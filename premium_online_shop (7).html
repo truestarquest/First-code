@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ОНЛАЙН // ТВОЇ ЦІНИ — PREMIUM MASTER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Syncopate:wght@700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #07080a;
+            --panel-bg: #0f1015;
+            --text-color: #e5e5e7;
+            --text-muted: #6e6e73;
+            --accent-color: #e63946;
+            --gold-premium: #c5a880;
+            --border-color: rgba(255, 255, 255, 0.04);
+            --shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            --glow: rgba(230, 57, 70, 0.06);
+            --header-bg: rgba(7, 8, 10, 0.85);
+            --title-color: #c5a880;
+            --title-glow: 0 0 20px rgba(197, 168, 128, 0.35), 0 0 40px rgba(197, 168, 128, 0.1);
+            --overlay-bg: rgba(5, 5, 7, 0.85);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #fcfbf9;
+            --panel-bg: #ffffff;
+            --text-color: #1a1a1c;
+            --text-muted: #86868b;
+            --accent-color: #e63946;
+            --gold-premium: #bfa37a;
+            --border-color: rgba(0, 0, 0, 0.05);
+            --shadow: 0 30px 60px rgba(0, 0, 0, 0.03);
+            --glow: rgba(197, 168, 128, 0.04);
+            --header-bg: rgba(252, 251, 249, 0.85);
+            --title-color: #1a1a1c;
+            --title-glow: 0 0 50px rgba(0, 0, 0, 0);
+            --overlay-bg: rgba(252, 251, 249, 0.9);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            transition: background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        body[data-theme="light"]::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            box-shadow: inset 0 0 100px rgba(197, 168, 128, 0.08);
+            pointer-events: none;
+            z-index: 9998;
+            animation: steamPerimeter 12s infinite ease-in-out;
+        }
+
+        @keyframes steamPerimeter {
+            0%, 100% { opacity: 0.3; filter: blur(6px); }
+            50% { opacity: 0.8; filter: blur(12px); }
+        }
+
+        .fluid-surface {
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fluid-transition {
+            transform: translateY(8px);
+            filter: blur(2px);
+            opacity: 0.85;
+        }
+
+        .time-greeting {
+            position: fixed;
+            top: 100px;
+            right: 5%;
+            background: #0f1015;
+            border-left: 3px solid var(--gold-premium);
+            padding: 20px 30px;
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            z-index: 1100;
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .time-greeting.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .time-greeting p {
+            font-size: 13px;
+            font-weight: 500;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+        }
+
+        .time-greeting span {
+            color: var(--gold-premium);
+            font-weight: 600;
+        }
+
+        .cursor-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, var(--glow) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            will-change: transform;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: var(--header-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--border-color);
+            transition: background 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 14px;
+            letter-spacing: 4px;
+            color: var(--text-color);
+            transition: color 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .logo span { color: var(--accent-color); }
+
+        .logo-img {
+            height: 32px;
+            width: auto;
+            object-fit: contain;
+            transition: filter 0.4s ease, transform 0.4s ease;
+        }
+
+        .logo:hover .logo-img {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 8px var(--gold-premium));
+        }
+
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-color);
+        }
+
+        [data-theme="light"] .live-status {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #2ec4b6;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #2ec4b6;
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes pulseDot {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 14px #2ec4b6; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-btn, .lang-btn {
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-color);
+            padding: 10px 22px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .theme-btn:hover, .lang-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .lang-btn {
+            padding: 10px 16px;
+            border-color: var(--gold-premium);
+            color: var(--gold-premium);
+        }
+
+        .insta-btn {
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #ffffff;
+            background: var(--accent-color);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: 11px 26px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(230, 57, 70, 0.2);
+        }
+
+        .hero-facade {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            padding: 0 20px;
+        }
+
+        .facade-tag {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            letter-spacing: 8px;
+            color: var(--accent-color);
+            margin-bottom: 25px;
+        }
+
+        .facade-title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 68px;
+            font-weight: 700;
+            letter-spacing: 14px;
+            margin-bottom: 25px;
+            color: var(--title-color);
+            text-shadow: var(--title-glow);
+            transition: color 1.5s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .facade-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            max-width: 600px;
+            line-height: 1.9;
+            margin-bottom: 45px;
+            transition: color 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .enter-btn {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 18px 48px;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.4s ease;
+        }
+
+        .enter-btn:hover {
+            background: var(--accent-color);
+            color: #ffffff;
+            box-shadow: 0 0 35px rgba(230, 57, 70, 0.35);
+        }
+
+        .main-storefront {
+            padding: 140px 5% 80px 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .shop-container {
+            display: flex;
+            gap: 40px;
+            max-width: 1440px;
+            margin: 0 auto;
+            perspective: 1600px;
+        }
+
+        .jacuzzi-border {
+            position: relative;
+            background: var(--panel-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .side-catalog {
+            flex: 0.8;
+            padding: 35px 30px;
+            height: fit-content;
+        }
+
+        .catalog-title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            color: var(--text-color);
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .cat-group { list-style: none; }
+        .cat-item { margin-bottom: 12px; }
+
+        .cat-trigger {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: left;
+            padding: 14px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cat-trigger:hover, .cat-item.active .cat-trigger {
+            background: var(--accent-color);
+            color: #ffffff;
+        }
+
+        .cat-dropdown {
+            max-height: 0;
+            overflow: hidden;
+            padding-left: 15px;
+            transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cat-item.active .cat-dropdown { max-height: 350px; }
+
+        .cat-dropdown a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            padding: 11px 0;
+            transition: color 0.3s;
+        }
+
+        .cat-dropdown a:hover { color: var(--text-color); }
+
+        .main-showcase {
+            flex: 2.4;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .luxury-banner {
+            padding: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        .banner-text h2 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 22px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, var(--text-color) 0%, var(--gold-premium) 50%, var(--text-color) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShimmer 5s linear infinite;
+        }
+
+        @keyframes textShimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .banner-text p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            transition: opacity 0.5s ease;
+        }
+
+        .product-card {
+            padding: 30px;
+            text-align: center;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            transition: background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        [data-theme="dark"] .product-card:hover, body:not([data-theme="light"]) .product-card:hover {
+            background: #13141c;
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 35px 70px rgba(230, 57, 70, 0.08);
+        }
+
+        [data-theme="light"] .product-card:hover {
+            background: #ffffff;
+            border-color: var(--gold-premium);
+            box-shadow: 0 30px 60px rgba(197, 168, 128, 0.15);
+        }
+
+        @keyframes borderChainScan {
+            0% { box-shadow: 0 0 0 0px rgba(197, 168, 128, 0); border-color: var(--border-color); }
+            40% { box-shadow: 0 0 25px 2px rgba(197, 168, 128, 0.4); border-color: var(--gold-premium); }
+            100% { box-shadow: 0 0 0 0px rgba(197, 168, 128, 0); border-color: var(--border-color); }
+        }
+
+        .product-card.chain-scanned {
+            animation: borderChainScan 1.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .exclusive-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            color: var(--gold-premium);
+            border: 1px solid var(--gold-premium);
+            padding: 4px 9px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .product-img-slot {
+            height: 160px;
+            background: rgba(255,255,255,0.01);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .product-card:hover .product-img-slot {
+            transform: scale(1.03);
+        }
+
+        .product-card h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-color);
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-color);
+            font-weight: 800;
+            font-size: 16px;
+            margin-bottom: 22px;
+        }
+
+        .buy-action {
+            background: transparent;
+            border: 1px solid var(--text-color);
+            color: var(--text-color);
+            padding: 13px 0;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        .buy-action:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        /* PRODUCT SPOTLIGHT OVERLAY */
+        .product-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--overlay-bg);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 20px;
+        }
+
+        .product-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .overlay-card {
+            width: 100%;
+            max-width: 900px;
+            background: var(--panel-bg);
+            padding: 50px;
+            position: relative;
+            transform: translateY(40px) scale(0.96);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .product-overlay.active .overlay-card {
+            transform: translateY(0) scale(1);
+        }
+
+        .close-overlay {
+            position: absolute;
+            top: 25px; right: 25px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 32px;
+            cursor: pointer;
+            transition: color 0.3s;
+            line-height: 1;
+        }
+
+        .close-overlay:hover {
+            color: var(--accent-color);
+        }
+
+        .overlay-content {
+            display: flex;
+            gap: 50px;
+        }
+
+        .overlay-image-side {
+            flex: 1;
+            position: relative;
+        }
+
+        .overlay-image-side .product-img-slot {
+            height: 100%;
+            min-height: 320px;
+            margin-bottom: 0;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .overlay-info-side {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .overlay-info-side h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            line-height: 1.3;
+        }
+
+        .overlay-info-side .product-price {
+            font-size: 22px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .modal-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 35px;
+        }
+
+        .specs-table td {
+            padding: 10px 0;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        [data-theme="light"] .specs-table td {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.02);
+        }
+
+        .specs-table td:first-child {
+            color: var(--text-muted);
+            font-weight: 500;
+            width: 40%;
+        }
+
+        .specs-table td:last-child {
+            color: var(--text-color);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .insta-order-btn {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #ffffff;
+            padding: 16px 0;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(230, 57, 70, 0.25);
+        }
+
+        .insta-order-btn:hover {
+            background: transparent;
+            color: var(--accent-color);
+        }
+
+        .brands-marquee {
+            width: 100vw;
+            margin-left: calc(-5vw);
+            overflow: hidden;
+            background: var(--panel-bg);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 30px 0;
+            margin-top: 60px;
+            display: flex;
+            transition: background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 100px;
+            animation: scrollMarquee 28s linear infinite;
+        }
+
+        .marquee-track a {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 13px;
+            letter-spacing: 5px;
+            color: var(--text-muted);
+            text-decoration: none;
+            opacity: 0.4;
+            transition: all 0.3s;
+        }
+
+        .marquee-track a:hover {
+            opacity: 1;
+            color: var(--accent-color);
+            transform: scale(1.08);
+        }
+
+        @keyframes scrollMarquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* RESPONSIVE DESIGN ARCHITECTURE */
+        @media (max-width: 1200px) {
+            .logo-wrapper { gap: 12px; }
+            .live-status { display: none; }
+        }
+
+        @media (max-width: 1024px) {
+            .facade-title { font-size: 52px; letter-spacing: 10px; }
+            .shop-container { gap: 25px; }
+        }
+
+        @media (max-width: 900px) {
+            .shop-container { flex-direction: column; }
+            .side-catalog, .main-showcase { flex: none; width: 100%; }
+            .overlay-content { flex-direction: column; gap: 30px; }
+            .overlay-card { padding: 35px 25px; max-height: 90vh; overflow-y: auto; }
+            .overlay-image-side .product-img-slot { min-height: 200px; height: 200px; }
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 15px 4%; }
+            .logo { font-size: 11px; letter-spacing: 2px; }
+            .logo-img { height: 26px; }
+            .theme-btn, .lang-btn, .insta-btn { padding: 8px 14px; font-size: 10px; }
+            .nav-actions { gap: 8px; }
+            .facade-title { font-size: 38px; letter-spacing: 6px; }
+            .facade-desc { font-size: 13px; line-height: 1.7; }
+            .main-storefront { padding: 100px 4% 60px 4%; }
+            .luxury-banner { padding: 35px 25px; }
+            .banner-text h2 { font-size: 18px; }
+            .cursor-glow { display: none !important; }
+            .time-greeting {
+                width: calc(100% - 8%); left: 4%; right: 4%; top: auto; bottom: 20px;
+                transform: translateY(40px); border-left: none; border-bottom: 3px solid var(--gold-premium);
+            }
+            .time-greeting.show { transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            header { flex-direction: column; gap: 12px; text-align: center; position: absolute; }
+            .nav-actions { width: 100%; justify-content: center; }
+            .hero-facade { height: auto; padding: 160px 20px 60px 20px; }
+            .facade-title { font-size: 32px; letter-spacing: 3px; }
+            .enter-btn { padding: 15px 35px; width: 100%; max-width: 280px; }
+            .products-grid { grid-template-columns: 1fr; }
+            .marquee-track { gap: 50px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-glow" id="glow"></div>
+
+    <div class="time-greeting" id="timeGreeting">
+        <p id="greetText">Доброго вечора, шановний гостю.<br><span>Ваш</span> вечірній простір технологій готовий до роботи.</p>
+    </div>
+
+    <header id="navbar">
+        <div class="logo-wrapper">
+            <!-- Місце під оригінальний логотип. Заміни src на шлях до файлу зображення (наприклад logo.png або logo.svg) -->
+            <div class="logo" id="siteLogo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c5a880'><path d='M12 2L2 22h20L12 2zm0 4l6.5 13h-13L12 6z'/></svg>" class="logo-img" alt="Logo">
+                &nbsp;ОНЛАЙН // <span>ЦІНИ</span>
+            </div>
+            <div class="live-status">
+                <span class="status-dot"></span>
+                <span id="statusLabel">MANAGER ONLINE</span>
+            </div>
+        </div>
+        <div class="nav-actions">
+            <button class="lang-btn" id="langBtn">EN</button>
+            <button class="theme-btn" id="themeBtn">LIGHT MODE</button>
+            <a href="https://www.instagram.com/online_shoooooop/" target="_blank" class="insta-btn">Instagram</a>
+        </div>
+    </header>
+
+    <!-- PRODUCT SPOTLIGHT OVERLAY (ДИНАМІЧНА СТОРІНКА ТОВАРУ) -->
+    <div class="product-overlay" id="productOverlay">
+        <div class="overlay-card jacuzzi-border">
+            <button class="close-overlay" id="closeOverlay">&times;</button>
+            <div class="overlay-content">
+                <div class="overlay-image-side">
+                    <div class="exclusive-badge" id="modalBadge">EXCLUSIVE</div>
+                    <div class="product-img-slot">[ PREMIUM ORIGINAL GADGET ]</div>
+                </div>
+                <div class="overlay-info-side">
+                    <h2 id="modalTitle">Product Name</h2>
+                    <div class="product-price" id="modalPrice">0 UAH</div>
+                    <p class="modal-desc" id="modalDesc">Product description options setup dynamic.</p>
+                    <table class="specs-table" id="modalSpecs">
+                        <!-- Наповнюється динамічно через JS -->
+                    </table>
+                    <a href="https://www.instagram.com/online_shoooooop/" target="_blank" class="buy-action insta-order-btn" id="modalOrderBtn">Оформити запит</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fluid-surface" id="surfaceWrapper">
+
+        <section class="hero-facade">
+            <div class="facade-tag">EXCLUSIVE GADGETS HUB</div>
+            <h1 class="facade-title" id="mainTitle">ONLINE SHOP</h1>
+            <p class="facade-desc" id="siteDesc">Естетика оригінальних рішень. Переступите поріг нашого простору та відчуйте бездоганну якість лідерів ринку.</p>
+            <button class="enter-btn" id="enterBtn">Зайти всередину</button>
+        </section>
+
+        <section class="main-storefront" id="storeSpace">
+            <div class="shop-container">
+
+                <aside class="side-catalog jacuzzi-border">
+                    <div class="catalog-title" id="catTitle">Каталог товарів</div>
+                    <ul class="cat-group">
+                        <li class="cat-item active" id="cat-apple">
+                            <button class="cat-trigger" id="triggerApple" onclick="switchCategory('apple')">Apple Гаджети <span>↓</span></button>
+                            <div class="cat-dropdown">
+                                <a href="#" id="subIphone" onclick="switchCategory('apple')">• iPhone Premium Line</a>
+                                <a href="#" id="subMacbook" onclick="switchCategory('apple')">• MacBook Air & Pro</a>
+                                <a href="#" id="subIpad" onclick="switchCategory('apple')">• iPad Ultra Ecosystem</a>
+                            </div>
+                        </li>
+                        <li class="cat-item" id="cat-gaming">
+                            <button class="cat-trigger" id="triggerGaming" onclick="switchCategory('gaming')">Геймінг & Складові <span>↓</span></button>
+                            <div class="cat-dropdown">
+                                <a href="#" id="subKeyboard" onclick="switchCategory('gaming')">• Механічні клавіатури</a>
+                                <a href="#" id="subMice" onclick="switchCategory('gaming')">• Елітні ігрові миші</a>
+                                <a href="#" id="subGraphics" onclick="switchCategory('gaming')">• Графічні аксесуари</a>
+                            </div>
+                        </li>
+                        <li class="cat-item" id="cat-audio">
+                            <button class="cat-trigger" id="triggerAudio" onclick="switchCategory('audio')">Аудіосистеми <span>↓</span></button>
+                            <div class="cat-dropdown">
+                                <a href="#" id="subAcoustic" onclick="switchCategory('audio')">• Акустика High-End</a>
+                                <a href="#" id="subHeadphones" onclick="switchCategory('audio')">• Студійні навушники</a>
+                            </div>
+                        </li>
+                    </ul>
+                </aside>
+
+                <div class="main-showcase">
+                    <div class="luxury-banner jacuzzi-border">
+                        <div class="banner-text">
+                            <h2 id="bannerTitle">ПРОСТІР ВАРТІСНИХ РІШЕНЬ.</h2>
+                            <p id="bannerDesc">Індивідуальний підхід до кожного клієнта, який цінує надійність, оригінальність та швидкість інновацій.</p>
+                        </div>
+                    </div>
+
+                    <div class="products-grid" id="productGrid"></div>
+                </div>
+
+            </div>
+
+            <div class="brands-marquee">
+                <div class="marquee-track">
+                    <a href="#" onclick="switchCategory('apple')">APPLE</a>
+                    <a href="#" onclick="switchCategory('gaming')">RAZER</a>
+                    <a href="#" onclick="switchCategory('audio')">SONY</a>
+                    <a href="#" onclick="switchCategory('gaming')">LOGITECH</a>
+                    <a href="#" onclick="switchCategory('apple')">APPLE</a>
+                    <a href="#" onclick="switchCategory('gaming')">RAZER</a>
+                    <a href="#" onclick="switchCategory('audio')">SONY</a>
+                    <a href="#" onclick="switchCategory('gaming')">LOGITECH</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        let currentLang = 'uk';
+        let activeCategory = 'apple';
+
+        const translations = {
+            uk: {
+                greetText: "Доброго вечора, шановний гостю.<br><span>Ваш</span> вечірній простір технологій готовий до роботи.",
+                siteLogo: `<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c5a880'><path d='M12 2L2 22h20L12 2zm0 4l6.5 13h-13L12 6z'/></svg>" class="logo-img" alt="Logo">&nbsp;ОНЛАЙН // <span>ЦІНИ</span>`,
+                siteDesc: "Естетика оригінальних рішень. Переступите поріг нашого простору та відчуйте бездоганну якість лідерів ринку.",
+                enterBtn: "Зайти всередину",
+                catTitle: "Каталог товарів",
+                triggerApple: "Apple Гаджети <span>↓</span>",
+                triggerGaming: "Геймінг & Складові <span>↓</span>",
+                triggerAudio: "Аудіосистеми <span>↓</span>",
+                subIphone: "• iPhone Premium Line",
+                subMacbook: "• MacBook Air & Pro",
+                subIpad: "• iPad Ultra Ecosystem",
+                subKeyboard: "• Механічні клавіатури",
+                subMice: "• Елітні ігрові миші",
+                subGraphics: "• Графічні аксесуари",
+                subAcoustic: "• Акустика High-End",
+                subHeadphones: "• Студійні навушники",
+                bannerTitle: "ПРОСТІР ВАРТІСНИХ РІШЕНЬ.",
+                bannerDesc: "Індивідуальний підхід до кожного клієнта, який цінує надійність, оригінальність та швидкість інновацій.",
+                buyAction: "Детальніше",
+                statusLabel: "МЕНЕДЖЕР ОНЛАЙН",
+                modalBtnText: "Оформити запит через Instagram",
+                specLabels: { state: "Стан", warranty: "Гарантія", Delivery: "Доставка" },
+                specValues: { new: "Новий / Оригінал", war: "12 місяців", del: "Швидка по Україні" }
+            },
+            en: {
+                greetText: "Good evening, dear guest.<br><span>Your</span> evening technology space is ready for operation.",
+                siteLogo: `<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c5a880'><path d='M12 2L2 22h20L12 2zm0 4l6.5 13h-13L12 6z'/></svg>" class="logo-img" alt="Logo">&nbsp;ONLINE // <span>PRICES</span>`,
+                siteDesc: "Aesthetics of original solutions. Step across the threshold of our space and experience the flawless quality of market leaders.",
+                enterBtn: "Step inside",
+                catTitle: "Product Catalog",
+                triggerApple: "Apple Gadgets <span>↓</span>",
+                triggerGaming: "Gaming & Hardware <span>↓</span>",
+                triggerAudio: "Audio Systems <span>↓</span>",
+                subIphone: "• iPhone Premium Line",
+                subMacbook: "• MacBook Air & Pro",
+                subIpad: "• iPad Ultra Ecosystem",
+                subKeyboard: "• Mechanical Keyboards",
+                subMice: "• Elite Gaming Mice",
+                subGraphics: "• Graphics Accessories",
+                subAcoustic: "• High-End Acoustics",
+                subHeadphones: "• Studio Headphones",
+                bannerTitle: "SPACE OF VALUABLE SOLUTIONS.",
+                bannerDesc: "Individual approach to each client who values reliability, originality, and the speed of innovation.",
+                buyAction: "View Details",
+                statusLabel: "MANAGER ONLINE",
+                modalBtnText: "Order via Instagram",
+                specLabels: { state: "Condition", warranty: "Warranty", Delivery: "Delivery" },
+                specValues: { new: "Brand New / Original", war: "12 Months", del: "Fast Shipping" }
+            }
+        };
+
+        const productsDatabase = {
+            apple: [
+                { name: "iPhone 15 Pro Max 256GB Space Black", price: "44 500 UAH", tag: "EXCLUSIVE", descUk: "Найвища лінійка смартфонів Apple з титановим корпусом та передовою оптикою.", descEn: "The flagship line of Apple smartphones featuring a durable titanium frame and pro-tier cameras." },
+                { name: "MacBook Pro 16\" M3 Max 36GB/1TB", price: "142 000 UAH", tag: "EXCLUSIVE", descUk: "Безкомпромісна потужність для найважчих професійних завдань, рендерингу та кодингу.", descEn: "Uncompromised performance for extreme professional workflows, 3D rendering, and compiling." },
+                { name: "iPad Pro 13\" M4 Wi-Fi 512GB Matte", price: "64 900 UAH", tag: "NEW", descUk: "Ультратонкий дизайн з революційним Tandem OLED дисплеєм нового покоління.", descEn: "Ultra-thin design combined with the revolutionary Tandem OLED display tech." }
+            ],
+            gaming: [
+                { name: "Wooting 60HE Analog Mechanical Keyboard", price: "11 800 UAH", tag: "EXCLUSIVE", descUk: "Аналогова клавіатура на магнітних перемикачах ефекту Холла для максимального відгуку в іграх.", descEn: "Analog mechanical keyboard powered by Hall effect switches for extreme gaming response." },
+                { name: "Logitech G Pro X Superlight 2 Lightspeed", price: "6 400 UAH", tag: "POPULAR", descUk: "Вибір кіберспортсменів: надлегка бездротова конструкція та ідеальна точність сенсора.", descEn: "The esports choice: ultra-light wireless frame housing a pixel-perfect sensor." }
+            ],
+            audio: [
+                { name: "Sony WH-1000XM5 Wireless Noise-Cancelling", price: "14 300 UAH", tag: "PREMIUM", descUk: "Еталонне активне шумозаглушення преміум-класу та кришталево чисте просторове аудіо.", descEn: "Industry-leading active noise cancellation coupled with pristine spatial soundscapes." }
+            ]
+        };
+
+        const glow = document.getElementById('glow');
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let ballX = window.innerWidth / 2, ballY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+
+        function smoothCursorAnimation() {
+            if (window.innerWidth > 768) {
+                ballX += (mouseX - ballX) * 0.08;
+                ballY += (mouseY - ballY) * 0.08;
+                glow.style.transform = `translate(calc(${ballX}px - 50%), calc(${ballY}px - 50%))`;
+            }
+            requestAnimationFrame(smoothCursorAnimation);
+        }
+        smoothCursorAnimation();
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const hour = new Date().getHours();
+            if (hour >= 17 || hour < 5) {
+                const greeting = document.getElementById('timeGreeting');
+                setTimeout(() => {
+                    greeting.className = 'time-greeting show';
+                    setTimeout(() => greeting.className = 'time-greeting', 4500);
+                }, 1000);
+            }
+            renderProducts(activeCategory);
+            setupModalListeners();
+        });
+
+        document.getElementById('enterBtn').addEventListener('click', () => {
+            const target = document.getElementById('storeSpace');
+            window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 50, behavior: 'smooth' });
+        });
+
+        const themeBtn = document.getElementById('themeBtn');
+        const wrapper = document.getElementById('surfaceWrapper');
+
+        themeBtn.addEventListener('click', () => {
+            wrapper.classList.add('fluid-transition');
+            setTimeout(() => {
+                if (document.documentElement.getAttribute('data-theme') === 'light') {
+                    document.documentElement.removeAttribute('data-theme');
+                    themeBtn.textContent = 'LIGHT MODE';
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    themeBtn.textContent = 'DARK MODE';
+                }
+                wrapper.classList.remove('fluid-transition');
+            }, 450);
+        });
+
+        const langBtn = document.getElementById('langBtn');
+        langBtn.addEventListener('click', () => {
+            wrapper.classList.add('fluid-transition');
+            setTimeout(() => {
+                currentLang = currentLang === 'uk' ? 'en' : 'uk';
+                langBtn.textContent = currentLang === 'uk' ? 'EN' : 'UA';
+
+                const pack = translations[currentLang];
+                for (let key in pack) {
+                    const el = document.getElementById(key);
+                    if (el && key !== 'specLabels' && key !== 'specValues') el.innerHTML = pack[key];
+                }
+
+                renderProducts(activeCategory);
+                wrapper.classList.remove('fluid-transition');
+            }, 450);
+        });
+
+        function switchCategory(catKey) {
+            if (window.event) window.event.preventDefault();
+            activeCategory = catKey;
+
+            document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`cat-${catKey}`).classList.add('active');
+
+            const grid = document.getElementById('productGrid');
+            grid.style.opacity = '0';
+
+            setTimeout(() => {
+                renderProducts(catKey);
+                grid.style.opacity = '1';
+                document.querySelectorAll('.product-card').forEach((card, i) => {
+                    setTimeout(() => {
+                        card.classList.add('chain-scanned');
+                        setTimeout(() => card.classList.remove('chain-scanned'), 1400);
+                    }, i * 60);
+                });
+            }, 350);
+        }
+
+        function renderProducts(catKey) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            productsDatabase[catKey].forEach((prod, index) => {
+                const card = document.createElement('div');
+                card.className = 'product-card jacuzzi-border';
+                card.setAttribute('onclick', `openProductModal('${catKey}', ${index})`);
+                card.innerHTML = `
+                    <div class="exclusive-badge">${prod.tag}</div>
+                    <div class="product-img-slot">[ BRAND PLATFORM ]</div>
+                    <h3>${prod.name}</h3>
+                    <div class="product-price">${prod.price}</div>
+                    <button class="buy-action">${translations[currentLang].buyAction}</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        /* OVERLAY LOGIC FOR INDIVIDUAL PRODUCT PAGES */
+        const overlay = document.getElementById('productOverlay');
+
+        function openProductModal(catKey, index) {
+            const product = productsDatabase[catKey][index];
+            const labels = translations[currentLang].specLabels;
+            const values = translations[currentLang].specValues;
+
+            document.getElementById('modalBadge').textContent = product.tag;
+            document.getElementById('modalTitle').textContent = product.name;
+            document.getElementById('modalPrice').textContent = product.price;
+            document.getElementById('modalDesc').textContent = currentLang === 'uk' ? product.descUk : product.descEn;
+
+            // Формування преміальної таблиці специфікацій
+            const specsTable = document.getElementById('modalSpecs');
+            specsTable.innerHTML = `
+                <tr><td>${labels.state}</td><td>${values.new}</td></tr>
+                <tr><td>${labels.warranty}</td><td>${values.war}</td></tr>
+                <tr><td>${labels.Delivery}</td><td>${values.del}</td></tr>
+            `;
+
+            // Автоматичне формування красивого тексту для Instagram Direct
+            const encodedText = encodeURIComponent(`Вітаю! Мене зацікавив товар: ${product.name} (${product.price}). Чи є в наявності?`);
+            document.getElementById('modalOrderBtn').href = `https://www.instagram.com/online_shoooooop/?text=${encodedText}`;
+            document.getElementById('modalOrderBtn').textContent = translations[currentLang].modalBtnText;
+
+            overlay.classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function setupModalListeners() {
+            document.getElementById('closeOverlay').addEventListener('click', closeModal);
+            overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
+            document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+        }
+
+        function closeModal() {
+            overlay.classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+    </script>
+</body>
+</html>
