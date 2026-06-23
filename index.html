@@ -166,17 +166,15 @@
         .logo span { color: var(--accent-color); }
 
         .logo-img {
-            height: 28px;
+            height: 32px;
             width: auto;
-            margin-right: 4px;
-            color: var(--gold-premium);
-            transition: filter 0.4s ease, transform 0.4s ease, color 0.4s ease;
+            object-fit: contain;
+            transition: filter 0.4s ease, transform 0.4s ease;
         }
 
         .logo:hover .logo-img {
-            transform: scale(1.08);
-            filter: drop-shadow(0 0 10px var(--gold-premium));
-            color: var(--text-color);
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 8px var(--gold-premium));
         }
 
         .live-status {
@@ -753,7 +751,7 @@
         @media (max-width: 768px) {
             header { padding: 15px 4%; }
             .logo { font-size: 11px; letter-spacing: 2px; }
-            .logo-img { height: 22px; }
+            .logo-img { height: 26px; }
             .theme-btn, .lang-btn, .insta-btn { padding: 8px 14px; font-size: 10px; }
             .nav-actions { gap: 8px; }
             .facade-title { font-size: 38px; letter-spacing: 6px; }
@@ -790,17 +788,9 @@
 
     <header id="navbar">
         <div class="logo-wrapper">
-            <!-- Оновлений інтерактивний SVG логотип на основі реального фірмового брендингу -->
+            <!-- Місце під оригінальний логотип. Заміни src на шлях до файлу зображення (наприклад logo.png або logo.svg) -->
             <div class="logo" id="siteLogo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-                <svg class="logo-img" viewBox="0 0 100 50" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Ліва кутова масивна дужка -->
-                    <path d="M 10 5 L 32 5 L 32 15 L 22 15 L 22 35 L 32 35 L 32 45 L 10 45 Z" />
-                    <!-- Центральні внутрішні колони -->
-                    <path d="M 40 10 L 47 10 L 47 40 L 40 40 Z" />
-                    <path d="M 60 10 L 53 10 L 53 40 L 60 40 Z" />
-                    <!-- Права кутова масивна дужка -->
-                    <path d="M 90 5 L 68 5 L 68 15 L 78 15 L 78 35 L 68 35 L 68 45 L 90 45 Z" />
-                </svg>
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c5a880'><path d='M12 2L2 22h20L12 2zm0 4l6.5 13h-13L12 6z'/></svg>" class="logo-img" alt="Logo">
                 &nbsp;ОНЛАЙН // <span>ЦІНИ</span>
             </div>
             <div class="live-status">
@@ -910,20 +900,10 @@
         let currentLang = 'uk';
         let activeCategory = 'apple';
 
-        // Постійна стрічка нового SVG, щоб логотип не ламався при зміні мов
-        const sharedLogoSVG = `
-            <svg class="logo-img" viewBox="0 0 100 50" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path d="M 10 5 L 32 5 L 32 15 L 22 15 L 22 35 L 32 35 L 32 45 L 10 45 Z" />
-                <path d="M 40 10 L 47 10 L 47 40 L 40 40 Z" />
-                <path d="M 60 10 L 53 10 L 53 40 L 60 40 Z" />
-                <path d="M 90 5 L 68 5 L 68 15 L 78 15 L 78 35 L 68 35 L 68 45 L 90 45 Z" />
-            </svg>
-        `;
-
         const translations = {
             uk: {
                 greetText: "Доброго вечора, шановний гостю.<br><span>Ваш</span> вечірній простір технологій готовий до роботи.",
-                siteLogo: sharedLogoSVG + `&nbsp;ОНЛАЙН // <span>ЦІНИ</span>`,
+                siteLogo: `<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c5a880'><path d='M12 2L2 22h20L12 2zm0 4l6.5 13h-13L12 6z'/></svg>" class="logo-img" alt="Logo">&nbsp;ОНЛАЙН // <span>ЦІНИ</span>`,
                 siteDesc: "Естетика оригінальних рішень. Переступите поріг нашого простору та відчуйте бездоганну якість лідерів ринку.",
                 enterBtn: "Зайти всередину",
                 catTitle: "Каталог товарів",
@@ -948,7 +928,7 @@
             },
             en: {
                 greetText: "Good evening, dear guest.<br><span>Your</span> evening technology space is ready for operation.",
-                siteLogo: sharedLogoSVG + `&nbsp;ONLINE // <span>PRICES</span>`,
+                siteLogo: `<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c5a880'><path d='M12 2L2 22h20L12 2zm0 4l6.5 13h-13L12 6z'/></svg>" class="logo-img" alt="Logo">&nbsp;ONLINE // <span>PRICES</span>`,
                 siteDesc: "Aesthetics of original solutions. Step across the threshold of our space and experience the flawless quality of market leaders.",
                 enterBtn: "Step inside",
                 catTitle: "Product Catalog",
@@ -1111,6 +1091,7 @@
             document.getElementById('modalPrice').textContent = product.price;
             document.getElementById('modalDesc').textContent = currentLang === 'uk' ? product.descUk : product.descEn;
 
+            // Формування преміальної таблиці специфікацій
             const specsTable = document.getElementById('modalSpecs');
             specsTable.innerHTML = `
                 <tr><td>${labels.state}</td><td>${values.new}</td></tr>
@@ -1118,6 +1099,7 @@
                 <tr><td>${labels.Delivery}</td><td>${values.del}</td></tr>
             `;
 
+            // Автоматичне формування красивого тексту для Instagram Direct
             const encodedText = encodeURIComponent(`Вітаю! Мене зацікавив товар: ${product.name} (${product.price}). Чи є в наявності?`);
             document.getElementById('modalOrderBtn').href = `https://www.instagram.com/online_shoooooop/?text=${encodedText}`;
             document.getElementById('modalOrderBtn').textContent = translations[currentLang].modalBtnText;
