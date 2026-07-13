@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ОНЛАЙН // ТВОЇ ЦІНИ — PREMIUM MASTER</title>
+    <meta name="description" content="Premium Tech Store — оригінальна техніка Apple, Sony, Logitech з гарантією та швидкою доставкою по Україні. iPhone, MacBook, iPad, навушники, ігрові аксесуари.">
+    <meta name="keywords" content="iPhone, MacBook, iPad, Apple, Sony, Logitech, гаджети, техніка, купити, Україна, навушники, клавіатура">
+    <meta property="og:title" content="ОНЛАЙН // ЦІНИ — Premium Tech Store">
+    <meta property="og:description" content="Оригінальна техніка з гарантією та доставкою по Україні">
+    <meta property="og:type" content="website">
+    <title>ОНЛАЙН // ЦІНИ — PREMIUM MASTER</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50'%3E%3Cpath fill='%23e63946' d='M 10 5 L 32 5 L 32 15 L 22 15 L 22 35 L 32 35 L 32 45 L 10 45 Z'/%3E%3Cpath fill='%23e63946' d='M 40 10 L 47 10 L 47 40 L 40 40 Z'/%3E%3Cpath fill='%23e63946' d='M 60 10 L 53 10 L 53 40 L 60 40 Z'/%3E%3Cpath fill='%23e63946' d='M 90 5 L 68 5 L 68 15 L 78 15 L 78 35 L 68 35 L 68 45 L 90 45 Z'/%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Syncopate:wght@700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -12,6 +18,7 @@
             --text-color: #e5e5e7;
             --text-muted: #6e6e73;
             --accent-color: #e63946;
+            --accent-blue: #2563eb;
             --gold-premium: #c5a880;
             --border-color: rgba(255, 255, 255, 0.04);
             --shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
@@ -38,11 +45,7 @@
             --overlay-bg: rgba(252, 251, 249, 0.9);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background-color: var(--bg-color);
@@ -52,9 +55,7 @@
             transition: background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        body.modal-open {
-            overflow: hidden;
-        }
+        body.modal-open { overflow: hidden; }
 
         body[data-theme="light"]::before {
             content: '';
@@ -97,10 +98,7 @@
             pointer-events: none;
         }
 
-        .time-greeting.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        .time-greeting.show { opacity: 1; transform: translateX(0); }
 
         .time-greeting p {
             font-size: 13px;
@@ -110,17 +108,12 @@
             line-height: 1.5;
         }
 
-        .time-greeting span {
-            color: var(--gold-premium);
-            font-weight: 600;
-        }
+        .time-greeting span { color: var(--gold-premium); font-weight: 600; }
 
         .cursor-glow {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 450px;
-            height: 450px;
+            top: 0; left: 0;
+            width: 450px; height: 450px;
             background: radial-gradient(circle, var(--glow) 0%, rgba(0,0,0,0) 70%);
             border-radius: 50%;
             pointer-events: none;
@@ -129,12 +122,11 @@
             will-change: transform;
         }
 
+        /* ===== HEADER ===== */
         header {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px 5%;
+            top: 0; left: 0; width: 100%;
+            padding: 16px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -144,12 +136,14 @@
             -webkit-backdrop-filter: blur(25px);
             border-bottom: 1px solid var(--border-color);
             transition: background 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            gap: 20px;
         }
 
         .logo-wrapper {
             display: flex;
             align-items: center;
             gap: 20px;
+            flex-shrink: 0;
         }
 
         .logo {
@@ -166,15 +160,15 @@
         .logo span { color: var(--accent-color); }
 
         .logo-img {
-            height: 32px;
-            width: auto;
-            object-fit: contain;
+            height: 28px; width: auto;
+            margin-right: 4px;
+            color: var(--gold-premium);
             transition: filter 0.4s ease, transform 0.4s ease;
         }
 
         .logo:hover .logo-img {
-            transform: scale(1.05);
-            filter: drop-shadow(0 0 8px var(--gold-premium));
+            transform: scale(1.08);
+            filter: drop-shadow(0 0 10px var(--gold-premium));
         }
 
         .live-status {
@@ -191,13 +185,10 @@
             color: var(--text-color);
         }
 
-        [data-theme="light"] .live-status {
-            background: rgba(0, 0, 0, 0.02);
-        }
+        [data-theme="light"] .live-status { background: rgba(0, 0, 0, 0.02); }
 
         .status-dot {
-            width: 6px;
-            height: 6px;
+            width: 6px; height: 6px;
             background-color: #2ec4b6;
             border-radius: 50%;
             box-shadow: 0 0 10px #2ec4b6;
@@ -210,10 +201,98 @@
             100% { transform: scale(0.9); opacity: 0.6; }
         }
 
+        /* ===== NAV LINKS ===== */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0; right: 0;
+            height: 1px;
+            background: var(--accent-color);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-links a:hover { color: var(--text-color); }
+        .nav-links a:hover::after { transform: scaleX(1); }
+
+        /* Hamburger menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 5px;
+            background: transparent;
+            border: none;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px; height: 2px;
+            background: var(--text-color);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 65px; left: 0; right: 0;
+            background: var(--header-bg);
+            backdrop-filter: blur(25px);
+            padding: 20px 5%;
+            z-index: 999;
+            border-bottom: 1px solid var(--border-color);
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mobile-nav.open { display: flex; }
+
+        .mobile-nav a {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: color 0.3s;
+        }
+
+        .mobile-nav a:hover { color: var(--accent-color); }
+
         .nav-actions {
             display: flex;
             align-items: center;
             gap: 15px;
+            flex-shrink: 0;
         }
 
         .theme-btn, .lang-btn {
@@ -251,8 +330,17 @@
             padding: 11px 26px;
             border-radius: 20px;
             box-shadow: 0 4px 15px rgba(230, 57, 70, 0.2);
+            transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
+        .insta-btn:hover {
+            background: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+
+        /* ===== HERO ===== */
         .hero-facade {
             height: 100vh;
             display: flex;
@@ -278,10 +366,20 @@
             font-size: 68px;
             font-weight: 700;
             letter-spacing: 14px;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             color: var(--title-color);
             text-shadow: var(--title-glow);
             transition: color 1.5s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .facade-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 25px;
         }
 
         .facade-desc {
@@ -293,30 +391,116 @@
             transition: color 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        .hero-cta-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
         .enter-btn {
-            background: transparent;
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
-            padding: 18px 48px;
-            font-size: 11px;
+            background: var(--accent-color);
+            border: 2px solid var(--accent-color);
+            color: #ffffff;
+            padding: 18px 52px;
+            font-size: 12px;
             letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 30px rgba(230, 57, 70, 0.3);
+        }
+
+        .enter-btn:hover {
+            background: transparent;
+            color: var(--accent-color);
+            box-shadow: 0 0 35px rgba(230, 57, 70, 0.35);
+        }
+
+        .enter-btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 18px 36px;
+            font-size: 11px;
+            letter-spacing: 2px;
             text-transform: uppercase;
             font-weight: 600;
             cursor: pointer;
             border-radius: 30px;
             transition: all 0.4s ease;
+            text-decoration: none;
         }
 
-        .enter-btn:hover {
-            background: var(--accent-color);
-            color: #ffffff;
-            box-shadow: 0 0 35px rgba(230, 57, 70, 0.35);
+        .enter-btn-outline:hover {
+            border-color: var(--text-color);
+            color: var(--text-color);
         }
 
+        .hero-stats {
+            display: flex;
+            gap: 50px;
+            margin-top: 70px;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--gold-premium);
+        }
+
+        .hero-stat-label {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* ===== MAIN STOREFRONT ===== */
         .main-storefront {
             padding: 140px 5% 80px 5%;
             position: relative;
             z-index: 2;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            letter-spacing: 6px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--title-color);
+            margin-bottom: 16px;
+        }
+
+        .section-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            max-width: 550px;
+            margin: 0 auto;
+            line-height: 1.8;
         }
 
         .shop-container {
@@ -333,14 +517,10 @@
             border-radius: 12px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
-            transition: background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .side-catalog {
-            flex: 0.8;
-            padding: 35px 30px;
-            height: fit-content;
-        }
+        .side-catalog { flex: 0.8; padding: 35px 30px; height: fit-content; }
 
         .catalog-title {
             font-family: 'Syncopate', sans-serif;
@@ -399,18 +579,9 @@
 
         .cat-dropdown a:hover { color: var(--text-color); }
 
-        .main-showcase {
-            flex: 2.4;
-            display: flex;
-            flex-direction: column;
-            gap: 40px;
-        }
+        .main-showcase { flex: 2.4; display: flex; flex-direction: column; gap: 40px; }
 
-        .luxury-banner {
-            padding: 50px;
-            display: flex;
-            align-items: center;
-        }
+        .luxury-banner { padding: 50px; display: flex; align-items: center; }
 
         .banner-text h2 {
             font-family: 'Syncopate', sans-serif;
@@ -430,11 +601,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        .banner-text p {
-            color: var(--text-muted);
-            font-size: 14px;
-            line-height: 1.7;
-        }
+        .banner-text p { color: var(--text-muted); font-size: 14px; line-height: 1.7; }
 
         .products-grid {
             display: grid;
@@ -444,16 +611,14 @@
         }
 
         .product-card {
-            padding: 30px;
+            padding: 25px;
             text-align: center;
             transform-style: preserve-3d;
             cursor: pointer;
             transition: background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .product-card:hover {
-            transform: translateY(-10px);
-        }
+        .product-card:hover { transform: translateY(-10px) scale(1.02); }
 
         [data-theme="dark"] .product-card:hover, body:not([data-theme="light"]) .product-card:hover {
             background: #13141c;
@@ -473,14 +638,11 @@
             100% { box-shadow: 0 0 0 0px rgba(197, 168, 128, 0); border-color: var(--border-color); }
         }
 
-        .product-card.chain-scanned {
-            animation: borderChainScan 1.4s cubic-bezier(0.25, 1, 0.5, 1);
-        }
+        .product-card.chain-scanned { animation: borderChainScan 1.4s cubic-bezier(0.25, 1, 0.5, 1); }
 
         .exclusive-badge {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 15px; right: 15px;
             font-family: 'Orbitron', sans-serif;
             font-size: 9px;
             color: var(--gold-premium);
@@ -492,31 +654,50 @@
         }
 
         .product-img-slot {
-            height: 160px;
-            background: rgba(255,255,255,0.01);
-            border: 1px dashed var(--border-color);
-            border-radius: 8px;
-            margin-bottom: 22px;
+            height: 180px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 10px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .product-img-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 15px;
+            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.3));
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .product-card:hover .product-img-slot img {
+            transform: scale(1.08);
+        }
+
+        .product-img-slot .img-placeholder {
             font-family: 'Orbitron', sans-serif;
             font-size: 11px;
             color: var(--text-muted);
             letter-spacing: 1px;
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .product-card:hover .product-img-slot {
-            transform: scale(1.03);
         }
 
         .product-card h3 {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             color: var(--text-color);
             line-height: 1.4;
+        }
+
+        .product-desc-short {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 14px;
         }
 
         .product-price {
@@ -524,7 +705,7 @@
             color: var(--accent-color);
             font-weight: 800;
             font-size: 16px;
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
 
         .buy-action {
@@ -550,7 +731,7 @@
             color: var(--bg-color);
         }
 
-        /* PRODUCT SPOTLIGHT OVERLAY */
+        /* ===== PRODUCT SPOTLIGHT OVERLAY ===== */
         .product-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -567,14 +748,10 @@
             padding: 20px;
         }
 
-        .product-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .product-overlay.active { opacity: 1; pointer-events: auto; }
 
         .overlay-card {
-            width: 100%;
-            max-width: 900px;
+            width: 100%; max-width: 900px;
             background: var(--panel-bg);
             padding: 50px;
             position: relative;
@@ -582,9 +759,7 @@
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .product-overlay.active .overlay-card {
-            transform: translateY(0) scale(1);
-        }
+        .product-overlay.active .overlay-card { transform: translateY(0) scale(1); }
 
         .close-overlay {
             position: absolute;
@@ -598,19 +773,11 @@
             line-height: 1;
         }
 
-        .close-overlay:hover {
-            color: var(--accent-color);
-        }
+        .close-overlay:hover { color: var(--accent-color); }
 
-        .overlay-content {
-            display: flex;
-            gap: 50px;
-        }
+        .overlay-content { display: flex; gap: 50px; }
 
-        .overlay-image-side {
-            flex: 1;
-            position: relative;
-        }
+        .overlay-image-side { flex: 1; position: relative; }
 
         .overlay-image-side .product-img-slot {
             height: 100%;
@@ -626,16 +793,16 @@
         }
 
         .overlay-info-side h2 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: var(--text-color);
             line-height: 1.3;
         }
 
         .overlay-info-side .product-price {
             font-size: 22px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 15px;
         }
@@ -650,7 +817,7 @@
         .specs-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
 
         .specs-table td {
@@ -659,21 +826,10 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.02);
         }
 
-        [data-theme="light"] .specs-table td {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.02);
-        }
+        [data-theme="light"] .specs-table td { border-bottom: 1px solid rgba(0, 0, 0, 0.02); }
 
-        .specs-table td:first-child {
-            color: var(--text-muted);
-            font-weight: 500;
-            width: 40%;
-        }
-
-        .specs-table td:last-child {
-            color: var(--text-color);
-            font-weight: 600;
-            text-align: right;
-        }
+        .specs-table td:first-child { color: var(--text-muted); font-weight: 500; width: 40%; }
+        .specs-table td:last-child { color: var(--text-color); font-weight: 600; text-align: right; }
 
         .insta-order-btn {
             background: var(--accent-color);
@@ -689,6 +845,7 @@
             color: var(--accent-color);
         }
 
+        /* ===== BRANDS MARQUEE ===== */
         .brands-marquee {
             width: 100vw;
             margin-left: calc(-5vw);
@@ -718,26 +875,505 @@
             transition: all 0.3s;
         }
 
-        .marquee-track a:hover {
-            opacity: 1;
-            color: var(--accent-color);
-            transform: scale(1.08);
-        }
+        .marquee-track a:hover { opacity: 1; color: var(--accent-color); transform: scale(1.08); }
 
         @keyframes scrollMarquee {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
 
-        /* RESPONSIVE DESIGN ARCHITECTURE */
+        /* ===== BENEFITS SECTION ===== */
+        .benefits-section {
+            padding: 100px 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .benefit-card {
+            padding: 40px 30px;
+            border-radius: 16px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(230, 57, 70, 0.15);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .benefit-card:hover::before { opacity: 1; }
+
+        .benefit-icon {
+            font-size: 38px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .benefit-title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-color);
+            margin-bottom: 14px;
+            text-transform: uppercase;
+        }
+
+        .benefit-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        /* ===== REVIEWS SECTION ===== */
+        .reviews-section {
+            padding: 100px 5%;
+            background: var(--panel-bg);
+            position: relative;
+            z-index: 2;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .review-card {
+            padding: 35px;
+            border-radius: 16px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            position: relative;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        }
+
+        .review-quote {
+            position: absolute;
+            top: 20px; right: 25px;
+            font-size: 60px;
+            color: var(--accent-color);
+            opacity: 0.12;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .review-stars {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+
+        .review-stars span {
+            color: var(--gold-premium);
+            font-size: 16px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .review-avatar {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-color), var(--gold-premium));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .review-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .review-product {
+            font-size: 11px;
+            color: var(--accent-color);
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== INSTAGRAM BLOCK ===== */
+        .instagram-section {
+            padding: 100px 5%;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .insta-block {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .insta-big-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            background: linear-gradient(135deg, #e63946, #c2185b);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 13px;
+            letter-spacing: 2px;
+            font-weight: 700;
+            padding: 20px 50px;
+            border-radius: 50px;
+            box-shadow: 0 15px 40px rgba(230, 57, 70, 0.3);
+            transition: all 0.4s ease;
+            margin-top: 40px;
+        }
+
+        .insta-big-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 60px rgba(230, 57, 70, 0.4);
+        }
+
+        .insta-big-btn svg {
+            width: 22px; height: 22px;
+        }
+
+        .insta-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .insta-post {
+            aspect-ratio: 1;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .insta-post:hover { transform: scale(1.02); }
+
+        .insta-post img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.85;
+            transition: opacity 0.3s;
+        }
+
+        .insta-post:hover img { opacity: 1; }
+
+        .insta-post-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(230, 57, 70, 0.0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .insta-post:hover .insta-post-overlay {
+            background: rgba(230, 57, 70, 0.15);
+        }
+
+        /* ===== CONTACT SECTION ===== */
+        .contact-section {
+            padding: 100px 5%;
+            background: var(--panel-bg);
+            border-top: 1px solid var(--border-color);
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 60px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .contact-info h3 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .contact-icon {
+            font-size: 22px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .contact-item-title {
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .contact-item-value {
+            font-size: 14px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .contact-item-value a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .contact-form-wrapper { }
+
+        .contact-form-wrapper h3 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+
+        .form-group label {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group textarea {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--accent-color);
+        }
+
+        .form-group textarea { resize: none; height: 110px; }
+
+        .form-submit-btn {
+            background: var(--accent-color);
+            border: none;
+            color: #ffffff;
+            padding: 16px 40px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(230, 57, 70, 0.25);
+            align-self: flex-start;
+        }
+
+        .form-submit-btn:hover {
+            background: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            box-shadow: none;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: #050607;
+            border-top: 1px solid var(--border-color);
+            padding: 50px 5% 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .footer-brand .footer-logo {
+            display: flex;
+            align-items: center;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: var(--text-color);
+            margin-bottom: 16px;
+            gap: 8px;
+        }
+
+        .footer-brand .footer-logo span { color: var(--accent-color); }
+
+        .footer-brand p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 240px;
+        }
+
+        .footer-nav-title, .footer-contact-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .footer-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-nav-links a {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-nav-links a:hover { color: var(--text-color); }
+
+        .footer-contact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .footer-contact-list a {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-contact-list a:hover { color: var(--accent-color); }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-copy {
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .footer-copy span { color: var(--gold-premium); }
+
+        .footer-made {
+            font-size: 11px;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 1200px) {
             .logo-wrapper { gap: 12px; }
             .live-status { display: none; }
+            .nav-links { gap: 20px; }
         }
 
         @media (max-width: 1024px) {
             .facade-title { font-size: 52px; letter-spacing: 10px; }
             .shop-container { gap: 25px; }
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
         }
 
         @media (max-width: 900px) {
@@ -746,16 +1382,20 @@
             .overlay-content { flex-direction: column; gap: 30px; }
             .overlay-card { padding: 35px 25px; max-height: 90vh; overflow-y: auto; }
             .overlay-image-side .product-img-slot { min-height: 200px; height: 200px; }
+            .contact-container { grid-template-columns: 1fr; gap: 40px; }
+            .footer-inner { grid-template-columns: 1fr 1fr; }
         }
 
         @media (max-width: 768px) {
             header { padding: 15px 4%; }
             .logo { font-size: 11px; letter-spacing: 2px; }
-            .logo-img { height: 26px; }
+            .logo-img { height: 22px; }
             .theme-btn, .lang-btn, .insta-btn { padding: 8px 14px; font-size: 10px; }
             .nav-actions { gap: 8px; }
             .facade-title { font-size: 38px; letter-spacing: 6px; }
             .facade-desc { font-size: 13px; line-height: 1.7; }
+            .hero-stats { gap: 25px; }
+            .hero-stat-num { font-size: 20px; }
             .main-storefront { padding: 100px 4% 60px 4%; }
             .luxury-banner { padding: 35px 25px; }
             .banner-text h2 { font-size: 18px; }
@@ -765,16 +1405,26 @@
                 transform: translateY(40px); border-left: none; border-bottom: 3px solid var(--gold-premium);
             }
             .time-greeting.show { transform: translateY(0); }
+            .benefits-section, .reviews-section, .instagram-section, .contact-section { padding: 70px 4%; }
+            .insta-gallery { grid-template-columns: repeat(3, 1fr); }
+            .footer-inner { grid-template-columns: 1fr; gap: 30px; }
+            .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
         }
 
         @media (max-width: 600px) {
-            header { flex-direction: column; gap: 12px; text-align: center; position: absolute; }
-            .nav-actions { width: 100%; justify-content: center; }
+            header { flex-direction: row; padding: 12px 4%; }
             .hero-facade { height: auto; padding: 160px 20px 60px 20px; }
             .facade-title { font-size: 32px; letter-spacing: 3px; }
             .enter-btn { padding: 15px 35px; width: 100%; max-width: 280px; }
             .products-grid { grid-template-columns: 1fr; }
             .marquee-track { gap: 50px; }
+            .hero-stats { gap: 20px; flex-wrap: wrap; justify-content: center; }
+            .form-row { grid-template-columns: 1fr; }
+            .reviews-grid { grid-template-columns: 1fr; }
+            .benefits-grid { grid-template-columns: 1fr; }
+            .hero-cta-group { flex-direction: column; }
+            .nav-actions { gap: 6px; }
+            .theme-btn { display: none; }
         }
     </style>
 </head>
@@ -788,9 +1438,13 @@
 
     <header id="navbar">
         <div class="logo-wrapper">
-            <!-- Місце під оригінальний логотип. Заміни src на шлях до файлу зображення (наприклад logo.png або logo.svg) -->
             <div class="logo" id="siteLogo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c5a880'><path d='M12 2L2 22h20L12 2zm0 4l6.5 13h-13L12 6z'/></svg>" class="logo-img" alt="Logo">
+                <svg class="logo-img" viewBox="0 0 100 50" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 10 5 L 32 5 L 32 15 L 22 15 L 22 35 L 32 35 L 32 45 L 10 45 Z" />
+                    <path d="M 40 10 L 47 10 L 47 40 L 40 40 Z" />
+                    <path d="M 60 10 L 53 10 L 53 40 L 60 40 Z" />
+                    <path d="M 90 5 L 68 5 L 68 15 L 78 15 L 78 35 L 68 35 L 68 45 L 90 45 Z" />
+                </svg>
                 &nbsp;ОНЛАЙН // <span>ЦІНИ</span>
             </div>
             <div class="live-status">
@@ -798,29 +1452,50 @@
                 <span id="statusLabel">MANAGER ONLINE</span>
             </div>
         </div>
+
+        <nav class="nav-links" id="navLinks">
+            <a href="#hero-top" id="navHome">Головна</a>
+            <a href="#storeSpace" id="navCatalog">Каталог</a>
+            <a href="#benefits" id="navBenefits">Переваги</a>
+            <a href="#reviews" id="navReviews">Відгуки</a>
+            <a href="#contact" id="navContact">Контакти</a>
+        </nav>
+
         <div class="nav-actions">
             <button class="lang-btn" id="langBtn">EN</button>
             <button class="theme-btn" id="themeBtn">LIGHT MODE</button>
             <a href="https://www.instagram.com/online_shoooooop/" target="_blank" class="insta-btn">Instagram</a>
+            <button class="hamburger" id="hamburgerBtn" aria-label="Меню">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </header>
 
-    <!-- PRODUCT SPOTLIGHT OVERLAY (ДИНАМІЧНА СТОРІНКА ТОВАРУ) -->
+    <!-- MOBILE NAV -->
+    <nav class="mobile-nav" id="mobileNav">
+        <a href="#hero-top" id="mNavHome" onclick="closeMobileNav()">Головна</a>
+        <a href="#storeSpace" id="mNavCatalog" onclick="closeMobileNav()">Каталог</a>
+        <a href="#benefits" id="mNavBenefits" onclick="closeMobileNav()">Переваги</a>
+        <a href="#reviews" id="mNavReviews" onclick="closeMobileNav()">Відгуки</a>
+        <a href="#contact" id="mNavContact" onclick="closeMobileNav()">Контакти</a>
+    </nav>
+
+    <!-- PRODUCT SPOTLIGHT OVERLAY -->
     <div class="product-overlay" id="productOverlay">
         <div class="overlay-card jacuzzi-border">
             <button class="close-overlay" id="closeOverlay">&times;</button>
             <div class="overlay-content">
                 <div class="overlay-image-side">
                     <div class="exclusive-badge" id="modalBadge">EXCLUSIVE</div>
-                    <div class="product-img-slot">[ PREMIUM ORIGINAL GADGET ]</div>
+                    <div class="product-img-slot" id="modalImgSlot">
+                        <span class="img-placeholder">[ PREMIUM ORIGINAL ]</span>
+                    </div>
                 </div>
                 <div class="overlay-info-side">
                     <h2 id="modalTitle">Product Name</h2>
                     <div class="product-price" id="modalPrice">0 UAH</div>
-                    <p class="modal-desc" id="modalDesc">Product description options setup dynamic.</p>
-                    <table class="specs-table" id="modalSpecs">
-                        <!-- Наповнюється динамічно через JS -->
-                    </table>
+                    <p class="modal-desc" id="modalDesc">Product description.</p>
+                    <table class="specs-table" id="modalSpecs"></table>
                     <a href="https://www.instagram.com/online_shoooooop/" target="_blank" class="buy-action insta-order-btn" id="modalOrderBtn">Оформити запит</a>
                 </div>
             </div>
@@ -829,16 +1504,40 @@
 
     <div class="fluid-surface" id="surfaceWrapper">
 
-        <section class="hero-facade">
+        <!-- HERO -->
+        <section class="hero-facade" id="hero-top">
             <div class="facade-tag">EXCLUSIVE GADGETS HUB</div>
-            <h1 class="facade-title" id="mainTitle">ONLINE SHOP</h1>
+            <h1 class="facade-title" id="mainTitle">PREMIUM TECH</h1>
+            <p class="facade-subtitle" id="facadeSubtitle">Оригінальна техніка з доставкою по Україні</p>
             <p class="facade-desc" id="siteDesc">Естетика оригінальних рішень. Переступите поріг нашого простору та відчуйте бездоганну якість лідерів ринку.</p>
-            <button class="enter-btn" id="enterBtn">Зайти всередину</button>
+            <div class="hero-cta-group">
+                <button class="enter-btn" id="enterBtn">Переглянути каталог</button>
+                <a href="#contact" class="enter-btn-outline" id="contactBtn">Зв'язатися</a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-num">500+</div>
+                    <div class="hero-stat-label" id="statLabel1">Клієнтів</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-num">100%</div>
+                    <div class="hero-stat-label" id="statLabel2">Оригінал</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-num">12 міс.</div>
+                    <div class="hero-stat-label" id="statLabel3">Гарантія</div>
+                </div>
+            </div>
         </section>
 
+        <!-- CATALOG -->
         <section class="main-storefront" id="storeSpace">
+            <div class="section-header">
+                <div class="section-tag" id="catalogTag">Наш каталог</div>
+                <h2 class="section-title" id="catalogTitle">ВИБІР ТЕХНІКИ</h2>
+                <p class="section-desc" id="catalogDesc">Оберіть пристрій з нашого асортименту та оформіть замовлення через Instagram</p>
+            </div>
             <div class="shop-container">
-
                 <aside class="side-catalog jacuzzi-border">
                     <div class="catalog-title" id="catTitle">Каталог товарів</div>
                     <ul class="cat-group">
@@ -846,12 +1545,12 @@
                             <button class="cat-trigger" id="triggerApple" onclick="switchCategory('apple')">Apple Гаджети <span>↓</span></button>
                             <div class="cat-dropdown">
                                 <a href="#" id="subIphone" onclick="switchCategory('apple')">• iPhone Premium Line</a>
-                                <a href="#" id="subMacbook" onclick="switchCategory('apple')">• MacBook Air & Pro</a>
+                                <a href="#" id="subMacbook" onclick="switchCategory('apple')">• MacBook Air &amp; Pro</a>
                                 <a href="#" id="subIpad" onclick="switchCategory('apple')">• iPad Ultra Ecosystem</a>
                             </div>
                         </li>
                         <li class="cat-item" id="cat-gaming">
-                            <button class="cat-trigger" id="triggerGaming" onclick="switchCategory('gaming')">Геймінг & Складові <span>↓</span></button>
+                            <button class="cat-trigger" id="triggerGaming" onclick="switchCategory('gaming')">Геймінг &amp; Складові <span>↓</span></button>
                             <div class="cat-dropdown">
                                 <a href="#" id="subKeyboard" onclick="switchCategory('gaming')">• Механічні клавіатури</a>
                                 <a href="#" id="subMice" onclick="switchCategory('gaming')">• Елітні ігрові миші</a>
@@ -875,10 +1574,8 @@
                             <p id="bannerDesc">Індивідуальний підхід до кожного клієнта, який цінує надійність, оригінальність та швидкість інновацій.</p>
                         </div>
                     </div>
-
                     <div class="products-grid" id="productGrid"></div>
                 </div>
-
             </div>
 
             <div class="brands-marquee">
@@ -887,31 +1584,286 @@
                     <a href="#" onclick="switchCategory('gaming')">RAZER</a>
                     <a href="#" onclick="switchCategory('audio')">SONY</a>
                     <a href="#" onclick="switchCategory('gaming')">LOGITECH</a>
+                    <a href="#" onclick="switchCategory('gaming')">WOOTING</a>
+                    <a href="#" onclick="switchCategory('audio')">BOSE</a>
                     <a href="#" onclick="switchCategory('apple')">APPLE</a>
                     <a href="#" onclick="switchCategory('gaming')">RAZER</a>
                     <a href="#" onclick="switchCategory('audio')">SONY</a>
                     <a href="#" onclick="switchCategory('gaming')">LOGITECH</a>
+                    <a href="#" onclick="switchCategory('gaming')">WOOTING</a>
+                    <a href="#" onclick="switchCategory('audio')">BOSE</a>
                 </div>
             </div>
         </section>
+
+        <!-- BENEFITS -->
+        <section class="benefits-section" id="benefits">
+            <div class="section-header">
+                <div class="section-tag" id="benefitsTag">Чому ми</div>
+                <h2 class="section-title" id="benefitsTitle">НАШІ ПЕРЕВАГИ</h2>
+                <p class="section-desc" id="benefitsDesc">Ми гарантуємо якість на кожному кроці — від вибору до доставки</p>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <span class="benefit-icon">✅</span>
+                    <div class="benefit-title" id="ben1Title">Оригінальна техніка</div>
+                    <p class="benefit-desc" id="ben1Desc">Всі товари — виключно оригінальні, від офіційних дистриб'юторів. Ніякого рефурбу або підробок.</p>
+                </div>
+                <div class="benefit-card">
+                    <span class="benefit-icon">🚀</span>
+                    <div class="benefit-title" id="ben2Title">Швидка доставка</div>
+                    <p class="benefit-desc" id="ben2Desc">Доставляємо по всій Україні протягом 1–3 днів. Нова пошта, Укрпошта або кур'єр — на ваш вибір.</p>
+                </div>
+                <div class="benefit-card">
+                    <span class="benefit-icon">🛡️</span>
+                    <div class="benefit-title" id="ben3Title">Гарантія 12 місяців</div>
+                    <p class="benefit-desc" id="ben3Desc">Офіційна гарантія на весь асортимент. У разі будь-яких проблем — повний сервісний супровід.</p>
+                </div>
+                <div class="benefit-card">
+                    <span class="benefit-icon">💬</span>
+                    <div class="benefit-title" id="ben4Title">Підтримка 24/7</div>
+                    <p class="benefit-desc" id="ben4Desc">Наш менеджер завжди онлайн та готовий відповісти на будь-яке запитання в Instagram або телефоном.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- REVIEWS -->
+        <section class="reviews-section" id="reviews">
+            <div class="section-header">
+                <div class="section-tag" id="reviewsTag">Відгуки</div>
+                <h2 class="section-title" id="reviewsTitle">ЩО КАЖУТЬ КЛІЄНТИ</h2>
+                <p class="section-desc" id="reviewsDesc">Більше 500 задоволених покупців по всій Україні</p>
+            </div>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="review-quote">"</div>
+                    <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                    <p class="review-text" id="review1Text">"Замовив iPhone 15 Pro Max — прийшов в ідеальній упаковці, оригінал 100%. Менеджер відповів моментально, доставка Nova Post наступного дня. Рекомендую!"</p>
+                    <div class="review-author">
+                        <div class="review-avatar">ДМ</div>
+                        <div>
+                            <div class="review-name" id="review1Name">Дмитро М.</div>
+                            <div class="review-product" id="review1Product">iPhone 15 Pro Max</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-quote">"</div>
+                    <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                    <p class="review-text" id="review2Text">"Брала навушники Sony WH-1000XM5 — якість звуку неймовірна, а шумозаглушення взагалі космос. Ціна краща, ніж в офіційних магазинах. Однозначно повернуся!"</p>
+                    <div class="review-author">
+                        <div class="review-avatar">ОК</div>
+                        <div>
+                            <div class="review-name" id="review2Name">Олена К.</div>
+                            <div class="review-product" id="review2Product">Sony WH-1000XM5</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-quote">"</div>
+                    <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                    <p class="review-text" id="review3Text">"MacBook Pro M3 Max — мрія дизайнера. Все прийшло швидко, упаковка бездоганна. Менеджер допоміг обрати потрібну конфігурацію. Магазин вищого рівня!"</p>
+                    <div class="review-author">
+                        <div class="review-avatar">АП</div>
+                        <div>
+                            <div class="review-name" id="review3Name">Андрій П.</div>
+                            <div class="review-product" id="review3Product">MacBook Pro 16" M3 Max</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INSTAGRAM SECTION -->
+        <section class="instagram-section" id="instagram">
+            <div class="insta-block">
+                <div class="section-tag">Слідкуй за нами</div>
+                <h2 class="section-title">@ONLINE_SHOOOOOOP</h2>
+                <p class="section-desc">Нові надходження, ексклюзивні пропозиції та відгуки — щодня в Instagram</p>
+                <a href="https://www.instagram.com/online_shoooooop/" target="_blank" class="insta-big-btn">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="white" stroke-width="2"/>
+                        <circle cx="12" cy="12" r="5" stroke="white" stroke-width="2"/>
+                        <circle cx="17.5" cy="6.5" r="1.5" fill="white"/>
+                    </svg>
+                    Підписатися в Instagram
+                </a>
+                <div class="insta-gallery">
+                    <a href="https://www.instagram.com/online_shoooooop/" target="_blank" class="insta-post">
+                        <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-7inch-blacktitanium?wid=400&hei=400&fmt=jpeg&qlt=80" alt="iPhone 15 Pro Max" onerror="this.style.display='none'">
+                        <div class="insta-post-overlay"></div>
+                    </a>
+                    <a href="https://www.instagram.com/online_shoooooop/" target="_blank" class="insta-post">
+                        <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/mbp16-spacegray-select-202310?wid=400&hei=400&fmt=jpeg&qlt=80" alt="MacBook Pro 16" onerror="this.style.display='none'">
+                        <div class="insta-post-overlay"></div>
+                    </a>
+                    <a href="https://www.instagram.com/online_shoooooop/" target="_blank" class="insta-post">
+                        <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/ipad-pro-finish-select-202405-13inch-silver-wifi?wid=400&hei=400&fmt=jpeg&qlt=80" alt="iPad Pro" onerror="this.style.display='none'">
+                        <div class="insta-post-overlay"></div>
+                    </a>
+                    <a href="https://www.instagram.com/online_shoooooop/" target="_blank" class="insta-post">
+                        <img src="https://www.sony.com/image/5d02da5df552836db894cead8a68f5f3?fmt=png-alpha&wid=400" alt="Sony WH-1000XM5" onerror="this.style.display='none'">
+                        <div class="insta-post-overlay"></div>
+                    </a>
+                    <a href="https://www.instagram.com/online_shoooooop/" target="_blank" class="insta-post">
+                        <img src="https://resource.logitech.com/w_386,h_386,ar_1:1,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/logitech/en/products/mice/g-pro-x-superlight-2/gallery/gpx-superlight2-gallery-1-black.png" alt="Logitech G Pro" onerror="this.style.display='none'">
+                        <div class="insta-post-overlay"></div>
+                    </a>
+                    <a href="https://www.instagram.com/online_shoooooop/" target="_blank" class="insta-post">
+                        <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/airpods-pro-2-hero-select?wid=400&hei=400&fmt=jpeg&qlt=80" alt="AirPods Pro 2" onerror="this.style.display='none'">
+                        <div class="insta-post-overlay"></div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section class="contact-section" id="contact">
+            <div class="section-header">
+                <div class="section-tag" id="contactTag">Зв'язатися</div>
+                <h2 class="section-title" id="contactTitle">КОНТАКТИ</h2>
+                <p class="section-desc" id="contactDesc">Маєте питання? Пишіть — відповімо швидко!</p>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3 id="contactInfoTitle">Як з нами зв'язатися</h3>
+                    <div class="contact-item">
+                        <div class="contact-icon">📱</div>
+                        <div>
+                            <div class="contact-item-title">Instagram</div>
+                            <div class="contact-item-value"><a href="https://www.instagram.com/online_shoooooop/" target="_blank">@online_shoooooop</a></div>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">🕐</div>
+                        <div>
+                            <div class="contact-item-title" id="workTimeLabel">Години роботи</div>
+                            <div class="contact-item-value" id="workTimeValue">Пн–Нд: 9:00 — 22:00</div>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">🚚</div>
+                        <div>
+                            <div class="contact-item-title" id="deliveryLabel">Доставка</div>
+                            <div class="contact-item-value" id="deliveryValue">Нова Пошта · Укрпошта · Meest</div>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div>
+                            <div class="contact-item-title" id="locationLabel">Географія</div>
+                            <div class="contact-item-value" id="locationValue">Доставляємо по всій Україні</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form-wrapper">
+                    <h3 id="formTitle">Залишити запит</h3>
+                    <form class="contact-form" id="contactForm" onsubmit="handleFormSubmit(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="formName" id="labelName">Ваше ім'я</label>
+                                <input type="text" id="formName" placeholder="Іван" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="formPhone" id="labelPhone">Телефон / Instagram</label>
+                                <input type="text" id="formPhone" placeholder="+380 або @ніk">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="formProduct" id="labelProduct">Товар, що цікавить</label>
+                            <input type="text" id="formProduct" placeholder="iPhone 15 Pro Max, MacBook...">
+                        </div>
+                        <div class="form-group">
+                            <label for="formMessage" id="labelMessage">Повідомлення</label>
+                            <textarea id="formMessage" placeholder="Ваше запитання або деталі замовлення..."></textarea>
+                        </div>
+                        <button type="submit" class="form-submit-btn" id="formSubmitBtn">Надіслати запит</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
     </div>
+
+    <!-- FOOTER -->
+    <footer id="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <svg height="20" viewBox="0 0 100 50" fill="#e63946" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 10 5 L 32 5 L 32 15 L 22 15 L 22 35 L 32 35 L 32 45 L 10 45 Z" />
+                        <path d="M 40 10 L 47 10 L 47 40 L 40 40 Z" />
+                        <path d="M 60 10 L 53 10 L 53 40 L 60 40 Z" />
+                        <path d="M 90 5 L 68 5 L 68 15 L 78 15 L 78 35 L 68 35 L 68 45 L 90 45 Z" />
+                    </svg>
+                    ОНЛАЙН // <span>ЦІНИ</span>
+                </div>
+                <p>Оригінальна техніка провідних брендів з гарантією та швидкою доставкою по Україні.</p>
+            </div>
+            <div>
+                <div class="footer-nav-title">Навігація</div>
+                <div class="footer-nav-links">
+                    <a href="#hero-top">Головна</a>
+                    <a href="#storeSpace">Каталог</a>
+                    <a href="#benefits">Переваги</a>
+                    <a href="#reviews">Відгуки</a>
+                    <a href="#contact">Контакти</a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-contact-title">Контакти</div>
+                <div class="footer-contact-list">
+                    <a href="https://www.instagram.com/online_shoooooop/" target="_blank">
+                        <span>📱</span> @online_shoooooop
+                    </a>
+                    <a href="#contact">
+                        <span>✉️</span> Надіслати запит
+                    </a>
+                    <a href="#storeSpace">
+                        <span>🛒</span> Переглянути каталог
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copy">© <span>2025</span> ОНЛАЙН // ЦІНИ — Premium Tech Store. Всі права захищено.</div>
+            <div class="footer-made">Made with ❤️ in Ukraine</div>
+        </div>
+    </footer>
 
     <script>
         let currentLang = 'uk';
         let activeCategory = 'apple';
 
+        const sharedLogoSVG = `
+            <svg class="logo-img" viewBox="0 0 100 50" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 10 5 L 32 5 L 32 15 L 22 15 L 22 35 L 32 35 L 32 45 L 10 45 Z" />
+                <path d="M 40 10 L 47 10 L 47 40 L 40 40 Z" />
+                <path d="M 60 10 L 53 10 L 53 40 L 60 40 Z" />
+                <path d="M 90 5 L 68 5 L 68 15 L 78 15 L 78 35 L 68 35 L 68 45 L 90 45 Z" />
+            </svg>
+        `;
+
         const translations = {
             uk: {
                 greetText: "Доброго вечора, шановний гостю.<br><span>Ваш</span> вечірній простір технологій готовий до роботи.",
-                siteLogo: `<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c5a880'><path d='M12 2L2 22h20L12 2zm0 4l6.5 13h-13L12 6z'/></svg>" class="logo-img" alt="Logo">&nbsp;ОНЛАЙН // <span>ЦІНИ</span>`,
+                siteLogo: sharedLogoSVG + `&nbsp;ОНЛАЙН // <span>ЦІНИ</span>`,
                 siteDesc: "Естетика оригінальних рішень. Переступите поріг нашого простору та відчуйте бездоганну якість лідерів ринку.",
-                enterBtn: "Зайти всередину",
+                facadeSubtitle: "Оригінальна техніка з доставкою по Україні",
+                enterBtn: "Переглянути каталог",
+                contactBtn: "Зв'язатися",
+                statLabel1: "Клієнтів",
+                statLabel2: "Оригінал",
+                statLabel3: "Гарантія",
+                catalogTag: "Наш каталог",
+                catalogTitle: "ВИБІР ТЕХНІКИ",
+                catalogDesc: "Оберіть пристрій з нашого асортименту та оформіть замовлення через Instagram",
                 catTitle: "Каталог товарів",
                 triggerApple: "Apple Гаджети <span>↓</span>",
-                triggerGaming: "Геймінг & Складові <span>↓</span>",
+                triggerGaming: "Геймінг &amp; Складові <span>↓</span>",
                 triggerAudio: "Аудіосистеми <span>↓</span>",
                 subIphone: "• iPhone Premium Line",
-                subMacbook: "• MacBook Air & Pro",
+                subMacbook: "• MacBook Air &amp; Pro",
                 subIpad: "• iPad Ultra Ecosystem",
                 subKeyboard: "• Механічні клавіатури",
                 subMice: "• Елітні ігрові миші",
@@ -923,20 +1875,61 @@
                 buyAction: "Детальніше",
                 statusLabel: "МЕНЕДЖЕР ОНЛАЙН",
                 modalBtnText: "Оформити запит через Instagram",
+                navHome: "Головна", navCatalog: "Каталог", navBenefits: "Переваги", navReviews: "Відгуки", navContact: "Контакти",
+                mNavHome: "Головна", mNavCatalog: "Каталог", mNavBenefits: "Переваги", mNavReviews: "Відгуки", mNavContact: "Контакти",
+                benefitsTag: "Чому ми",
+                benefitsTitle: "НАШІ ПЕРЕВАГИ",
+                benefitsDesc: "Ми гарантуємо якість на кожному кроці — від вибору до доставки",
+                ben1Title: "Оригінальна техніка",
+                ben1Desc: "Всі товари — виключно оригінальні, від офіційних дистриб'юторів. Ніякого рефурбу або підробок.",
+                ben2Title: "Швидка доставка",
+                ben2Desc: "Доставляємо по всій Україні протягом 1–3 днів. Нова пошта, Укрпошта або кур'єр — на ваш вибір.",
+                ben3Title: "Гарантія 12 місяців",
+                ben3Desc: "Офіційна гарантія на весь асортимент. У разі будь-яких проблем — повний сервісний супровід.",
+                ben4Title: "Підтримка 24/7",
+                ben4Desc: "Наш менеджер завжди онлайн та готовий відповісти на будь-яке запитання в Instagram або телефоном.",
+                reviewsTag: "Відгуки",
+                reviewsTitle: "ЩО КАЖУТЬ КЛІЄНТИ",
+                reviewsDesc: "Більше 500 задоволених покупців по всій Україні",
+                review1Text: '"Замовив iPhone 15 Pro Max — прийшов в ідеальній упаковці, оригінал 100%. Менеджер відповів моментально, доставка Nova Post наступного дня. Рекомендую!"',
+                review1Name: "Дмитро М.", review1Product: "iPhone 15 Pro Max",
+                review2Text: '"Брала навушники Sony WH-1000XM5 — якість звуку неймовірна, а шумозаглушення взагалі космос. Ціна краща, ніж в офіційних магазинах. Однозначно повернуся!"',
+                review2Name: "Олена К.", review2Product: "Sony WH-1000XM5",
+                review3Text: '"MacBook Pro M3 Max — мрія дизайнера. Все прийшло швидко, упаковка бездоганна. Менеджер допоміг обрати потрібну конфігурацію. Магазин вищого рівня!"',
+                review3Name: "Андрій П.", review3Product: "MacBook Pro 16\" M3 Max",
+                contactTag: "Зв'язатися",
+                contactTitle: "КОНТАКТИ",
+                contactDesc: "Маєте питання? Пишіть — відповімо швидко!",
+                contactInfoTitle: "Як з нами зв'язатися",
+                workTimeLabel: "Години роботи", workTimeValue: "Пн–Нд: 9:00 — 22:00",
+                deliveryLabel: "Доставка", deliveryValue: "Нова Пошта · Укрпошта · Meest",
+                locationLabel: "Географія", locationValue: "Доставляємо по всій Україні",
+                formTitle: "Залишити запит",
+                labelName: "Ваше ім'я", labelPhone: "Телефон / Instagram",
+                labelProduct: "Товар, що цікавить", labelMessage: "Повідомлення",
+                formSubmitBtn: "Надіслати запит",
                 specLabels: { state: "Стан", warranty: "Гарантія", Delivery: "Доставка" },
                 specValues: { new: "Новий / Оригінал", war: "12 місяців", del: "Швидка по Україні" }
             },
             en: {
-                greetText: "Good evening, dear guest.<br><span>Your</span> evening technology space is ready for operation.",
-                siteLogo: `<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23c5a880'><path d='M12 2L2 22h20L12 2zm0 4l6.5 13h-13L12 6z'/></svg>" class="logo-img" alt="Logo">&nbsp;ONLINE // <span>PRICES</span>`,
+                greetText: "Good evening, dear guest.<br><span>Your</span> evening technology space is ready.",
+                siteLogo: sharedLogoSVG + `&nbsp;ONLINE // <span>PRICES</span>`,
                 siteDesc: "Aesthetics of original solutions. Step across the threshold of our space and experience the flawless quality of market leaders.",
-                enterBtn: "Step inside",
+                facadeSubtitle: "Premium Original Tech with Delivery across Ukraine",
+                enterBtn: "Browse Catalog",
+                contactBtn: "Contact Us",
+                statLabel1: "Clients",
+                statLabel2: "Original",
+                statLabel3: "Warranty",
+                catalogTag: "Our Catalog",
+                catalogTitle: "CHOOSE YOUR TECH",
+                catalogDesc: "Choose from our lineup and place your order via Instagram",
                 catTitle: "Product Catalog",
                 triggerApple: "Apple Gadgets <span>↓</span>",
-                triggerGaming: "Gaming & Hardware <span>↓</span>",
+                triggerGaming: "Gaming &amp; Hardware <span>↓</span>",
                 triggerAudio: "Audio Systems <span>↓</span>",
                 subIphone: "• iPhone Premium Line",
-                subMacbook: "• MacBook Air & Pro",
+                subMacbook: "• MacBook Air &amp; Pro",
                 subIpad: "• iPad Ultra Ecosystem",
                 subKeyboard: "• Mechanical Keyboards",
                 subMice: "• Elite Gaming Mice",
@@ -948,6 +1941,39 @@
                 buyAction: "View Details",
                 statusLabel: "MANAGER ONLINE",
                 modalBtnText: "Order via Instagram",
+                navHome: "Home", navCatalog: "Catalog", navBenefits: "Benefits", navReviews: "Reviews", navContact: "Contact",
+                mNavHome: "Home", mNavCatalog: "Catalog", mNavBenefits: "Benefits", mNavReviews: "Reviews", mNavContact: "Contact",
+                benefitsTag: "Why us",
+                benefitsTitle: "OUR ADVANTAGES",
+                benefitsDesc: "We guarantee quality at every step — from selection to delivery",
+                ben1Title: "Original Products",
+                ben1Desc: "All goods are exclusively original, from official distributors. No refurbs or fakes.",
+                ben2Title: "Fast Delivery",
+                ben2Desc: "We deliver across all of Ukraine within 1–3 days. Nova Post, Ukrposhta, or courier — your choice.",
+                ben3Title: "12-Month Warranty",
+                ben3Desc: "Official warranty on all products. Full service support in case of any issues.",
+                ben4Title: "24/7 Support",
+                ben4Desc: "Our manager is always online, ready to answer any question via Instagram or by phone.",
+                reviewsTag: "Reviews",
+                reviewsTitle: "WHAT CLIENTS SAY",
+                reviewsDesc: "Over 500 satisfied customers across Ukraine",
+                review1Text: '"Ordered iPhone 15 Pro Max — arrived in perfect packaging, 100% original. Manager replied instantly, Nova Post delivery next day. Highly recommend!"',
+                review1Name: "Dmytro M.", review1Product: "iPhone 15 Pro Max",
+                review2Text: '"Got Sony WH-1000XM5 — the sound quality is incredible, noise cancellation is just cosmic. Better price than official stores. Definitely coming back!"',
+                review2Name: "Olena K.", review2Product: "Sony WH-1000XM5",
+                review3Text: '"MacBook Pro M3 Max — a designer\'s dream. Everything arrived quickly, packaging is flawless. Manager helped choose the right config. Top-tier store!"',
+                review3Name: "Andriy P.", review3Product: "MacBook Pro 16\" M3 Max",
+                contactTag: "Get in Touch",
+                contactTitle: "CONTACTS",
+                contactDesc: "Have a question? Write to us — we'll reply quickly!",
+                contactInfoTitle: "How to reach us",
+                workTimeLabel: "Working hours", workTimeValue: "Mon–Sun: 9:00 — 22:00",
+                deliveryLabel: "Delivery", deliveryValue: "Nova Post · Ukrposhta · Meest",
+                locationLabel: "Coverage", locationValue: "Delivery across all of Ukraine",
+                formTitle: "Leave a Request",
+                labelName: "Your name", labelPhone: "Phone / Instagram",
+                labelProduct: "Product of interest", labelMessage: "Message",
+                formSubmitBtn: "Send Request",
                 specLabels: { state: "Condition", warranty: "Warranty", Delivery: "Delivery" },
                 specValues: { new: "Brand New / Original", war: "12 Months", del: "Fast Shipping" }
             }
@@ -955,19 +1981,70 @@
 
         const productsDatabase = {
             apple: [
-                { name: "iPhone 15 Pro Max 256GB Space Black", price: "44 500 UAH", tag: "EXCLUSIVE", descUk: "Найвища лінійка смартфонів Apple з титановим корпусом та передовою оптикою.", descEn: "The flagship line of Apple smartphones featuring a durable titanium frame and pro-tier cameras." },
-                { name: "MacBook Pro 16\" M3 Max 36GB/1TB", price: "142 000 UAH", tag: "EXCLUSIVE", descUk: "Безкомпромісна потужність для найважчих професійних завдань, рендерингу та кодингу.", descEn: "Uncompromised performance for extreme professional workflows, 3D rendering, and compiling." },
-                { name: "iPad Pro 13\" M4 Wi-Fi 512GB Matte", price: "64 900 UAH", tag: "NEW", descUk: "Ультратонкий дизайн з революційним Tandem OLED дисплеєм нового покоління.", descEn: "Ultra-thin design combined with the revolutionary Tandem OLED display tech." }
+                {
+                    name: "iPhone 15 Pro Max 256GB Space Black",
+                    price: "44 500 UAH",
+                    tag: "EXCLUSIVE",
+                    img: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-7inch-blacktitanium?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1693009284535",
+                    descUk: "Найвища лінійка смартфонів Apple з титановим корпусом та передовою оптикою. Чіп A17 Pro, USB-C, Action Button.",
+                    descEn: "The flagship Apple smartphone with titanium frame, A17 Pro chip, USB-C, and Action Button."
+                },
+                {
+                    name: "MacBook Pro 16\" M3 Max 36GB/1TB",
+                    price: "142 000 UAH",
+                    tag: "EXCLUSIVE",
+                    img: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/mbp16-spacegray-select-202310?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1697230830200",
+                    descUk: "Безкомпромісна потужність для найважчих професійних завдань, рендерингу та кодингу. Дисплей 16.2\" Liquid Retina XDR.",
+                    descEn: "Uncompromised performance for extreme workflows. 16.2\" Liquid Retina XDR display, M3 Max chip."
+                },
+                {
+                    name: "iPad Pro 13\" M4 Wi-Fi 512GB",
+                    price: "64 900 UAH",
+                    tag: "NEW",
+                    img: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/ipad-pro-finish-select-202405-13inch-silver-wifi?wid=800&hei=800&fmt=jpeg&qlt=90&.v=1713920657751",
+                    descUk: "Ультратонкий дизайн (5.1 мм) з революційним Tandem OLED дисплеєм та найпотужнішим чіпом M4.",
+                    descEn: "Ultra-thin design (5.1mm) with revolutionary Tandem OLED display and powerful M4 chip."
+                }
             ],
             gaming: [
-                { name: "Wooting 60HE Analog Mechanical Keyboard", price: "11 800 UAH", tag: "EXCLUSIVE", descUk: "Аналогова клавіатура на магнітних перемикачах ефекту Холла для максимального відгуку в іграх.", descEn: "Analog mechanical keyboard powered by Hall effect switches for extreme gaming response." },
-                { name: "Logitech G Pro X Superlight 2 Lightspeed", price: "6 400 UAH", tag: "POPULAR", descUk: "Вибір кіберспортсменів: надлегка бездротова конструкція та ідеальна точність сенсора.", descEn: "The esports choice: ultra-light wireless frame housing a pixel-perfect sensor." }
+                {
+                    name: "Wooting 60HE Analog Mechanical Keyboard",
+                    price: "11 800 UAH",
+                    tag: "EXCLUSIVE",
+                    img: "https://images.squarespace-cdn.com/content/v1/618b8db2a3c68a2c0e84c2d3/1636556574696-OFTHIVW0MVXFBMV0VXCQ/Wooting+60HE+Product+Photo.jpg",
+                    descUk: "Аналогова клавіатура на магнітних перемикачах ефекту Холла для максимального відгуку в іграх.",
+                    descEn: "Analog mechanical keyboard powered by Hall effect switches for extreme gaming response."
+                },
+                {
+                    name: "Logitech G Pro X Superlight 2",
+                    price: "6 400 UAH",
+                    tag: "POPULAR",
+                    img: "https://resource.logitech.com/w_386,h_386,ar_1:1,q_auto,f_auto,dpr_2.0/d_transparent.gif/content/dam/logitech/en/products/mice/g-pro-x-superlight-2/gallery/gpx-superlight2-gallery-1-black.png",
+                    descUk: "Вибір кіберспортсменів: надлегка бездротова конструкція та ідеальна точність сенсора HERO 2.",
+                    descEn: "The esports choice: ultra-light wireless design with pixel-perfect HERO 2 sensor."
+                }
             ],
             audio: [
-                { name: "Sony WH-1000XM5 Wireless Noise-Cancelling", price: "14 300 UAH", tag: "PREMIUM", descUk: "Еталонне активне шумозаглушення преміум-класу та кришталево чисте просторове аудіо.", descEn: "Industry-leading active noise cancellation coupled with pristine spatial soundscapes." }
+                {
+                    name: "Sony WH-1000XM5 Wireless",
+                    price: "14 300 UAH",
+                    tag: "PREMIUM",
+                    img: "https://www.sony.com/image/5d02da5df552836db894cead8a68f5f3?fmt=png-alpha&wid=600",
+                    descUk: "Еталонне активне шумозаглушення преміум-класу та кришталево чисте просторове аудіо. До 30 годин відтворення.",
+                    descEn: "Industry-leading ANC with pristine spatial audio. Up to 30 hours playback."
+                },
+                {
+                    name: "Apple AirPods Pro 2 USB-C",
+                    price: "9 900 UAH",
+                    tag: "NEW",
+                    img: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MQD83?wid=800&hei=800&fmt=jpeg&qlt=90",
+                    descUk: "Адаптивне шумозаглушення нового покоління, Adaptive Audio та Conversation Awareness. Чіп H2.",
+                    descEn: "Next-gen Adaptive Transparency, Conversation Awareness, H2 chip. USB-C charging case."
+                }
             ]
         };
 
+        /* ===== CURSOR GLOW ===== */
         const glow = document.getElementById('glow');
         let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
         let ballX = window.innerWidth / 2, ballY = window.innerHeight / 2;
@@ -984,6 +2061,7 @@
         }
         smoothCursorAnimation();
 
+        /* ===== INIT ===== */
         window.addEventListener('DOMContentLoaded', () => {
             const hour = new Date().getHours();
             if (hour >= 17 || hour < 5) {
@@ -997,11 +2075,12 @@
             setupModalListeners();
         });
 
+        /* ===== HERO CTA ===== */
         document.getElementById('enterBtn').addEventListener('click', () => {
-            const target = document.getElementById('storeSpace');
-            window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 50, behavior: 'smooth' });
+            document.getElementById('storeSpace').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
+        /* ===== THEME ===== */
         const themeBtn = document.getElementById('themeBtn');
         const wrapper = document.getElementById('surfaceWrapper');
 
@@ -1019,6 +2098,7 @@
             }, 450);
         });
 
+        /* ===== LANG ===== */
         const langBtn = document.getElementById('langBtn');
         langBtn.addEventListener('click', () => {
             wrapper.classList.add('fluid-transition');
@@ -1027,9 +2107,11 @@
                 langBtn.textContent = currentLang === 'uk' ? 'EN' : 'UA';
 
                 const pack = translations[currentLang];
+                const skipKeys = ['specLabels', 'specValues'];
                 for (let key in pack) {
+                    if (skipKeys.includes(key)) continue;
                     const el = document.getElementById(key);
-                    if (el && key !== 'specLabels' && key !== 'specValues') el.innerHTML = pack[key];
+                    if (el) el.innerHTML = pack[key];
                 }
 
                 renderProducts(activeCategory);
@@ -1037,16 +2119,29 @@
             }, 450);
         });
 
+        /* ===== HAMBURGER ===== */
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const mobileNav = document.getElementById('mobileNav');
+
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('active');
+            mobileNav.classList.toggle('open');
+        });
+
+        function closeMobileNav() {
+            hamburgerBtn.classList.remove('active');
+            mobileNav.classList.remove('open');
+        }
+
+        /* ===== CATEGORY SWITCH ===== */
         function switchCategory(catKey) {
             if (window.event) window.event.preventDefault();
             activeCategory = catKey;
-
             document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`cat-${catKey}`).classList.add('active');
 
             const grid = document.getElementById('productGrid');
             grid.style.opacity = '0';
-
             setTimeout(() => {
                 renderProducts(catKey);
                 grid.style.opacity = '1';
@@ -1059,6 +2154,7 @@
             }, 350);
         }
 
+        /* ===== RENDER PRODUCTS ===== */
         function renderProducts(catKey) {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = '';
@@ -1067,10 +2163,19 @@
                 const card = document.createElement('div');
                 card.className = 'product-card jacuzzi-border';
                 card.setAttribute('onclick', `openProductModal('${catKey}', ${index})`);
+
+                const imgHTML = prod.img
+                    ? `<img src="${prod.img}" alt="${prod.name}" onerror="this.parentNode.innerHTML='<span class=\\'img-placeholder\\'>${prod.tag}</span>'">`
+                    : `<span class="img-placeholder">${prod.tag}</span>`;
+
+                const shortDesc = currentLang === 'uk' ? prod.descUk : prod.descEn;
+                const shortDescTrimmed = shortDesc.length > 80 ? shortDesc.substring(0, 80) + '…' : shortDesc;
+
                 card.innerHTML = `
                     <div class="exclusive-badge">${prod.tag}</div>
-                    <div class="product-img-slot">[ BRAND PLATFORM ]</div>
+                    <div class="product-img-slot">${imgHTML}</div>
                     <h3>${prod.name}</h3>
+                    <p class="product-desc-short">${shortDescTrimmed}</p>
                     <div class="product-price">${prod.price}</div>
                     <button class="buy-action">${translations[currentLang].buyAction}</button>
                 `;
@@ -1078,7 +2183,7 @@
             });
         }
 
-        /* OVERLAY LOGIC FOR INDIVIDUAL PRODUCT PAGES */
+        /* ===== OVERLAY LOGIC ===== */
         const overlay = document.getElementById('productOverlay');
 
         function openProductModal(catKey, index) {
@@ -1091,7 +2196,14 @@
             document.getElementById('modalPrice').textContent = product.price;
             document.getElementById('modalDesc').textContent = currentLang === 'uk' ? product.descUk : product.descEn;
 
-            // Формування преміальної таблиці специфікацій
+            // Update modal image
+            const modalImgSlot = document.getElementById('modalImgSlot');
+            if (product.img) {
+                modalImgSlot.innerHTML = `<img src="${product.img}" alt="${product.name}" style="width:100%;height:100%;object-fit:contain;padding:20px;" onerror="this.parentNode.innerHTML='<span class=\\'img-placeholder\\'>[ PREMIUM ORIGINAL ]</span>'">`;
+            } else {
+                modalImgSlot.innerHTML = `<span class="img-placeholder">[ PREMIUM ORIGINAL ]</span>`;
+            }
+
             const specsTable = document.getElementById('modalSpecs');
             specsTable.innerHTML = `
                 <tr><td>${labels.state}</td><td>${values.new}</td></tr>
@@ -1099,7 +2211,6 @@
                 <tr><td>${labels.Delivery}</td><td>${values.del}</td></tr>
             `;
 
-            // Автоматичне формування красивого тексту для Instagram Direct
             const encodedText = encodeURIComponent(`Вітаю! Мене зацікавив товар: ${product.name} (${product.price}). Чи є в наявності?`);
             document.getElementById('modalOrderBtn').href = `https://www.instagram.com/online_shoooooop/?text=${encodedText}`;
             document.getElementById('modalOrderBtn').textContent = translations[currentLang].modalBtnText;
@@ -1110,13 +2221,36 @@
 
         function setupModalListeners() {
             document.getElementById('closeOverlay').addEventListener('click', closeModal);
-            overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
-            document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+            overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
         }
 
         function closeModal() {
             overlay.classList.remove('active');
             document.body.classList.remove('modal-open');
+        }
+
+        /* ===== CONTACT FORM ===== */
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('formName').value;
+            const phone = document.getElementById('formPhone').value;
+            const product = document.getElementById('formProduct').value;
+            const message = document.getElementById('formMessage').value;
+
+            const text = `Нове звернення!\nІм'я: ${name}\nКонтакт: ${phone}\nТовар: ${product}\nПовідомлення: ${message}`;
+            const encoded = encodeURIComponent(text);
+            window.open(`https://www.instagram.com/online_shoooooop/?text=${encoded}`, '_blank');
+
+            const btn = document.getElementById('formSubmitBtn');
+            const origText = btn.textContent;
+            btn.textContent = '✓ Надіслано!';
+            btn.style.background = '#2ec4b6';
+            setTimeout(() => {
+                btn.textContent = origText;
+                btn.style.background = '';
+                document.getElementById('contactForm').reset();
+            }, 2500);
         }
     </script>
 </body>
