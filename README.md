@@ -324,7 +324,7 @@ This project is licensed under the **MIT License** — see the LICENSE file for 
 
 ## 📞 Support
 
-Если ести питання або баги:
+Якщо є питання або баги:
 
 1. Відкрий Issue на GitHub
 2. Напиши детально про проблему
