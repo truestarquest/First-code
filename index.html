@@ -497,7 +497,7 @@
         /* ===== TOASTS ===== */
         .toast-container {
             position: fixed;
-            bottom: 30px; right: 30px;
+            bottom: 100px; right: 30px;
             z-index: 5000;
             display: flex; flex-direction: column; gap: 10px;
             pointer-events: none;
@@ -523,7 +523,7 @@
         .toast-icon { flex-shrink: 0; width: 18px; height: 18px; color: var(--gold-premium); }
 
         @media (max-width: 480px) {
-            .toast-container { right: 16px; left: 16px; bottom: 16px; }
+            .toast-container { right: 16px; left: 16px; bottom: 92px; }
             .toast { max-width: none; }
             .icon-btn { width: 36px; height: 36px; }
         }
@@ -1061,27 +1061,6 @@
             background: var(--accent-color);
             color: #ffffff;
         }
-
-        .cat-dropdown {
-            max-height: 0;
-            overflow: hidden;
-            padding-left: 15px;
-            transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .cat-item.active .cat-dropdown { max-height: 350px; }
-
-        .cat-dropdown a {
-            display: block;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 13px;
-            padding: 11px 0;
-            transition: color 0.3s;
-        }
-
-        .cat-dropdown a:hover { color: var(--text-color); }
-        .cat-dropdown a.sub-active { color: var(--gold-premium); font-weight: 600; }
 
         .main-showcase { flex: 2.4; display: flex; flex-direction: column; gap: 40px; }
 
@@ -1952,6 +1931,447 @@
             .nav-actions { gap: 6px; }
             .theme-btn { display: none; }
         }
+
+        /* ===== FILTERS PANEL ===== */
+        .filter-block { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--border-color); }
+
+        .filter-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .price-inputs { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+
+        .price-inputs input {
+            width: 100%;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 12px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .price-inputs input:focus { outline: none; border-color: var(--gold-premium); }
+        .price-inputs span { color: var(--text-muted); font-size: 12px; }
+
+        .price-slider { width: 100%; accent-color: var(--accent-color); margin-bottom: 6px; cursor: pointer; }
+        .price-hint { font-size: 11px; color: var(--text-muted); }
+
+        .check-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 13px;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .check-row input { accent-color: var(--accent-color); width: 15px; height: 15px; cursor: pointer; }
+        .check-row .check-count { margin-left: auto; font-size: 11px; color: var(--text-muted); }
+
+        .reset-filters {
+            width: 100%;
+            margin-top: 18px;
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+            border-radius: 8px;
+            padding: 11px 0;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reset-filters:hover { border-color: var(--accent-color); color: var(--accent-color); }
+
+        .filters-toggle { display: none; }
+
+        .results-count { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+
+        /* ===== STOCK STATE ===== */
+        .stock-line { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 12px; }
+        .stock-in { color: #2ec4b6; }
+        .stock-out { color: var(--text-muted); }
+        .product-card.is-out .product-img-slot img { filter: grayscale(0.85) opacity(0.65); }
+        .cart-add-btn:disabled, .buy-action:disabled { opacity: 0.4; cursor: not-allowed; }
+        .cart-add-btn:disabled:hover { background: transparent; color: var(--gold-premium); }
+
+        /* ===== GENERIC MODAL SHELL (checkout / legal / callback) ===== */
+        .app-modal {
+            position: fixed; inset: 0;
+            background: var(--overlay-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 4000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .app-modal.active { opacity: 1; pointer-events: auto; }
+
+        .app-modal-card {
+            width: 100%;
+            max-width: 560px;
+            max-height: 88vh;
+            overflow-y: auto;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 36px 34px;
+            position: relative;
+            transform: translateY(30px) scale(0.97);
+            transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .app-modal.active .app-modal-card { transform: none; }
+        .app-modal-card.wide { max-width: 760px; }
+
+        .app-modal-close {
+            position: absolute;
+            top: 18px; right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 28px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .app-modal-close:hover { color: var(--accent-color); }
+
+        .app-modal-title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 15px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-color);
+            margin-bottom: 8px;
+            padding-right: 30px;
+        }
+
+        .app-modal-sub { font-size: 12.5px; color: var(--text-muted); margin-bottom: 26px; line-height: 1.6; }
+
+        /* ===== CHECKOUT FORM ===== */
+        .checkout-form { display: flex; flex-direction: column; gap: 16px; }
+        .checkout-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        .field { display: flex; flex-direction: column; gap: 7px; }
+
+        .field label {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .field input, .field textarea {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 13px 16px;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .field input:focus, .field textarea:focus { border-color: var(--gold-premium); }
+        .field textarea { resize: none; height: 80px; }
+        .field.invalid input { border-color: var(--accent-color); }
+
+        .field-error { font-size: 11px; color: var(--accent-color); display: none; }
+        .field.invalid .field-error { display: block; }
+
+        .pay-options { display: flex; flex-direction: column; gap: 10px; }
+
+        .pay-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px 16px;
+            cursor: pointer;
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .pay-option:hover { border-color: var(--gold-premium); }
+        .pay-option.selected { border-color: var(--gold-premium); background: rgba(197, 168, 128, 0.05); }
+        .pay-option input { accent-color: var(--accent-color); margin-top: 2px; }
+        .pay-option-name { font-size: 13px; font-weight: 600; color: var(--text-color); }
+        .pay-option-desc { font-size: 11.5px; color: var(--text-muted); margin-top: 3px; line-height: 1.5; }
+
+        .card-stub-note {
+            margin-top: 12px;
+            border: 1px dashed var(--gold-premium);
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 11.5px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .checkout-summary {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin-bottom: 24px;
+            background: var(--bg-color);
+        }
+
+        .summary-line { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--text-muted); padding: 5px 0; }
+        .summary-line.total { border-top: 1px solid var(--border-color); margin-top: 8px; padding-top: 12px; color: var(--text-color); }
+        .summary-line.total strong { font-family: 'Orbitron', sans-serif; font-size: 16px; color: var(--text-color); }
+        .summary-free { color: #2ec4b6; }
+
+        .submit-order-btn {
+            background: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            color: #fff;
+            padding: 16px 0;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(230, 57, 70, 0.22);
+        }
+
+        .submit-order-btn:hover { background: transparent; color: var(--accent-color); }
+
+        /* ===== ORDER SUCCESS ===== */
+        .order-success { text-align: center; padding: 20px 0 8px; }
+
+        .order-success-icon {
+            width: 68px; height: 68px;
+            border-radius: 50%;
+            border: 2px solid #2ec4b6;
+            color: #2ec4b6;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 24px;
+        }
+
+        .order-success h3 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 16px;
+            letter-spacing: 1px;
+            color: var(--text-color);
+            margin-bottom: 14px;
+        }
+
+        .order-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--gold-premium);
+            margin: 18px 0;
+        }
+
+        .order-success p { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
+        .order-success-actions { display: flex; gap: 12px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
+
+        /* ===== ORDER HISTORY ===== */
+        .order-history-item {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+        }
+
+        .order-history-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+        .order-history-id { font-family: 'Orbitron', sans-serif; font-size: 13px; color: var(--gold-premium); }
+        .order-history-date { font-size: 11px; color: var(--text-muted); }
+        .order-history-line { font-size: 12px; color: var(--text-muted); padding: 3px 0; }
+        .order-history-total { font-family: 'Orbitron', sans-serif; font-size: 13px; color: var(--text-color); margin-top: 10px; }
+
+        /* ===== LEGAL CONTENT ===== */
+        .legal-content h4 {
+            font-size: 13.5px;
+            color: var(--text-color);
+            margin: 22px 0 10px;
+            font-weight: 700;
+        }
+
+        .legal-content h4:first-child { margin-top: 0; }
+        .legal-content p, .legal-content li { font-size: 13px; color: var(--text-muted); line-height: 1.85; }
+        .legal-content ul { padding-left: 20px; margin: 8px 0; }
+        .legal-content li { margin-bottom: 6px; }
+        .legal-content strong { color: var(--text-color); }
+
+        /* ===== STICKY CONTACT FAB ===== */
+        .contact-fab {
+            position: fixed;
+            right: 26px; bottom: 26px;
+            z-index: 2600;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .contact-fab-menu {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(12px);
+            pointer-events: none;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .contact-fab.open .contact-fab-menu { opacity: 1; transform: none; pointer-events: auto; }
+
+        .contact-fab-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 9px 16px 9px 10px;
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 12.5px;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .contact-fab-item:hover { border-color: var(--gold-premium); transform: translateX(-3px); }
+
+        .contact-fab-item .fab-ico {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .contact-fab-item .fab-ico svg { width: 16px; height: 16px; }
+        .fab-ico.tg { background: #229ED9; }
+        .fab-ico.vb { background: #7360F2; }
+        .fab-ico.ph { background: #2ec4b6; }
+        .fab-ico.cb { background: var(--accent-color); }
+
+        .contact-fab-toggle {
+            width: 58px; height: 58px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gold-premium);
+            color: #07080a;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(197, 168, 128, 0.35);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .contact-fab-toggle svg { width: 26px; height: 26px; pointer-events: none; }
+        .contact-fab.open .contact-fab-toggle { transform: rotate(135deg); }
+
+        /* ===== FOOTER LEGAL ===== */
+        .footer-inner { grid-template-columns: 1.2fr 1fr 1fr 1.1fr; }
+        .footer-legal-links { display: flex; flex-direction: column; gap: 12px; }
+
+        .footer-legal-links button {
+            background: none;
+            border: none;
+            padding: 0;
+            text-align: left;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .footer-legal-links button:hover { color: var(--gold-premium); }
+
+        /* ===== MOBILE: BOTTOM SHEET + FILTERS ===== */
+        @media (max-width: 900px) {
+            .footer-inner { grid-template-columns: 1fr 1fr; }
+            .filters-toggle {
+                display: block;
+                width: 100%;
+                background: var(--panel-bg);
+                border: 1px solid var(--border-color);
+                color: var(--text-color);
+                border-radius: 10px;
+                padding: 14px;
+                font-size: 12px;
+                font-weight: 600;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                cursor: pointer;
+                margin-bottom: 14px;
+            }
+            .side-catalog { display: none; }
+            .side-catalog.open { display: block; }
+        }
+
+        @media (max-width: 600px) {
+            .side-drawer {
+                top: auto; bottom: 0; left: 0; right: 0;
+                width: 100%; max-width: none;
+                height: auto; max-height: 86vh;
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+                border-radius: 20px 20px 0 0;
+                transform: translateY(100%);
+            }
+            .side-drawer.active { transform: translateY(0); }
+            .drawer-grabber {
+                width: 42px; height: 4px;
+                border-radius: 2px;
+                background: var(--text-muted);
+                opacity: 0.4;
+                margin: 10px auto 0;
+                flex-shrink: 0;
+            }
+            .drawer-header { padding: 14px 22px; }
+            .drawer-body { padding: 6px 22px; }
+            .drawer-footer { padding: 16px 22px 24px; }
+
+            .app-modal { align-items: flex-end; padding: 0; }
+            .app-modal-card {
+                max-width: none;
+                max-height: 92vh;
+                border-radius: 20px 20px 0 0;
+                padding: 28px 22px 34px;
+                transform: translateY(100%);
+            }
+            .checkout-row { grid-template-columns: 1fr; }
+            .contact-fab { right: 18px; bottom: 18px; }
+            .contact-fab-toggle { width: 50px; height: 50px; }
+            .footer-inner { grid-template-columns: 1fr; }
+        }
+
+        @media (min-width: 601px) {
+            .drawer-grabber { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -2014,6 +2434,7 @@
     <!-- CART DRAWER -->
     <div class="side-drawer-overlay" id="cartDrawerOverlay" onclick="if(event.target===this) closeCartDrawer()"></div>
     <aside class="side-drawer" id="cartDrawer">
+        <div class="drawer-grabber"></div>
         <div class="drawer-header">
             <h3 id="cartDrawerTitle">КОШИК</h3>
             <button class="drawer-close" onclick="closeCartDrawer()" aria-label="Закрити">&times;</button>
@@ -2025,6 +2446,7 @@
     <!-- WISHLIST DRAWER -->
     <div class="side-drawer-overlay" id="wishlistDrawerOverlay" onclick="if(event.target===this) closeWishlistDrawer()"></div>
     <aside class="side-drawer" id="wishlistDrawer">
+        <div class="drawer-grabber"></div>
         <div class="drawer-header">
             <h3 id="wishlistDrawerTitle">ОБРАНЕ</h3>
             <button class="drawer-close" onclick="closeWishlistDrawer()" aria-label="Закрити">&times;</button>
@@ -2100,33 +2522,34 @@
                 <p class="section-desc" id="catalogDesc">Оберіть пристрій з нашого асортименту та оформіть замовлення через Instagram</p>
             </div>
             <div class="shop-container">
-                <aside class="side-catalog jacuzzi-border">
+                <aside class="side-catalog jacuzzi-border" id="sideCatalog">
                     <div class="catalog-title" id="catTitle">Каталог товарів</div>
-                    <ul class="cat-group">
-                        <li class="cat-item active" id="cat-apple">
-                            <button class="cat-trigger" id="triggerApple" onclick="switchCategory('apple')">Apple Гаджети <span>↓</span></button>
-                            <div class="cat-dropdown">
-                                <a href="#" id="subIphone" onclick="filterSubcategory('apple', 'iphone', this)">• iPhone Premium Line</a>
-                                <a href="#" id="subMacbook" onclick="filterSubcategory('apple', 'macbook', this)">• MacBook Air &amp; Pro</a>
-                                <a href="#" id="subIpad" onclick="filterSubcategory('apple', 'ipad', this)">• iPad Ultra Ecosystem</a>
-                            </div>
-                        </li>
-                        <li class="cat-item" id="cat-gaming">
-                            <button class="cat-trigger" id="triggerGaming" onclick="switchCategory('gaming')">Геймінг &amp; Складові <span>↓</span></button>
-                            <div class="cat-dropdown">
-                                <a href="#" id="subKeyboard" onclick="filterSubcategory('gaming', 'keyboard', this)">• Механічні клавіатури</a>
-                                <a href="#" id="subMice" onclick="filterSubcategory('gaming', 'mice', this)">• Елітні ігрові миші</a>
-                                <a href="#" id="subGraphics" onclick="filterSubcategory('gaming', 'graphics', this)">• Графічні аксесуари</a>
-                            </div>
-                        </li>
-                        <li class="cat-item" id="cat-audio">
-                            <button class="cat-trigger" id="triggerAudio" onclick="switchCategory('audio')">Аудіосистеми <span>↓</span></button>
-                            <div class="cat-dropdown">
-                                <a href="#" id="subAcoustic" onclick="filterSubcategory('audio', 'acoustic', this)">• Акустика High-End</a>
-                                <a href="#" id="subHeadphones" onclick="filterSubcategory('audio', 'headphones', this)">• Студійні навушники</a>
-                            </div>
-                        </li>
-                    </ul>
+                    <ul class="cat-group" id="categoryList"></ul>
+
+                    <div class="filter-block">
+                        <div class="filter-title" id="filterPriceTitle">Ціна, UAH</div>
+                        <div class="price-inputs">
+                            <input type="number" id="priceMinInput" min="0" step="100" oninput="onPriceInput()" aria-label="Мінімальна ціна">
+                            <span>—</span>
+                            <input type="number" id="priceMaxInput" min="0" step="100" oninput="onPriceInput()" aria-label="Максимальна ціна">
+                        </div>
+                        <input type="range" class="price-slider" id="priceSlider" min="0" step="100" oninput="onPriceSlider(this.value)" aria-label="Максимальна ціна (повзунок)">
+                        <div class="price-hint" id="priceHint"></div>
+                    </div>
+
+                    <div class="filter-block">
+                        <div class="filter-title" id="filterBrandTitle">Бренд</div>
+                        <div id="brandFilters"></div>
+                    </div>
+
+                    <div class="filter-block">
+                        <div class="filter-title" id="filterStockTitle">Наявність</div>
+                        <label class="check-row">
+                            <input type="checkbox" id="inStockOnly" onchange="onStockToggle(this.checked)">
+                            <span id="inStockLabel">Тільки в наявності</span>
+                        </label>
+                        <button class="reset-filters" id="resetFiltersBtn" onclick="resetFilters()">Скинути фільтри</button>
+                    </div>
                 </aside>
 
                 <div class="main-showcase">
@@ -2136,6 +2559,7 @@
                             <p id="bannerDesc">Індивідуальний підхід до кожного клієнта, який цінує надійність, оригінальність та швидкість інновацій.</p>
                         </div>
                     </div>
+                    <button class="filters-toggle" id="filtersToggle" onclick="toggleFilters()">Фільтри та категорії</button>
                     <div class="catalog-toolbar">
                         <div class="search-bar-wrap">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
@@ -2144,29 +2568,18 @@
                         <select class="sort-select" id="sortSelect" aria-label="Сортувати товари" onchange="handleSortChange(this.value)">
                             <option value="default" id="sortDefault">За замовчуванням</option>
                             <option value="newest" id="sortNewest">Спочатку нові</option>
+                            <option value="popular" id="sortPopular">За популярністю</option>
                             <option value="priceAsc" id="sortPriceAsc">Ціна: від дешевих</option>
                             <option value="priceDesc" id="sortPriceDesc">Ціна: від дорогих</option>
                         </select>
                     </div>
+                    <div class="results-count" id="resultsCount"></div>
                     <div class="products-grid" id="productGrid"></div>
                 </div>
             </div>
 
             <div class="brands-marquee">
-                <div class="marquee-track">
-                    <a href="#" onclick="switchCategory('apple')">APPLE</a>
-                    <a href="#" onclick="switchCategory('gaming')">RAZER</a>
-                    <a href="#" onclick="switchCategory('audio')">SONY</a>
-                    <a href="#" onclick="switchCategory('gaming')">LOGITECH</a>
-                    <a href="#" onclick="switchCategory('gaming')">WOOTING</a>
-                    <a href="#" onclick="switchCategory('audio')">BOSE</a>
-                    <a href="#" onclick="switchCategory('apple')">APPLE</a>
-                    <a href="#" onclick="switchCategory('gaming')">RAZER</a>
-                    <a href="#" onclick="switchCategory('audio')">SONY</a>
-                    <a href="#" onclick="switchCategory('gaming')">LOGITECH</a>
-                    <a href="#" onclick="switchCategory('gaming')">WOOTING</a>
-                    <a href="#" onclick="switchCategory('audio')">BOSE</a>
-                </div>
+                <div class="marquee-track" id="marqueeTrack"></div>
             </div>
         </section>
 
@@ -2355,6 +2768,27 @@
                         </div>
                     </div>
                     <div class="contact-item">
+                        <div class="contact-icon">☎️</div>
+                        <div>
+                            <div class="contact-item-title" id="phoneLabel">Телефон</div>
+                            <div class="contact-item-value"><a id="contactPhoneLink" href="#"></a></div>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">✈️</div>
+                        <div>
+                            <div class="contact-item-title">Telegram</div>
+                            <div class="contact-item-value"><a id="contactTelegramLink" href="#" target="_blank" rel="noopener"></a></div>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">✉️</div>
+                        <div>
+                            <div class="contact-item-title">Email</div>
+                            <div class="contact-item-value"><a id="contactEmailLink" href="#"></a></div>
+                        </div>
+                    </div>
+                    <div class="contact-item">
                         <div class="contact-icon">🕐</div>
                         <div>
                             <div class="contact-item-title" id="workTimeLabel">Години роботи</div>
@@ -2430,7 +2864,7 @@
                 <p>Оригінальна техніка провідних брендів з гарантією та швидкою доставкою по Україні.</p>
             </div>
             <div>
-                <div class="footer-nav-title">Навігація</div>
+                <div class="footer-nav-title" id="footerNavTitle">Навігація</div>
                 <div class="footer-nav-links">
                     <a href="#hero-top">Головна</a>
                     <a href="#storeSpace">Каталог</a>
@@ -2440,18 +2874,19 @@
                 </div>
             </div>
             <div>
-                <div class="footer-contact-title">Контакти</div>
-                <div class="footer-contact-list">
-                    <a href="https://www.instagram.com/online_shoooooop/" target="_blank">
-                        <span>📱</span> @online_shoooooop
-                    </a>
-                    <a href="#contact">
-                        <span>✉️</span> Надіслати запит
-                    </a>
-                    <a href="#storeSpace">
-                        <span>🛒</span> Переглянути каталог
-                    </a>
+                <div class="footer-nav-title" id="footerLegalTitle">Інформація</div>
+                <div class="footer-legal-links">
+                    <button onclick="openLegal('about')" id="legalLinkAbout">Про нас</button>
+                    <button onclick="openLegal('offer')" id="legalLinkOffer">Договір публічної оферти</button>
+                    <button onclick="openLegal('delivery')" id="legalLinkDelivery">Доставка та оплата</button>
+                    <button onclick="openLegal('returns')" id="legalLinkReturns">Політика повернення</button>
+                    <button onclick="openLegal('warranty')" id="legalLinkWarranty">Гарантія</button>
+                    <button onclick="openOrders()" id="legalLinkOrders">Мої замовлення</button>
                 </div>
+            </div>
+            <div>
+                <div class="footer-contact-title" id="footerContactTitle">Контакти</div>
+                <div class="footer-contact-list" id="footerContactList"></div>
             </div>
         </div>
         <div class="footer-bottom">
@@ -2466,11 +2901,46 @@
         <span class="floating-chat-tooltip" id="chatTooltip">Написати нам</span>
     </a>
 
+    <!-- STICKY CONTACT FAB -->
+    <div class="contact-fab" id="contactFab">
+        <div class="contact-fab-menu" id="contactFabMenu"></div>
+        <button class="contact-fab-toggle" onclick="toggleContactFab()" aria-label="Зв'язок" aria-expanded="false" id="contactFabToggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        </button>
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div class="app-modal" id="checkoutModal" onclick="if(event.target===this) closeCheckout()">
+        <div class="app-modal-card" id="checkoutCard"></div>
+    </div>
+
+    <!-- LEGAL / ORDERS MODAL -->
+    <div class="app-modal" id="legalModal" onclick="if(event.target===this) closeLegal()">
+        <div class="app-modal-card wide">
+            <button class="app-modal-close" onclick="closeLegal()" aria-label="Закрити">&times;</button>
+            <div class="app-modal-title" id="legalModalTitle"></div>
+            <div class="legal-content" id="legalModalBody"></div>
+        </div>
+    </div>
+
+    <!-- CALLBACK MODAL -->
+    <div class="app-modal" id="callbackModal" onclick="if(event.target===this) closeCallback()">
+        <div class="app-modal-card" id="callbackCard"></div>
+    </div>
+
     <script>
         let currentLang = 'uk';
-        let activeCategory = 'apple';
-        let activeSubcat = null;
-        let currentSort = 'default';
+
+        /* Єдиний стан каталогу: категорія + пошук + сортування + фільтри */
+        const filters = {
+            cat: 'all',
+            search: '',
+            sort: 'default',
+            brands: [],
+            inStockOnly: false,
+            priceMin: 0,
+            priceMax: 0
+        };
 
         const sharedLogoSVG = `
             <svg class="logo-img" viewBox="0 0 123 65" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -2491,19 +2961,14 @@
                 statLabel3: "Гарантія",
                 catalogTag: "Наш каталог",
                 catalogTitle: "ВИБІР ТЕХНІКИ",
-                catalogDesc: "Оберіть пристрій з нашого асортименту та оформіть замовлення через Instagram",
+                catalogDesc: "Оберіть пристрій, додайте в кошик і оформіть замовлення за пару хвилин",
                 catTitle: "Каталог товарів",
-                triggerApple: "Apple Гаджети <span>↓</span>",
-                triggerGaming: "Геймінг &amp; Складові <span>↓</span>",
-                triggerAudio: "Аудіосистеми <span>↓</span>",
-                subIphone: "• iPhone Premium Line",
-                subMacbook: "• MacBook Air &amp; Pro",
-                subIpad: "• iPad Ultra Ecosystem",
-                subKeyboard: "• Механічні клавіатури",
-                subMice: "• Елітні ігрові миші",
-                subGraphics: "• Графічні аксесуари",
-                subAcoustic: "• Акустика High-End",
-                subHeadphones: "• Студійні навушники",
+                filtersToggle: "Фільтри та категорії",
+                filterPriceTitle: "Ціна, UAH",
+                filterBrandTitle: "Бренд",
+                filterStockTitle: "Наявність",
+                inStockLabel: "Тільки в наявності",
+                resetFiltersBtn: "Скинути фільтри",
                 bannerTitle: "ПРОСТІР ВАРТІСНИХ РІШЕНЬ.",
                 bannerDesc: "Індивідуальний підхід до кожного клієнта, який цінує надійність, оригінальність та швидкість інновацій.",
                 buyAction: "Детальніше",
@@ -2566,8 +3031,59 @@
                 newsletterDesc: "Підпишіться, і ми повідомимо про знижки та новинки першими",
                 newsletterBtn: "Підписатися",
                 chatTooltip: "Написати нам",
-                specLabels: { state: "Стан", warranty: "Гарантія", Delivery: "Доставка" },
-                specValues: { new: "Новий / Оригінал", war: "12 місяців", del: "Швидка по Україні" }
+                sortPopular: "За популярністю",
+                resultsFound: "Знайдено товарів",
+                noResults: "Нічого не знайдено. Спробуйте змінити фільтри.",
+                inStock: "● В наявності",
+                outOfStock: "○ Немає в наявності",
+                outOfStockToast: "Товару немає в наявності",
+                subtotal: "Сума товарів",
+                shipping: "Доставка",
+                freeShipping: "Безкоштовно",
+                freeFromHint: "До безкоштовної доставки залишилось",
+                checkoutBtn: "Оформити замовлення",
+                checkoutTitle: "Оформлення замовлення",
+                checkoutSub: "Заповніть дані — менеджер підтвердить замовлення протягом 15 хвилин.",
+                toPay: "До сплати",
+                coName: "Ім'я та прізвище",
+                coPhone: "Телефон",
+                coCity: "Місто",
+                coBranch: "Відділення Нової Пошти",
+                coComment: "Коментар до замовлення",
+                coCommentPh: "Необов'язково",
+                coPayment: "Спосіб оплати",
+                payCod: "Накладний платіж",
+                payCodDesc: "Оплата при отриманні у відділенні. Комісію перевізника сплачує отримувач.",
+                payCard: "Оплата карткою",
+                payCardDesc: "Онлайн-оплата (демо-режим).",
+                cardStub: "⚠️ Онлайн-оплата поки в тестовому режимі: платіжний шлюз не підключено. Замовлення буде створено, а реквізити для оплати надішле менеджер.",
+                placeOrder: "Підтвердити замовлення",
+                errName: "Вкажіть ім'я (мінімум 2 символи)",
+                errPhone: "Вкажіть телефон у форматі +380XXXXXXXXX",
+                errCity: "Вкажіть місто",
+                errBranch: "Вкажіть номер відділення",
+                thanksTitle: "Дякуємо за замовлення!",
+                thanksBody: "Ваше замовлення прийнято. Менеджер зателефонує для підтвердження найближчим часом.",
+                continueShopping: "Продовжити покупки",
+                myOrders: "Мої замовлення",
+                noOrders: "Замовлень поки немає.",
+                callbackBtn: "Зворотний дзвінок",
+                callbackTitle: "Зворотний дзвінок",
+                callbackSub: "Залиште ім'я та телефон — передзвонимо протягом робочого дня.",
+                callbackSubmit: "Передзвоніть мені",
+                callbackDone: "Дякуємо! Ми зателефонуємо найближчим часом.",
+                footerNavTitle: "Навігація",
+                footerLegalTitle: "Інформація",
+                footerContactTitle: "Контакти",
+                phoneLabel: "Телефон",
+                legalLinkAbout: "Про нас",
+                legalLinkOffer: "Договір публічної оферти",
+                legalLinkDelivery: "Доставка та оплата",
+                legalLinkReturns: "Політика повернення",
+                legalLinkWarranty: "Гарантія",
+                legalLinkOrders: "Мої замовлення",
+                specLabels: { brand: "Бренд", category: "Категорія", stock: "Наявність", state: "Стан", warranty: "Гарантія", Delivery: "Доставка" },
+                specValues: { new: "Новий / Оригінал", war: "12 місяців", del: "Швидка по Україні", inStock: "В наявності", outOfStock: "Немає в наявності" }
             },
             en: {
                 greetText: "Good evening, dear guest.<br><span>Your</span> evening technology space is ready.",
@@ -2581,19 +3097,14 @@
                 statLabel3: "Warranty",
                 catalogTag: "Our Catalog",
                 catalogTitle: "CHOOSE YOUR TECH",
-                catalogDesc: "Choose from our lineup and place your order via Instagram",
+                catalogDesc: "Pick a device, add it to the cart and check out in a couple of minutes",
                 catTitle: "Product Catalog",
-                triggerApple: "Apple Gadgets <span>↓</span>",
-                triggerGaming: "Gaming &amp; Hardware <span>↓</span>",
-                triggerAudio: "Audio Systems <span>↓</span>",
-                subIphone: "• iPhone Premium Line",
-                subMacbook: "• MacBook Air &amp; Pro",
-                subIpad: "• iPad Ultra Ecosystem",
-                subKeyboard: "• Mechanical Keyboards",
-                subMice: "• Elite Gaming Mice",
-                subGraphics: "• Graphics Accessories",
-                subAcoustic: "• High-End Acoustics",
-                subHeadphones: "• Studio Headphones",
+                filtersToggle: "Filters & categories",
+                filterPriceTitle: "Price, UAH",
+                filterBrandTitle: "Brand",
+                filterStockTitle: "Availability",
+                inStockLabel: "In stock only",
+                resetFiltersBtn: "Reset filters",
                 bannerTitle: "SPACE OF VALUABLE SOLUTIONS.",
                 bannerDesc: "Individual approach to each client who values reliability, originality, and the speed of innovation.",
                 buyAction: "View Details",
@@ -2656,81 +3167,403 @@
                 newsletterDesc: "Subscribe and we'll notify you about deals and new products first",
                 newsletterBtn: "Subscribe",
                 chatTooltip: "Message us",
-                specLabels: { state: "Condition", warranty: "Warranty", Delivery: "Delivery" },
-                specValues: { new: "Brand New / Original", war: "12 Months", del: "Fast Shipping" }
+                sortPopular: "Most popular",
+                resultsFound: "Products found",
+                noResults: "Nothing found. Try changing the filters.",
+                inStock: "● In stock",
+                outOfStock: "○ Out of stock",
+                outOfStockToast: "This product is out of stock",
+                subtotal: "Subtotal",
+                shipping: "Shipping",
+                freeShipping: "Free",
+                freeFromHint: "Left until free shipping:",
+                checkoutBtn: "Checkout",
+                checkoutTitle: "Checkout",
+                checkoutSub: "Fill in your details — a manager confirms the order within 15 minutes.",
+                toPay: "Total",
+                coName: "Full name",
+                coPhone: "Phone",
+                coCity: "City",
+                coBranch: "Nova Poshta branch",
+                coComment: "Order comment",
+                coCommentPh: "Optional",
+                coPayment: "Payment method",
+                payCod: "Cash on delivery",
+                payCodDesc: "Pay at the branch on pickup. Carrier fee paid by the recipient.",
+                payCard: "Card payment",
+                payCardDesc: "Online payment (demo mode).",
+                cardStub: "⚠️ Online payment is in demo mode: no payment gateway is connected yet. The order will be created and the manager will send payment details.",
+                placeOrder: "Place order",
+                errName: "Enter your name (at least 2 characters)",
+                errPhone: "Enter a phone number as +380XXXXXXXXX",
+                errCity: "Enter your city",
+                errBranch: "Enter the branch number",
+                thanksTitle: "Thank you for your order!",
+                thanksBody: "Your order is accepted. A manager will call you shortly to confirm it.",
+                continueShopping: "Continue shopping",
+                myOrders: "My orders",
+                noOrders: "No orders yet.",
+                callbackBtn: "Request a call",
+                callbackTitle: "Request a call",
+                callbackSub: "Leave your name and phone — we'll call back during business hours.",
+                callbackSubmit: "Call me back",
+                callbackDone: "Thanks! We'll call you shortly.",
+                footerNavTitle: "Navigation",
+                footerLegalTitle: "Information",
+                footerContactTitle: "Contacts",
+                phoneLabel: "Phone",
+                legalLinkAbout: "About us",
+                legalLinkOffer: "Public offer agreement",
+                legalLinkDelivery: "Delivery and payment",
+                legalLinkReturns: "Return policy",
+                legalLinkWarranty: "Warranty",
+                legalLinkOrders: "My orders",
+                specLabels: { brand: "Brand", category: "Category", stock: "Availability", state: "Condition", warranty: "Warranty", Delivery: "Delivery" },
+                specValues: { new: "Brand New / Original", war: "12 Months", del: "Fast Shipping", inStock: "In stock", outOfStock: "Out of stock" }
             }
         };
 
-        const productsDatabase = {
-            apple: [
-                {
-                    name: "iPhone 15 Pro Max 256GB Space Black",
-                    price: "44 500 UAH",
-                    subcat: "iphone",
-                    tag: "EXCLUSIVE",
-                    img: "https://res.cloudinary.com/ybzjck1g/image/upload/v1784114234/iphone_15_pro_1783908348737_cg1cli.jpg",
-                    descUk: "Найвища лінійка смартфонів Apple з титановим корпусом та передовою оптикою. Чіп A17 Pro, USB-C, Action Button.",
-                    descEn: "The flagship Apple smartphone with titanium frame, A17 Pro chip, USB-C, and Action Button."
+        /* =======================================================================
+           ШОП-КОНФІГ. Змінюй значення тут — решта сайту підхопить автоматично.
+           TODO: заміни телефон / email / Telegram / Viber на свої реальні.
+           ======================================================================= */
+        const CONTACTS = {
+            phone: '+380671234567',
+            phoneLabel: '+38 (067) 123-45-67',
+            email: 'info@premium-tech.store',
+            telegram: 'https://t.me/online_shoooooop',
+            telegramLabel: '@online_shoooooop',
+            viber: 'viber://chat?number=%2B380671234567',
+            instagram: 'https://www.instagram.com/online_shoooooop/'
+        };
+
+        const SHIPPING = { cost: 150, freeFrom: 5000 };
+
+        const CATEGORIES = [
+            { key: 'all',         uk: 'Всі товари',  en: 'All products' },
+            { key: 'smartphones', uk: 'Смартфони',   en: 'Smartphones' },
+            { key: 'laptops',     uk: 'Ноутбуки',    en: 'Laptops' },
+            { key: 'tablets',     uk: 'Планшети',    en: 'Tablets' },
+            { key: 'accessories', uk: 'Аксесуари',   en: 'Accessories' }
+        ];
+
+        /* Каталог товарів. Щоб додати товар — просто додай об'єкт у масив.
+           price — число в UAH; added — дата надходження (сортування «нові»);
+           popularity — 0..100 (сортування «за популярністю»). */
+        const PRODUCTS = [
+            {
+                id: 'iphone-15-pro-max-256',
+                name: 'iPhone 15 Pro Max 256GB Space Black',
+                brand: 'Apple',
+                cat: 'smartphones',
+                price: 44500,
+                inStock: true,
+                tag: 'EXCLUSIVE',
+                popularity: 98,
+                added: '2026-05-20',
+                img: 'https://res.cloudinary.com/ybzjck1g/image/upload/v1784114234/iphone_15_pro_1783908348737_cg1cli.jpg',
+                descUk: 'Найвища лінійка смартфонів Apple з титановим корпусом та передовою оптикою. Чіп A17 Pro, USB-C, Action Button.',
+                descEn: 'The flagship Apple smartphone with titanium frame, A17 Pro chip, USB-C, and Action Button.'
+            },
+            {
+                id: 'macbook-pro-16-m3-max',
+                name: 'MacBook Pro 16" M3 Max 36GB/1TB',
+                brand: 'Apple',
+                cat: 'laptops',
+                price: 142000,
+                inStock: true,
+                tag: 'EXCLUSIVE',
+                popularity: 84,
+                added: '2026-04-02',
+                img: 'https://res.cloudinary.com/ybzjck1g/image/upload/v1784114234/macbook_pro_1783908367548_ozwgr5.jpg',
+                descUk: 'Безкомпромісна потужність для найважчих професійних завдань, рендерингу та кодингу. Дисплей 16.2" Liquid Retina XDR.',
+                descEn: 'Uncompromised performance for extreme workflows. 16.2" Liquid Retina XDR display, M3 Max chip.'
+            },
+            {
+                id: 'ipad-pro-13-m4',
+                name: 'iPad Pro 13" M4 Wi-Fi 512GB',
+                brand: 'Apple',
+                cat: 'tablets',
+                price: 64900,
+                inStock: true,
+                tag: 'NEW',
+                popularity: 76,
+                added: '2026-06-15',
+                img: 'https://res.cloudinary.com/ybzjck1g/image/upload/v1784114235/ipad_pro_1783908375873_ulgskm.jpg',
+                descUk: 'Ультратонкий дизайн (5.1 мм) з революційним Tandem OLED дисплеєм та найпотужнішим чіпом M4.',
+                descEn: 'Ultra-thin design (5.1mm) with revolutionary Tandem OLED display and powerful M4 chip.'
+            },
+            {
+                id: 'wooting-60he',
+                name: 'Wooting 60HE Analog Mechanical Keyboard',
+                brand: 'Wooting',
+                cat: 'accessories',
+                price: 11800,
+                inStock: true,
+                tag: 'EXCLUSIVE',
+                popularity: 61,
+                added: '2026-03-11',
+                img: 'https://res.cloudinary.com/ybzjck1g/image/upload/v1784114234/gaming_keyboard_1783908389705_l4jzwb.jpg',
+                descUk: 'Аналогова клавіатура на магнітних перемикачах ефекту Холла для максимального відгуку в іграх.',
+                descEn: 'Analog mechanical keyboard powered by Hall effect switches for extreme gaming response.'
+            },
+            {
+                id: 'logitech-superlight-2',
+                name: 'Logitech G Pro X Superlight 2',
+                brand: 'Logitech',
+                cat: 'accessories',
+                price: 6400,
+                inStock: true,
+                tag: 'POPULAR',
+                popularity: 92,
+                added: '2026-02-28',
+                img: 'https://res.cloudinary.com/ybzjck1g/image/upload/v1784114234/gaming_mouse_1783908397467_xihr6q.jpg',
+                descUk: 'Вибір кіберспортсменів: надлегка бездротова конструкція та ідеальна точність сенсора HERO 2.',
+                descEn: 'The esports choice: ultra-light wireless design with pixel-perfect HERO 2 sensor.'
+            },
+            {
+                id: 'sony-wh-1000xm5',
+                name: 'Sony WH-1000XM5 Wireless',
+                brand: 'Sony',
+                cat: 'accessories',
+                price: 14300,
+                inStock: true,
+                tag: 'PREMIUM',
+                popularity: 88,
+                added: '2026-01-19',
+                img: 'https://res.cloudinary.com/ybzjck1g/image/upload/v1784114234/sony_headphones_1783908360219_dsnhnx.jpg',
+                descUk: 'Еталонне активне шумозаглушення преміум-класу та кришталево чисте просторове аудіо. До 30 годин відтворення.',
+                descEn: 'Industry-leading ANC with pristine spatial audio. Up to 30 hours playback.'
+            },
+            {
+                id: 'airpods-pro-2-usbc',
+                name: 'Apple AirPods Pro 2 USB-C',
+                brand: 'Apple',
+                cat: 'accessories',
+                price: 9900,
+                inStock: false,
+                tag: 'NEW',
+                popularity: 95,
+                added: '2026-07-04',
+                img: 'https://res.cloudinary.com/ybzjck1g/image/upload/v1784115542/airpods_pro_2_1784115459901_tf7zfc.jpg',
+                descUk: 'Адаптивне шумозаглушення нового покоління, Adaptive Audio та Conversation Awareness. Чіп H2.',
+                descEn: 'Next-gen Adaptive Transparency, Conversation Awareness, H2 chip. USB-C charging case.'
+            }
+        ];
+
+        /* =======================================================================
+           ПРАВОВІ СТОРІНКИ.
+           TODO: підстав реальні реквізити ФОП/ТОВ у полях [ ... ] нижче.
+           ======================================================================= */
+        const LEGAL = {
+            uk: {
+                about: {
+                    title: 'Про нас',
+                    body: `
+                        <h4>Хто ми</h4>
+                        <p><strong>Premium Tech Store (ОНЛАЙН // ЦІНИ)</strong> — український магазин оригінальної техніки. Ми працюємо з 2023 року та доставили понад 500 замовлень по всій Україні.</p>
+                        <h4>Наш підхід</h4>
+                        <ul>
+                            <li>Тільки оригінальна техніка від офіційних дистриб'юторів — без рефурбу та реплік.</li>
+                            <li>Перевірка кожного пристрою перед відправкою.</li>
+                            <li>Офіційна гарантія 12 місяців на весь асортимент.</li>
+                            <li>Менеджер на зв'язку щодня з 9:00 до 22:00.</li>
+                        </ul>
+                        <h4>Реквізити</h4>
+                        <p>ФОП [Прізвище Ім'я По батькові]<br>РНОКПП / ЄДРПОУ: [номер]<br>Адреса: [місто, вулиця]<br>Email: ${CONTACTS.email}<br>Телефон: ${CONTACTS.phoneLabel}</p>
+                    `
                 },
-                {
-                    name: "MacBook Pro 16\" M3 Max 36GB/1TB",
-                    price: "142 000 UAH",
-                    subcat: "macbook",
-                    tag: "EXCLUSIVE",
-                    img: "https://res.cloudinary.com/ybzjck1g/image/upload/v1784114234/macbook_pro_1783908367548_ozwgr5.jpg",
-                    descUk: "Безкомпромісна потужність для найважчих професійних завдань, рендерингу та кодингу. Дисплей 16.2\" Liquid Retina XDR.",
-                    descEn: "Uncompromised performance for extreme workflows. 16.2\" Liquid Retina XDR display, M3 Max chip."
+                offer: {
+                    title: 'Договір публічної оферти',
+                    body: `
+                        <h4>1. Загальні положення</h4>
+                        <p>Цей документ є публічною офертою ФОП [ПІБ] (далі — «Продавець») укласти договір купівлі-продажу товарів на умовах, викладених нижче. Оформлення замовлення на сайті означає повну та безумовну згоду Покупця з умовами цієї оферти.</p>
+                        <h4>2. Предмет договору</h4>
+                        <p>Продавець зобов'язується передати у власність Покупцеві товар, представлений у каталозі сайту, а Покупець — прийняти та оплатити його на умовах цього договору.</p>
+                        <h4>3. Оформлення замовлення</h4>
+                        <ul>
+                            <li>Замовлення оформлюється через кошик на сайті або через менеджера в Instagram / Telegram.</li>
+                            <li>Покупець зобов'язаний надати достовірні контактні дані та дані доставки.</li>
+                            <li>Замовлення вважається підтвердженим після узгодження з менеджером.</li>
+                        </ul>
+                        <h4>4. Ціна та оплата</h4>
+                        <p>Ціни вказані в гривнях (UAH). Продавець має право змінювати ціни до моменту підтвердження замовлення. Доступні способи оплати: накладний платіж при отриманні або оплата карткою за реквізитами, наданими менеджером.</p>
+                        <h4>5. Доставка</h4>
+                        <p>Доставка здійснюється службами Нова Пошта, Укрпошта, Meest. Вартість доставки — ${SHIPPING.cost} UAH; при сумі замовлення від ${SHIPPING.freeFrom} UAH доставка безкоштовна.</p>
+                        <h4>6. Відповідальність</h4>
+                        <p>Продавець не несе відповідальності за шкоду, спричинену неправильним використанням товару. Сторони звільняються від відповідальності у разі форс-мажорних обставин.</p>
+                        <h4>7. Персональні дані</h4>
+                        <p>Покупець надає згоду на обробку своїх персональних даних відповідно до Закону України «Про захист персональних даних» виключно з метою виконання замовлення.</p>
+                    `
                 },
-                {
-                    name: "iPad Pro 13\" M4 Wi-Fi 512GB",
-                    price: "64 900 UAH",
-                    subcat: "ipad",
-                    tag: "NEW",
-                    img: "https://res.cloudinary.com/ybzjck1g/image/upload/v1784114235/ipad_pro_1783908375873_ulgskm.jpg",
-                    descUk: "Ультратонкий дизайн (5.1 мм) з революційним Tandem OLED дисплеєм та найпотужнішим чіпом M4.",
-                    descEn: "Ultra-thin design (5.1mm) with revolutionary Tandem OLED display and powerful M4 chip."
+                delivery: {
+                    title: 'Доставка та оплата',
+                    body: `
+                        <h4>Доставка</h4>
+                        <ul>
+                            <li><strong>Нова Пошта</strong> — на відділення або поштомат, 1–3 робочі дні.</li>
+                            <li><strong>Укрпошта</strong> — 2–5 робочих днів.</li>
+                            <li><strong>Meest</strong> — 2–4 робочі дні.</li>
+                        </ul>
+                        <p>Вартість доставки — <strong>${SHIPPING.cost} UAH</strong>. При замовленні на суму від <strong>${SHIPPING.freeFrom} UAH</strong> доставка <strong>безкоштовна</strong>.</p>
+                        <p>Замовлення, оформлені до 15:00, відправляємо того ж дня. Після відправки менеджер надсилає ТТН.</p>
+                        <h4>Оплата</h4>
+                        <ul>
+                            <li><strong>Накладний платіж</strong> — оплата при отриманні у відділенні (комісія перевізника оплачується Покупцем).</li>
+                            <li><strong>Оплата карткою</strong> — за реквізитами, які надсилає менеджер після підтвердження замовлення.</li>
+                        </ul>
+                        <h4>Перевірка при отриманні</h4>
+                        <p>Ви маєте право оглянути товар у відділенні перед оплатою: перевірити комплектацію, зовнішній вигляд та відповідність замовленню.</p>
+                    `
+                },
+                returns: {
+                    title: 'Політика повернення',
+                    body: `
+                        <h4>Строк повернення</h4>
+                        <p>Відповідно до Закону України «Про захист прав споживачів» ви можете повернути товар належної якості протягом <strong>14 днів</strong> з дня отримання.</p>
+                        <h4>Умови повернення</h4>
+                        <ul>
+                            <li>Товар не був у використанні, збережено товарний вигляд, пломби та ярлики.</li>
+                            <li>Збережено повну комплектацію та оригінальну упаковку.</li>
+                            <li>Наявний документ, що підтверджує покупку (ТТН, чек або підтвердження замовлення).</li>
+                        </ul>
+                        <h4>Як оформити</h4>
+                        <ul>
+                            <li>Напишіть менеджеру в Telegram, Instagram або зателефонуйте: ${CONTACTS.phoneLabel}.</li>
+                            <li>Вкажіть номер замовлення та причину повернення.</li>
+                            <li>Після узгодження відправте товар на вказану адресу.</li>
+                        </ul>
+                        <p>Кошти повертаються протягом 7 банківських днів після отримання та перевірки товару. Вартість зворотної доставки оплачує Покупець, окрім випадків повернення бракованого товару.</p>
+                        <h4>Товар неналежної якості</h4>
+                        <p>Якщо виявлено заводський дефект — заміна або повернення коштів здійснюється за наш рахунок після діагностики в сервісному центрі.</p>
+                    `
+                },
+                warranty: {
+                    title: 'Гарантія',
+                    body: `
+                        <h4>Гарантійний строк</h4>
+                        <p>На всю техніку діє офіційна гарантія <strong>12 місяців</strong> з дня продажу, якщо інше не зазначено в картці товару.</p>
+                        <h4>Що покриває гарантія</h4>
+                        <ul>
+                            <li>Заводські дефекти матеріалів та збірки.</li>
+                            <li>Несправності електроніки, що виникли не з вини користувача.</li>
+                        </ul>
+                        <h4>Гарантія не поширюється на</h4>
+                        <ul>
+                            <li>Механічні пошкодження, потрапляння вологи, наслідки падінь.</li>
+                            <li>Пошкодження через нестабільну електромережу або несертифіковані аксесуари.</li>
+                            <li>Самостійний ремонт або втручання неавторизованого сервісу.</li>
+                            <li>Природний знос акумулятора та витратних елементів.</li>
+                        </ul>
+                        <h4>Гарантійне звернення</h4>
+                        <p>Зверніться до нас у Telegram, Instagram або за телефоном ${CONTACTS.phoneLabel}, вказавши номер замовлення та опис несправності. Ми узгодимо доставку в сервісний центр. Строк діагностики — до 14 днів.</p>
+                    `
                 }
-            ],
-            gaming: [
-                {
-                    name: "Wooting 60HE Analog Mechanical Keyboard",
-                    price: "11 800 UAH",
-                    subcat: "keyboard",
-                    tag: "EXCLUSIVE",
-                    img: "https://res.cloudinary.com/ybzjck1g/image/upload/v1784114234/gaming_keyboard_1783908389705_l4jzwb.jpg",
-                    descUk: "Аналогова клавіатура на магнітних перемикачах ефекту Холла для максимального відгуку в іграх.",
-                    descEn: "Analog mechanical keyboard powered by Hall effect switches for extreme gaming response."
+            },
+            en: {
+                about: {
+                    title: 'About us',
+                    body: `
+                        <h4>Who we are</h4>
+                        <p><strong>Premium Tech Store</strong> is a Ukrainian retailer of original tech. Working since 2023, over 500 orders delivered across Ukraine.</p>
+                        <h4>How we work</h4>
+                        <ul>
+                            <li>Original hardware from official distributors only — no refurbs, no replicas.</li>
+                            <li>Every device is checked before shipping.</li>
+                            <li>Official 12-month warranty on the whole lineup.</li>
+                            <li>Manager online daily, 9:00–22:00.</li>
+                        </ul>
+                        <h4>Company details</h4>
+                        <p>Sole proprietor [Full name]<br>Tax ID: [number]<br>Address: [city, street]<br>Email: ${CONTACTS.email}<br>Phone: ${CONTACTS.phoneLabel}</p>
+                    `
                 },
-                {
-                    name: "Logitech G Pro X Superlight 2",
-                    price: "6 400 UAH",
-                    subcat: "mice",
-                    tag: "POPULAR",
-                    img: "https://res.cloudinary.com/ybzjck1g/image/upload/v1784114234/gaming_mouse_1783908397467_xihr6q.jpg",
-                    descUk: "Вибір кіберспортсменів: надлегка бездротова конструкція та ідеальна точність сенсора HERO 2.",
-                    descEn: "The esports choice: ultra-light wireless design with pixel-perfect HERO 2 sensor."
-                }
-            ],
-            audio: [
-                {
-                    name: "Sony WH-1000XM5 Wireless",
-                    price: "14 300 UAH",
-                    subcat: "headphones",
-                    tag: "PREMIUM",
-                    img: "https://res.cloudinary.com/ybzjck1g/image/upload/v1784114234/sony_headphones_1783908360219_dsnhnx.jpg",
-                    descUk: "Еталонне активне шумозаглушення преміум-класу та кришталево чисте просторове аудіо. До 30 годин відтворення.",
-                    descEn: "Industry-leading ANC with pristine spatial audio. Up to 30 hours playback."
+                offer: {
+                    title: 'Public offer agreement',
+                    body: `
+                        <h4>1. General</h4>
+                        <p>This document is a public offer by sole proprietor [Full name] (the "Seller") to conclude a sale contract on the terms below. Placing an order means full and unconditional acceptance of these terms.</p>
+                        <h4>2. Subject</h4>
+                        <p>The Seller transfers ownership of the goods listed in the catalog; the Buyer accepts and pays for them under this agreement.</p>
+                        <h4>3. Placing an order</h4>
+                        <ul>
+                            <li>Orders are placed via the site cart or through a manager on Instagram / Telegram.</li>
+                            <li>The Buyer must provide accurate contact and delivery details.</li>
+                            <li>An order is confirmed once agreed with a manager.</li>
+                        </ul>
+                        <h4>4. Price and payment</h4>
+                        <p>Prices are in Ukrainian hryvnia (UAH) and may change until the order is confirmed. Payment options: cash on delivery, or card payment using details provided by the manager.</p>
+                        <h4>5. Delivery</h4>
+                        <p>Delivered by Nova Poshta, Ukrposhta or Meest. Shipping costs ${SHIPPING.cost} UAH and is free for orders from ${SHIPPING.freeFrom} UAH.</p>
+                        <h4>6. Liability</h4>
+                        <p>The Seller is not liable for damage caused by improper use of the goods. Neither party is liable in force majeure circumstances.</p>
+                        <h4>7. Personal data</h4>
+                        <p>The Buyer consents to processing of personal data under the Ukrainian Personal Data Protection Act, solely to fulfil the order.</p>
+                    `
                 },
-                {
-                    name: "Apple AirPods Pro 2 USB-C",
-                    price: "9 900 UAH",
-                    subcat: "headphones",
-                    tag: "NEW",
-                    img: "https://res.cloudinary.com/ybzjck1g/image/upload/v1784115542/airpods_pro_2_1784115459901_tf7zfc.jpg",
-                    descUk: "Адаптивне шумозаглушення нового покоління, Adaptive Audio та Conversation Awareness. Чіп H2.",
-                    descEn: "Next-gen Adaptive Transparency, Conversation Awareness, H2 chip. USB-C charging case."
+                delivery: {
+                    title: 'Delivery and payment',
+                    body: `
+                        <h4>Delivery</h4>
+                        <ul>
+                            <li><strong>Nova Poshta</strong> — branch or parcel locker, 1–3 business days.</li>
+                            <li><strong>Ukrposhta</strong> — 2–5 business days.</li>
+                            <li><strong>Meest</strong> — 2–4 business days.</li>
+                        </ul>
+                        <p>Shipping costs <strong>${SHIPPING.cost} UAH</strong>. Orders from <strong>${SHIPPING.freeFrom} UAH</strong> ship <strong>free</strong>.</p>
+                        <p>Orders placed before 15:00 ship the same day. The manager sends the tracking number after dispatch.</p>
+                        <h4>Payment</h4>
+                        <ul>
+                            <li><strong>Cash on delivery</strong> — pay at the branch on pickup (carrier fee paid by the Buyer).</li>
+                            <li><strong>Card payment</strong> — using details sent by the manager after order confirmation.</li>
+                        </ul>
+                        <h4>Inspection on pickup</h4>
+                        <p>You may inspect the parcel at the branch before paying: check the contents, condition and match with your order.</p>
+                    `
+                },
+                returns: {
+                    title: 'Return policy',
+                    body: `
+                        <h4>Return window</h4>
+                        <p>Under the Ukrainian Consumer Rights Protection Act you may return goods of proper quality within <strong>14 days</strong> of receipt.</p>
+                        <h4>Conditions</h4>
+                        <ul>
+                            <li>The item is unused, with original appearance, seals and labels intact.</li>
+                            <li>Complete package and original box preserved.</li>
+                            <li>Proof of purchase available (waybill, receipt or order confirmation).</li>
+                        </ul>
+                        <h4>How to start a return</h4>
+                        <ul>
+                            <li>Message us on Telegram or Instagram, or call ${CONTACTS.phoneLabel}.</li>
+                            <li>State your order number and the reason for the return.</li>
+                            <li>Ship the item to the address we confirm.</li>
+                        </ul>
+                        <p>Refunds are issued within 7 banking days after we receive and inspect the item. Return shipping is paid by the Buyer, except for defective goods.</p>
+                        <h4>Defective goods</h4>
+                        <p>If a manufacturing defect is confirmed, replacement or refund is at our expense after service-center diagnostics.</p>
+                    `
+                },
+                warranty: {
+                    title: 'Warranty',
+                    body: `
+                        <h4>Warranty period</h4>
+                        <p>All hardware carries an official <strong>12-month</strong> warranty from the date of sale, unless stated otherwise on the product card.</p>
+                        <h4>Covered</h4>
+                        <ul>
+                            <li>Manufacturing defects in materials and assembly.</li>
+                            <li>Electronic failures not caused by the user.</li>
+                        </ul>
+                        <h4>Not covered</h4>
+                        <ul>
+                            <li>Physical damage, liquid ingress, drop damage.</li>
+                            <li>Damage from unstable power supply or uncertified accessories.</li>
+                            <li>Self-repair or work by an unauthorized service.</li>
+                            <li>Normal battery wear and consumable parts.</li>
+                        </ul>
+                        <h4>Making a claim</h4>
+                        <p>Contact us on Telegram, Instagram or at ${CONTACTS.phoneLabel} with your order number and a description of the fault. We arrange delivery to the service center. Diagnostics take up to 14 days.</p>
+                    `
                 }
-            ]
+            }
         };
 
         /* ===== CURSOR GLOW ===== */
@@ -2760,11 +3593,44 @@
                     setTimeout(() => greeting.className = 'time-greeting', 4500);
                 }, 1000);
             }
-            renderProducts(activeCategory);
+            initPriceFilter();
+            buildCatalogUI();
+            buildContactUI();
+            renderProducts();
             setupModalListeners();
             updateCartBadge();
             updateWishlistBadge();
         });
+
+        /* Все, що залежить від даних каталогу або мови */
+        function buildCatalogUI() {
+            buildCategoryList();
+            buildBrandFilters();
+            buildMarquee();
+        }
+
+        function buildContactUI() {
+            buildContactFab();
+            document.getElementById('footerContactList').innerHTML = `
+                <a href="tel:${CONTACTS.phone}"><span>☎️</span> ${CONTACTS.phoneLabel}</a>
+                <a href="mailto:${CONTACTS.email}"><span>✉️</span> ${CONTACTS.email}</a>
+                <a href="${CONTACTS.telegram}" target="_blank" rel="noopener"><span>✈️</span> ${CONTACTS.telegramLabel}</a>
+                <a href="${CONTACTS.instagram}" target="_blank" rel="noopener"><span>📱</span> Instagram</a>
+                <a href="#" onclick="openCallback(); return false;"><span>📞</span> ${t('callbackBtn')}</a>
+            `;
+
+            const phoneLink = document.getElementById('contactPhoneLink');
+            phoneLink.href = `tel:${CONTACTS.phone}`;
+            phoneLink.textContent = CONTACTS.phoneLabel;
+
+            const tgLink = document.getElementById('contactTelegramLink');
+            tgLink.href = CONTACTS.telegram;
+            tgLink.textContent = CONTACTS.telegramLabel;
+
+            const mailLink = document.getElementById('contactEmailLink');
+            mailLink.href = `mailto:${CONTACTS.email}`;
+            mailLink.textContent = CONTACTS.email;
+        }
 
         /* ===== HERO CTA ===== */
         document.getElementById('enterBtn').addEventListener('click', () => {
@@ -2805,7 +3671,9 @@
                     if (el) el.innerHTML = pack[key];
                 }
 
-                renderProducts(activeCategory);
+                buildCatalogUI();
+                buildContactUI();
+                renderProducts();
                 wrapper.classList.remove('fluid-transition');
             }, 450);
         });
@@ -2824,53 +3692,153 @@
             mobileNav.classList.remove('open');
         }
 
-        /* ===== CATEGORY SWITCH ===== */
-        function switchCategory(catKey) {
-            if (window.event) window.event.preventDefault();
-            activeCategory = catKey;
-            activeSubcat = null;
-            document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`cat-${catKey}`).classList.add('active');
-            document.querySelectorAll('.cat-dropdown a').forEach(el => el.classList.remove('sub-active'));
+        /* ===== HELPERS ===== */
+        function fmtPrice(n) { return n.toLocaleString('uk-UA').replace(/ /g, ' ') + ' UAH'; }
+        function getProductById(id) { return PRODUCTS.find(p => p.id === id) || null; }
+        function t(key) { return translations[currentLang][key]; }
 
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) searchInput.value = '';
-
-            const grid = document.getElementById('productGrid');
-            grid.style.opacity = '0';
-            setTimeout(() => {
-                renderSkeleton();
-                setTimeout(() => {
-                    renderProducts(catKey);
-                    grid.style.opacity = '1';
-                    document.querySelectorAll('.product-card').forEach((card, i) => {
-                        setTimeout(() => {
-                            card.classList.add('chain-scanned');
-                            setTimeout(() => card.classList.remove('chain-scanned'), 1400);
-                        }, i * 60);
-                    });
-                }, 320);
-            }, 350);
+        function catLabel(key) {
+            const c = CATEGORIES.find(x => x.key === key);
+            return c ? c[currentLang] : key;
         }
 
-        function filterSubcategory(catKey, subcatKey, linkEl) {
-            if (window.event) window.event.preventDefault();
-            activeCategory = catKey;
-            activeSubcat = subcatKey;
-            document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`cat-${catKey}`).classList.add('active');
-            document.querySelectorAll('.cat-dropdown a').forEach(el => el.classList.remove('sub-active'));
-            if (linkEl) linkEl.classList.add('sub-active');
+        /* ===== CATALOG SIDEBAR (categories / brands / price) ===== */
+        function buildCategoryList() {
+            const list = document.getElementById('categoryList');
+            list.innerHTML = CATEGORIES.map(c => {
+                const count = c.key === 'all' ? PRODUCTS.length : PRODUCTS.filter(p => p.cat === c.key).length;
+                return `
+                    <li class="cat-item ${filters.cat === c.key ? 'active' : ''}" data-cat="${c.key}">
+                        <button class="cat-trigger" onclick="switchCategory('${c.key}')">${c[currentLang]} <span>${count}</span></button>
+                    </li>
+                `;
+            }).join('');
+        }
 
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) searchInput.value = '';
+        function allBrands() { return [...new Set(PRODUCTS.map(p => p.brand))].sort(); }
 
+        function buildBrandFilters() {
+            const box = document.getElementById('brandFilters');
+            box.innerHTML = allBrands().map(b => `
+                <label class="check-row">
+                    <input type="checkbox" value="${b}" ${filters.brands.includes(b) ? 'checked' : ''} onchange="onBrandToggle('${b}', this.checked)">
+                    <span>${b}</span>
+                    <span class="check-count">${PRODUCTS.filter(p => p.brand === b).length}</span>
+                </label>
+            `).join('');
+        }
+
+        function buildMarquee() {
+            const track = document.getElementById('marqueeTrack');
+            const brands = allBrands();
+            // двічі — щоб анімація translateX(-50%) зациклювалась без стрибка
+            track.innerHTML = [...brands, ...brands].map(b =>
+                `<a href="#" onclick="filterByBrand('${b}'); return false;">${b.toUpperCase()}</a>`
+            ).join('');
+        }
+
+        function priceBounds() {
+            const prices = PRODUCTS.map(p => p.price);
+            return { min: Math.min(...prices), max: Math.max(...prices) };
+        }
+
+        function initPriceFilter() {
+            const { min, max } = priceBounds();
+            filters.priceMin = min;
+            filters.priceMax = max;
+            const slider = document.getElementById('priceSlider');
+            slider.min = min;
+            slider.max = max;
+            slider.value = max;
+            syncPriceUI();
+        }
+
+        function syncPriceUI() {
+            document.getElementById('priceMinInput').value = filters.priceMin;
+            document.getElementById('priceMaxInput').value = filters.priceMax;
+            document.getElementById('priceSlider').value = filters.priceMax;
+            document.getElementById('priceHint').textContent =
+                `${fmtPrice(filters.priceMin)} — ${fmtPrice(filters.priceMax)}`;
+        }
+
+        function onPriceInput() {
+            const { min, max } = priceBounds();
+            const rawMin = parseInt(document.getElementById('priceMinInput').value, 10);
+            const rawMax = parseInt(document.getElementById('priceMaxInput').value, 10);
+            filters.priceMin = isNaN(rawMin) ? min : Math.max(0, rawMin);
+            filters.priceMax = isNaN(rawMax) ? max : Math.max(filters.priceMin, rawMax);
+            document.getElementById('priceSlider').value = Math.min(filters.priceMax, max);
+            document.getElementById('priceHint').textContent =
+                `${fmtPrice(filters.priceMin)} — ${fmtPrice(filters.priceMax)}`;
+            renderProducts();
+        }
+
+        function onPriceSlider(value) {
+            filters.priceMax = Math.max(filters.priceMin, parseInt(value, 10));
+            syncPriceUI();
+            renderProducts();
+        }
+
+        function onBrandToggle(brand, checked) {
+            filters.brands = checked
+                ? [...filters.brands, brand]
+                : filters.brands.filter(b => b !== brand);
+            renderProducts();
+        }
+
+        function onStockToggle(checked) {
+            filters.inStockOnly = checked;
+            renderProducts();
+        }
+
+        function resetFilters() {
+            filters.cat = 'all';
+            filters.search = '';
+            filters.sort = 'default';
+            filters.brands = [];
+            filters.inStockOnly = false;
+            document.getElementById('searchInput').value = '';
+            document.getElementById('sortSelect').value = 'default';
+            document.getElementById('inStockOnly').checked = false;
+            initPriceFilter();
+            buildCategoryList();
+            buildBrandFilters();
+            renderProducts();
+        }
+
+        function toggleFilters() {
+            document.getElementById('sideCatalog').classList.toggle('open');
+        }
+
+        /* ===== CATEGORY / BRAND SHORTCUTS ===== */
+        function switchCategory(catKey) {
+            filters.cat = catKey;
+            filters.search = '';
+            document.getElementById('searchInput').value = '';
+            document.querySelectorAll('.cat-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.cat === catKey);
+            });
+            renderWithTransition();
+        }
+
+        function filterByBrand(brand) {
+            filters.cat = 'all';
+            filters.search = '';
+            filters.brands = [brand];
+            document.getElementById('searchInput').value = '';
+            buildCategoryList();
+            buildBrandFilters();
+            document.getElementById('storeSpace').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            renderWithTransition();
+        }
+
+        function renderWithTransition() {
             const grid = document.getElementById('productGrid');
             grid.style.opacity = '0';
             setTimeout(() => {
                 renderSkeleton();
                 setTimeout(() => {
-                    renderProducts(catKey);
+                    renderProducts();
                     grid.style.opacity = '1';
                     document.querySelectorAll('.product-card').forEach((card, i) => {
                         setTimeout(() => {
@@ -2901,143 +3869,122 @@
 
         /* ===== SEARCH ===== */
         function handleSearch(query) {
-            renderProducts(activeCategory, query.trim());
+            filters.search = query.trim().toLowerCase();
+            renderProducts();
         }
 
         /* ===== SORT ===== */
         function handleSortChange(value) {
-            currentSort = value;
-            const searchInput = document.getElementById('searchInput');
-            renderProducts(activeCategory, searchInput ? searchInput.value.trim() : '');
+            filters.sort = value;
+            renderProducts();
         }
 
         function applySort(items) {
-            if (currentSort === 'priceAsc') {
-                return items.slice().sort((a, b) => parsePrice(a.prod.price) - parsePrice(b.prod.price));
+            const sorted = items.slice();
+            switch (filters.sort) {
+                case 'priceAsc':  return sorted.sort((a, b) => a.price - b.price);
+                case 'priceDesc': return sorted.sort((a, b) => b.price - a.price);
+                case 'newest':    return sorted.sort((a, b) => new Date(b.added) - new Date(a.added));
+                case 'popular':   return sorted.sort((a, b) => b.popularity - a.popularity);
+                default:          return sorted;
             }
-            if (currentSort === 'priceDesc') {
-                return items.slice().sort((a, b) => parsePrice(b.prod.price) - parsePrice(a.prod.price));
-            }
-            if (currentSort === 'newest') {
-                return items.slice().sort((a, b) => b.index - a.index);
-            }
-            return items;
+        }
+
+        /* ===== FILTER PIPELINE ===== */
+        function getFilteredProducts() {
+            const q = filters.search;
+            const items = PRODUCTS.filter(p => {
+                if (q) {
+                    const haystack = `${p.name} ${p.brand} ${catLabel(p.cat)}`.toLowerCase();
+                    if (!haystack.includes(q)) return false;
+                } else if (filters.cat !== 'all' && p.cat !== filters.cat) {
+                    return false;
+                }
+                if (filters.brands.length && !filters.brands.includes(p.brand)) return false;
+                if (filters.inStockOnly && !p.inStock) return false;
+                if (p.price < filters.priceMin || p.price > filters.priceMax) return false;
+                return true;
+            });
+            return applySort(items);
         }
 
         /* ===== RENDER PRODUCTS ===== */
-        function renderProducts(catKey, searchQuery) {
+        function renderProducts() {
             const grid = document.getElementById('productGrid');
-            grid.innerHTML = '';
+            const items = getFilteredProducts();
 
-            let items = [];
-
-            if (searchQuery) {
-                // Global search across ALL categories, not just the active one
-                const q = searchQuery.toLowerCase();
-                Object.keys(productsDatabase).forEach(ck => {
-                    productsDatabase[ck].forEach((prod, index) => {
-                        if (prod.name.toLowerCase().includes(q)) {
-                            items.push({ prod, index, itemCat: ck });
-                        }
-                    });
-                });
-                // While searching, drop the active-category highlight since results span categories
-                document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
-                document.querySelectorAll('.cat-dropdown a').forEach(el => el.classList.remove('sub-active'));
-            } else {
-                items = productsDatabase[catKey].map((prod, index) => ({ prod, index, itemCat: catKey }));
-                if (activeSubcat) {
-                    items = items.filter(({ prod }) => prod.subcat === activeSubcat);
-                }
-                document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
-                const activeEl = document.getElementById(`cat-${catKey}`);
-                if (activeEl) activeEl.classList.add('active');
-            }
-
-            items = applySort(items);
+            document.getElementById('resultsCount').textContent =
+                `${t('resultsFound')}: ${items.length}`;
 
             if (items.length === 0) {
-                if (activeSubcat && !searchQuery) {
-                    const msg = currentLang === 'uk' ? 'У цій підкатегорії поки немає товарів.' : 'No products in this subcategory yet.';
-                    const btnText = currentLang === 'uk' ? 'Переглянути всю категорію' : 'View full category';
-                    grid.innerHTML = `<div class="search-no-results">${msg}<br><br><button class="buy-action" style="width:auto; display:inline-block; padding:12px 26px;" onclick="switchCategory('${catKey}')">${btnText}</button></div>`;
-                } else {
-                    const msg = currentLang === 'uk' ? 'Нічого не знайдено. Спробуйте інший запит.' : 'No products found. Try a different search.';
-                    grid.innerHTML = `<div class="search-no-results">${msg}</div>`;
-                }
+                const btnText = currentLang === 'uk' ? 'Скинути фільтри' : 'Reset filters';
+                grid.innerHTML = `<div class="search-no-results">${t('noResults')}<br><br>
+                    <button class="buy-action" style="width:auto; display:inline-block; padding:12px 26px;" onclick="resetFilters()">${btnText}</button></div>`;
                 return;
             }
 
-            items.forEach(({ prod, index, itemCat }) => {
-                const pid = `${itemCat}-${index}`;
-                const card = document.createElement('div');
-                card.className = 'product-card jacuzzi-border';
-                card.setAttribute('onclick', `openProductModal('${itemCat}', ${index})`);
-
+            grid.innerHTML = items.map(prod => {
                 const imgHTML = prod.img
                     ? `<img src="${prod.img}" alt="${prod.name}" loading="lazy" decoding="async" class="lazy-img" onload="this.classList.add('loaded')" onerror="this.parentNode.innerHTML='<span class=\\'img-placeholder\\'>${prod.tag}</span>'">`
                     : `<span class="img-placeholder">${prod.tag}</span>`;
 
-                const shortDesc = currentLang === 'uk' ? prod.descUk : prod.descEn;
-                const shortDescTrimmed = shortDesc.length > 80 ? shortDesc.substring(0, 80) + '…' : shortDesc;
-                const heartActive = isInWishlist(pid) ? 'active' : '';
+                const desc = currentLang === 'uk' ? prod.descUk : prod.descEn;
+                const shortDesc = desc.length > 80 ? desc.substring(0, 80) + '…' : desc;
+                const stockClass = prod.inStock ? 'stock-in' : 'stock-out';
+                const stockText = prod.inStock ? t('inStock') : t('outOfStock');
 
-                card.innerHTML = `
-                    <button class="card-wishlist-btn ${heartActive}" onclick="event.stopPropagation(); toggleWishlist('${pid}')" aria-label="Обране">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                    </button>
-                    <div class="exclusive-badge">${prod.tag}</div>
-                    <div class="product-img-slot">${imgHTML}</div>
-                    <h3>${prod.name}</h3>
-                    <p class="product-desc-short">${shortDescTrimmed}</p>
-                    <div class="product-price">${prod.price}</div>
-                    <div class="product-actions-row">
-                        <button class="buy-action" onclick="event.stopPropagation(); openProductModal('${itemCat}', ${index})">${translations[currentLang].buyAction}</button>
-                        <button class="cart-add-btn" onclick="event.stopPropagation(); addToCart('${pid}')" aria-label="Додати в кошик">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                return `
+                    <div class="product-card jacuzzi-border ${prod.inStock ? '' : 'is-out'}" onclick="openProductModal('${prod.id}')">
+                        <button class="card-wishlist-btn ${isInWishlist(prod.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${prod.id}')" aria-label="Обране">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                         </button>
+                        <div class="exclusive-badge">${prod.tag}</div>
+                        <div class="product-img-slot">${imgHTML}</div>
+                        <h3>${prod.name}</h3>
+                        <p class="product-desc-short">${shortDesc}</p>
+                        <div class="stock-line ${stockClass}">${stockText}</div>
+                        <div class="product-price">${fmtPrice(prod.price)}</div>
+                        <div class="product-actions-row">
+                            <button class="buy-action" onclick="event.stopPropagation(); openProductModal('${prod.id}')">${t('buyAction')}</button>
+                            <button class="cart-add-btn" ${prod.inStock ? '' : 'disabled'} onclick="event.stopPropagation(); addToCart('${prod.id}')" aria-label="Додати в кошик">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                            </button>
+                        </div>
                     </div>
                 `;
-                grid.appendChild(card);
-            });
+            }).join('');
         }
 
         /* ===== OVERLAY LOGIC ===== */
         const overlay = document.getElementById('productOverlay');
 
-        const categoryLabels = {
-            apple: { uk: 'Apple Гаджети', en: 'Apple Gadgets' },
-            gaming: { uk: 'Геймінг & Складові', en: 'Gaming & Hardware' },
-            audio: { uk: 'Аудіосистеми', en: 'Audio Systems' }
-        };
-
-        function renderBreadcrumbs(catKey, productName) {
+        function renderBreadcrumbs(product) {
             const el = document.getElementById('modalBreadcrumbs');
             const home = currentLang === 'uk' ? 'Головна' : 'Home';
             const catalog = currentLang === 'uk' ? 'Каталог' : 'Catalog';
-            const catLabel = categoryLabels[catKey] ? categoryLabels[catKey][currentLang] : catKey;
-            const shortName = productName.length > 24 ? productName.substring(0, 24) + '…' : productName;
+            const shortName = product.name.length > 24 ? product.name.substring(0, 24) + '…' : product.name;
             el.innerHTML = `
                 <a onclick="closeModal()" href="#hero-top">${home}</a>
                 <span class="crumb-sep">/</span>
                 <a onclick="closeModal()" href="#storeSpace">${catalog}</a>
                 <span class="crumb-sep">/</span>
-                <a onclick="closeModal(); switchCategory('${catKey}')" href="#storeSpace">${catLabel}</a>
+                <a onclick="closeModal(); switchCategory('${product.cat}')" href="#storeSpace">${catLabel(product.cat)}</a>
                 <span class="crumb-sep">/</span>
                 <span class="crumb-current">${shortName}</span>
             `;
         }
 
-        function openProductModal(catKey, index) {
-            const product = productsDatabase[catKey][index];
+        function openProductModal(id) {
+            const product = getProductById(id);
+            if (!product) return;
             const labels = translations[currentLang].specLabels;
             const values = translations[currentLang].specValues;
-            currentModalId = `${catKey}-${index}`;
-            renderBreadcrumbs(catKey, product.name);
+            currentModalId = id;
+            renderBreadcrumbs(product);
 
             document.getElementById('modalBadge').textContent = product.tag;
             document.getElementById('modalTitle').textContent = product.name;
-            document.getElementById('modalPrice').textContent = product.price;
+            document.getElementById('modalPrice').textContent = fmtPrice(product.price);
             document.getElementById('modalDesc').textContent = currentLang === 'uk' ? product.descUk : product.descEn;
 
             // Update modal image
@@ -3050,23 +3997,30 @@
 
             const specsTable = document.getElementById('modalSpecs');
             specsTable.innerHTML = `
+                <tr><td>${labels.brand}</td><td>${product.brand}</td></tr>
+                <tr><td>${labels.category}</td><td>${catLabel(product.cat)}</td></tr>
+                <tr><td>${labels.stock}</td><td>${product.inStock ? values.inStock : values.outOfStock}</td></tr>
                 <tr><td>${labels.state}</td><td>${values.new}</td></tr>
                 <tr><td>${labels.warranty}</td><td>${values.war}</td></tr>
                 <tr><td>${labels.Delivery}</td><td>${values.del}</td></tr>
             `;
 
-            const encodedText = encodeURIComponent(`Вітаю! Мене зацікавив товар: ${product.name} (${product.price}). Чи є в наявності?`);
-            document.getElementById('modalOrderBtn').href = `https://www.instagram.com/online_shoooooop/?text=${encodedText}`;
+            const encodedText = encodeURIComponent(`Вітаю! Мене зацікавив товар: ${product.name} (${fmtPrice(product.price)}). Чи є в наявності?`);
+            document.getElementById('modalOrderBtn').href = `${CONTACTS.instagram}?text=${encodedText}`;
             document.getElementById('modalOrderBtn').textContent = translations[currentLang].modalBtnText;
-            document.getElementById('modalAddCartBtn').textContent = translations[currentLang].modalAddCartBtn;
+
+            const addBtn = document.getElementById('modalAddCartBtn');
+            addBtn.textContent = product.inStock ? t('modalAddCartBtn') : t('outOfStock');
+            addBtn.disabled = !product.inStock;
+
             updateModalWishlistBtn();
-            renderRelatedProducts(catKey, index);
+            renderRelatedProducts(product);
 
             overlay.classList.add('active');
             document.body.classList.add('modal-open');
         }
 
-        function renderRelatedProducts(catKey, index) {
+        function renderRelatedProducts(product) {
             let container = document.getElementById('relatedProductsBlock');
             if (!container) {
                 container = document.createElement('div');
@@ -3074,10 +4028,7 @@
                 container.id = 'relatedProductsBlock';
                 document.querySelector('.overlay-info-side').appendChild(container);
             }
-            const others = productsDatabase[catKey]
-                .map((p, i) => ({ p, i }))
-                .filter(item => item.i !== index)
-                .slice(0, 3);
+            const others = PRODUCTS.filter(p => p.cat === product.cat && p.id !== product.id).slice(0, 3);
 
             if (others.length === 0) { container.innerHTML = ''; return; }
 
@@ -3085,8 +4036,8 @@
             container.innerHTML = `
                 <div class="related-title">${title}</div>
                 <div class="related-grid">
-                    ${others.map(({ p, i }) => `
-                        <div class="related-item" onclick="openProductModal('${catKey}', ${i})">
+                    ${others.map(p => `
+                        <div class="related-item" onclick="openProductModal('${p.id}')">
                             <div class="related-item-img">${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async" class="lazy-img" onload="this.classList.add('loaded')">` : ''}</div>
                             <div class="related-item-name">${p.name.length > 28 ? p.name.substring(0, 28) + '…' : p.name}</div>
                         </div>
@@ -3103,6 +4054,10 @@
                     closeModal();
                     closeCartDrawer();
                     closeWishlistDrawer();
+                    closeCheckout();
+                    closeLegal();
+                    closeCallback();
+                    document.getElementById('contactFab').classList.remove('open');
                 }
             });
         }
@@ -3120,17 +4075,12 @@
         try { cart = JSON.parse(localStorage.getItem('ptc_cart') || '[]'); } catch (e) { cart = []; }
         try { wishlist = JSON.parse(localStorage.getItem('ptc_wishlist') || '[]'); } catch (e) { wishlist = []; }
 
+        // Прибираємо id, яких більше немає в каталозі (інакше «привиди» висять у localStorage)
+        cart = cart.filter(item => item && getProductById(item.id));
+        wishlist = wishlist.filter(id => getProductById(id));
+
         function saveCart() { localStorage.setItem('ptc_cart', JSON.stringify(cart)); updateCartBadge(); }
         function saveWishlist() { localStorage.setItem('ptc_wishlist', JSON.stringify(wishlist)); updateWishlistBadge(); }
-
-        function getProductById(id) {
-            const lastDash = id.lastIndexOf('-');
-            const catKey = id.substring(0, lastDash);
-            const idx = parseInt(id.substring(lastDash + 1), 10);
-            const list = productsDatabase[catKey];
-            if (!list) return null;
-            return list[idx] || null;
-        }
 
         function updateCartBadge() {
             const count = cart.reduce((sum, item) => sum + item.qty, 0);
@@ -3159,11 +4109,23 @@
 
         function isInWishlist(id) { return wishlist.includes(id); }
 
-        function parsePrice(priceStr) { return parseInt(priceStr.replace(/[^\d]/g, ''), 10) || 0; }
+        /* Підсумки кошика: сума товарів + доставка (безкоштовна від SHIPPING.freeFrom) */
+        function cartTotals() {
+            const subtotal = cart.reduce((sum, item) => {
+                const prod = getProductById(item.id);
+                return sum + (prod ? prod.price * item.qty : 0);
+            }, 0);
+            const shipping = (subtotal === 0 || subtotal >= SHIPPING.freeFrom) ? 0 : SHIPPING.cost;
+            return { subtotal, shipping, total: subtotal + shipping };
+        }
 
         function addToCart(id) {
             const prod = getProductById(id);
             if (!prod) return;
+            if (!prod.inStock) {
+                showToast(t('outOfStockToast'), 'default');
+                return;
+            }
             const existing = cart.find(item => item.id === id);
             if (existing) { existing.qty += 1; } else { cart.push({ id, qty: 1 }); }
             saveCart();
@@ -3199,7 +4161,7 @@
             }
             saveWishlist();
             renderWishlistDrawer();
-            renderProducts(activeCategory, document.getElementById('searchInput') ? document.getElementById('searchInput').value : '');
+            renderProducts();
             updateModalWishlistBtn();
         }
 
@@ -3216,18 +4178,16 @@
                 footer.innerHTML = '';
                 return;
             }
-            let total = 0;
             body.innerHTML = cart.map(item => {
                 const prod = getProductById(item.id);
                 if (!prod) return '';
-                total += parsePrice(prod.price) * item.qty;
                 const imgHTML = prod.img ? `<img src="${prod.img}" alt="${prod.name}" loading="lazy" decoding="async" class="lazy-img" onload="this.classList.add('loaded')">` : '';
                 return `
                     <div class="drawer-item">
                         <div class="drawer-item-img">${imgHTML}</div>
                         <div class="drawer-item-info">
                             <h4>${prod.name}</h4>
-                            <div class="drawer-item-price">${prod.price}</div>
+                            <div class="drawer-item-price">${fmtPrice(prod.price * item.qty)}</div>
                             <div class="drawer-item-controls">
                                 <button class="qty-btn" onclick="changeCartQty('${item.id}', -1)">−</button>
                                 <span class="qty-val">${item.qty}</span>
@@ -3239,12 +4199,24 @@
                 `;
             }).join('');
 
+            const { subtotal, shipping, total } = cartTotals();
+            const left = SHIPPING.freeFrom - subtotal;
+            const shipLine = shipping === 0
+                ? `<span class="summary-free">${t('freeShipping')}</span>`
+                : fmtPrice(shipping);
+            const freeHint = shipping > 0
+                ? `<div class="drawer-total-row" style="font-size:11.5px;">${t('freeFromHint')} ${fmtPrice(left)}</div>`
+                : '';
+
             footer.innerHTML = `
+                <div class="drawer-total-row"><span>${t('subtotal')}</span><span>${fmtPrice(subtotal)}</span></div>
+                <div class="drawer-total-row"><span>${t('shipping')}</span><span>${shipLine}</span></div>
+                ${freeHint}
                 <div class="drawer-total-row">
-                    <span>${currentLang === 'uk' ? 'Разом' : 'Total'}</span>
-                    <strong>${total.toLocaleString('uk-UA')} UAH</strong>
+                    <span>${currentLang === 'uk' ? 'Разом до сплати' : 'Total'}</span>
+                    <strong>${fmtPrice(total)}</strong>
                 </div>
-                <button class="buy-action insta-order-btn" style="width:100%;" onclick="checkoutCart()">${currentLang === 'uk' ? 'Оформити замовлення' : 'Checkout via Instagram'}</button>
+                <button class="buy-action insta-order-btn" style="width:100%;" onclick="openCheckout()">${t('checkoutBtn')}</button>
             `;
         }
 
@@ -3263,7 +4235,7 @@
                         <div class="drawer-item-img">${imgHTML}</div>
                         <div class="drawer-item-info">
                             <h4>${prod.name}</h4>
-                            <div class="drawer-item-price">${prod.price}</div>
+                            <div class="drawer-item-price">${fmtPrice(prod.price)}</div>
                             <div class="drawer-item-controls">
                                 <button class="drawer-item-remove" style="text-decoration:none; color:var(--gold-premium);" onclick="addToCart('${id}')">${currentLang === 'uk' ? '+ В кошик' : '+ Add to cart'}</button>
                                 <button class="drawer-item-remove" onclick="toggleWishlist('${id}')">${currentLang === 'uk' ? 'Видалити' : 'Remove'}</button>
@@ -3297,18 +4269,301 @@
             document.body.classList.remove('modal-open');
         }
 
-        function checkoutCart() {
+        /* ===== CHECKOUT ===== */
+        const checkoutModal = document.getElementById('checkoutModal');
+
+        function loadOrders() {
+            try { return JSON.parse(localStorage.getItem('ptc_orders') || '[]'); } catch (e) { return []; }
+        }
+
+        function nextOrderNumber() {
+            const orders = loadOrders();
+            return orders.length ? Math.max(...orders.map(o => o.number)) + 1 : 1001;
+        }
+
+        function openCheckout() {
             if (cart.length === 0) return;
-            const lines = cart.map(item => {
-                const prod = getProductById(item.id);
-                return prod ? `${prod.name} x${item.qty} — ${prod.price}` : '';
-            }).filter(Boolean);
-            const total = cart.reduce((sum, item) => {
-                const prod = getProductById(item.id);
-                return sum + (prod ? parsePrice(prod.price) * item.qty : 0);
-            }, 0);
-            const text = `Вітаю! Хочу оформити замовлення:\n${lines.join('\n')}\n\nРазом: ${total.toLocaleString('uk-UA')} UAH`;
-            window.open(`https://www.instagram.com/online_shoooooop/?text=${encodeURIComponent(text)}`, '_blank');
+            closeCartDrawer();
+            renderCheckoutForm();
+            checkoutModal.classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeCheckout() {
+            checkoutModal.classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        function renderCheckoutForm() {
+            const { subtotal, shipping, total } = cartTotals();
+            const shipLine = shipping === 0
+                ? `<span class="summary-free">${t('freeShipping')}</span>`
+                : fmtPrice(shipping);
+
+            document.getElementById('checkoutCard').innerHTML = `
+                <button class="app-modal-close" onclick="closeCheckout()" aria-label="Закрити">&times;</button>
+                <div class="app-modal-title">${t('checkoutTitle')}</div>
+                <div class="app-modal-sub">${t('checkoutSub')}</div>
+
+                <div class="checkout-summary">
+                    ${cart.map(item => {
+                        const p = getProductById(item.id);
+                        return p ? `<div class="summary-line"><span>${p.name} × ${item.qty}</span><span>${fmtPrice(p.price * item.qty)}</span></div>` : '';
+                    }).join('')}
+                    <div class="summary-line"><span>${t('shipping')}</span><span>${shipLine}</span></div>
+                    <div class="summary-line total"><span>${t('toPay')}</span><strong>${fmtPrice(total)}</strong></div>
+                </div>
+
+                <form class="checkout-form" id="checkoutForm" onsubmit="submitOrder(event)" novalidate>
+                    <div class="checkout-row">
+                        <div class="field" id="fieldName">
+                            <label for="coName">${t('coName')}</label>
+                            <input type="text" id="coName" placeholder="Іван Петренко" autocomplete="name">
+                            <span class="field-error">${t('errName')}</span>
+                        </div>
+                        <div class="field" id="fieldPhone">
+                            <label for="coPhone">${t('coPhone')}</label>
+                            <input type="tel" id="coPhone" placeholder="+380671234567" autocomplete="tel">
+                            <span class="field-error">${t('errPhone')}</span>
+                        </div>
+                    </div>
+                    <div class="checkout-row">
+                        <div class="field" id="fieldCity">
+                            <label for="coCity">${t('coCity')}</label>
+                            <input type="text" id="coCity" placeholder="Київ">
+                            <span class="field-error">${t('errCity')}</span>
+                        </div>
+                        <div class="field" id="fieldBranch">
+                            <label for="coBranch">${t('coBranch')}</label>
+                            <input type="text" id="coBranch" placeholder="№ 12">
+                            <span class="field-error">${t('errBranch')}</span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="coComment">${t('coComment')}</label>
+                        <textarea id="coComment" placeholder="${t('coCommentPh')}"></textarea>
+                    </div>
+
+                    <div class="field">
+                        <label>${t('coPayment')}</label>
+                        <div class="pay-options">
+                            <label class="pay-option selected" id="payCodOption">
+                                <input type="radio" name="payment" value="cod" checked onchange="onPaymentChange('cod')">
+                                <span>
+                                    <span class="pay-option-name">${t('payCod')}</span>
+                                    <span class="pay-option-desc">${t('payCodDesc')}</span>
+                                </span>
+                            </label>
+                            <label class="pay-option" id="payCardOption">
+                                <input type="radio" name="payment" value="card" onchange="onPaymentChange('card')">
+                                <span>
+                                    <span class="pay-option-name">${t('payCard')}</span>
+                                    <span class="pay-option-desc">${t('payCardDesc')}</span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="card-stub-note" id="cardStubNote" style="display:none;">${t('cardStub')}</div>
+                    </div>
+
+                    <button type="submit" class="submit-order-btn">${t('placeOrder')}</button>
+                </form>
+            `;
+        }
+
+        function onPaymentChange(method) {
+            document.getElementById('payCodOption').classList.toggle('selected', method === 'cod');
+            document.getElementById('payCardOption').classList.toggle('selected', method === 'card');
+            document.getElementById('cardStubNote').style.display = method === 'card' ? 'block' : 'none';
+        }
+
+        function isValidPhone(value) {
+            const digits = value.replace(/[\s()\-]/g, '');
+            return /^(\+?38)?0\d{9}$/.test(digits);
+        }
+
+        function markField(id, valid) {
+            document.getElementById(id).classList.toggle('invalid', !valid);
+            return valid;
+        }
+
+        function submitOrder(e) {
+            e.preventDefault();
+            const name = document.getElementById('coName').value.trim();
+            const phone = document.getElementById('coPhone').value.trim();
+            const city = document.getElementById('coCity').value.trim();
+            const branch = document.getElementById('coBranch').value.trim();
+            const comment = document.getElementById('coComment').value.trim();
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+
+            const ok = [
+                markField('fieldName', name.length >= 2),
+                markField('fieldPhone', isValidPhone(phone)),
+                markField('fieldCity', city.length >= 2),
+                markField('fieldBranch', branch.length >= 1)
+            ].every(Boolean);
+            if (!ok) return;
+
+            const { subtotal, shipping, total } = cartTotals();
+            const order = {
+                number: nextOrderNumber(),
+                date: new Date().toISOString(),
+                customer: { name, phone, city, branch, comment },
+                payment,
+                items: cart.map(item => {
+                    const p = getProductById(item.id);
+                    return { id: item.id, name: p.name, price: p.price, qty: item.qty };
+                }),
+                subtotal, shipping, total
+            };
+
+            const orders = loadOrders();
+            orders.push(order);
+            localStorage.setItem('ptc_orders', JSON.stringify(orders));
+
+            cart = [];
+            saveCart();
+            renderCartDrawer();
+            renderOrderSuccess(order);
+        }
+
+        function renderOrderSuccess(order) {
+            const payLabel = order.payment === 'cod' ? t('payCod') : t('payCard');
+            document.getElementById('checkoutCard').innerHTML = `
+                <button class="app-modal-close" onclick="closeCheckout()" aria-label="Закрити">&times;</button>
+                <div class="order-success">
+                    <div class="order-success-icon">✓</div>
+                    <h3>${t('thanksTitle')}</h3>
+                    <div class="order-number">#${order.number}</div>
+                    <p>${t('thanksBody')}</p>
+                    <p style="margin-top:14px;">
+                        ${t('toPay')}: <strong style="color:var(--text-color);">${fmtPrice(order.total)}</strong><br>
+                        ${t('coPayment')}: ${payLabel}
+                    </p>
+                    <div class="order-success-actions">
+                        <button class="buy-action" style="width:auto;padding:13px 26px;" onclick="closeCheckout()">${t('continueShopping')}</button>
+                        <button class="buy-action" style="width:auto;padding:13px 26px;" onclick="closeCheckout(); openOrders();">${t('myOrders')}</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        /* ===== ORDER HISTORY ===== */
+        function openOrders() {
+            const orders = loadOrders().slice().reverse();
+            const body = orders.length === 0
+                ? `<p>${t('noOrders')}</p>`
+                : orders.map(o => `
+                    <div class="order-history-item">
+                        <div class="order-history-head">
+                            <span class="order-history-id">#${o.number}</span>
+                            <span class="order-history-date">${new Date(o.date).toLocaleString('uk-UA')}</span>
+                        </div>
+                        ${o.items.map(i => `<div class="order-history-line">${i.name} × ${i.qty} — ${fmtPrice(i.price * i.qty)}</div>`).join('')}
+                        <div class="order-history-line">${t('shipping')}: ${o.shipping === 0 ? t('freeShipping') : fmtPrice(o.shipping)}</div>
+                        <div class="order-history-line">${o.customer.city}, ${t('coBranch')}: ${o.customer.branch}</div>
+                        <div class="order-history-total">${t('toPay')}: ${fmtPrice(o.total)}</div>
+                    </div>
+                `).join('');
+
+            showLegalModal(t('myOrders'), body);
+        }
+
+        /* ===== LEGAL PAGES ===== */
+        function openLegal(key) {
+            const page = LEGAL[currentLang][key];
+            if (!page) return;
+            showLegalModal(page.title, page.body);
+        }
+
+        function showLegalModal(title, bodyHTML) {
+            document.getElementById('legalModalTitle').textContent = title;
+            document.getElementById('legalModalBody').innerHTML = bodyHTML;
+            document.getElementById('legalModal').classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeLegal() {
+            document.getElementById('legalModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        /* ===== STICKY CONTACT FAB ===== */
+        function buildContactFab() {
+            document.getElementById('contactFabMenu').innerHTML = `
+                <a class="contact-fab-item" href="${CONTACTS.telegram}" target="_blank" rel="noopener">
+                    <span class="fab-ico tg"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.8 19c-.2 1-.9 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.4-4.9L18.4 6c.4-.3-.1-.5-.6-.2L6.7 12.6l-4.8-1.5c-1-.3-1-1 .2-1.5l18.6-7.2c.9-.3 1.6.2 1.2 1.9z"/></svg></span>
+                    Telegram
+                </a>
+                <a class="contact-fab-item" href="${CONTACTS.viber}">
+                    <span class="fab-ico vb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></span>
+                    Viber
+                </a>
+                <a class="contact-fab-item" href="tel:${CONTACTS.phone}">
+                    <span class="fab-ico ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></span>
+                    ${CONTACTS.phoneLabel}
+                </a>
+                <button class="contact-fab-item" onclick="openCallback()">
+                    <span class="fab-ico cb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5h18M3 12h12M3 19h18"/></svg></span>
+                    ${t('callbackBtn')}
+                </button>
+            `;
+        }
+
+        function toggleContactFab() {
+            const fab = document.getElementById('contactFab');
+            const open = fab.classList.toggle('open');
+            document.getElementById('contactFabToggle').setAttribute('aria-expanded', String(open));
+        }
+
+        /* ===== CALLBACK REQUEST ===== */
+        const callbackModal = document.getElementById('callbackModal');
+
+        function openCallback() {
+            document.getElementById('contactFab').classList.remove('open');
+            document.getElementById('callbackCard').innerHTML = `
+                <button class="app-modal-close" onclick="closeCallback()" aria-label="Закрити">&times;</button>
+                <div class="app-modal-title">${t('callbackTitle')}</div>
+                <div class="app-modal-sub">${t('callbackSub')}</div>
+                <form class="checkout-form" onsubmit="submitCallback(event)" novalidate>
+                    <div class="field" id="cbFieldName">
+                        <label for="cbName">${t('coName')}</label>
+                        <input type="text" id="cbName" placeholder="Іван" autocomplete="name">
+                        <span class="field-error">${t('errName')}</span>
+                    </div>
+                    <div class="field" id="cbFieldPhone">
+                        <label for="cbPhone">${t('coPhone')}</label>
+                        <input type="tel" id="cbPhone" placeholder="+380671234567" autocomplete="tel">
+                        <span class="field-error">${t('errPhone')}</span>
+                    </div>
+                    <button type="submit" class="submit-order-btn">${t('callbackSubmit')}</button>
+                </form>
+            `;
+            callbackModal.classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeCallback() {
+            callbackModal.classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        function submitCallback(e) {
+            e.preventDefault();
+            const name = document.getElementById('cbName').value.trim();
+            const phone = document.getElementById('cbPhone').value.trim();
+            const ok = [
+                markField('cbFieldName', name.length >= 2),
+                markField('cbFieldPhone', isValidPhone(phone))
+            ].every(Boolean);
+            if (!ok) return;
+
+            let list = [];
+            try { list = JSON.parse(localStorage.getItem('ptc_callbacks') || '[]'); } catch (err) { list = []; }
+            list.push({ name, phone, date: new Date().toISOString() });
+            localStorage.setItem('ptc_callbacks', JSON.stringify(list));
+
+            closeCallback();
+            showToast(t('callbackDone'), 'default');
         }
 
         /* ===== TOAST ===== */
