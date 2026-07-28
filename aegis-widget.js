@@ -53,6 +53,14 @@
         return n.toLocaleString('uk-UA').replace(/ /g, ' ') + ' UAH';
     }
 
+    /* Дані товарів потрапляють у innerHTML. Зараз каталог свій, але щойно
+       PRODUCTS почне приходити з API — це стане вектором XSS. */
+    function esc(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
     function productDesc(p) {
         return (lang() === 'en' ? p.descEn : p.descUk) || '';
     }
@@ -95,7 +103,6 @@
             askBudget: 'Чудовий вибір. На який бюджет орієнтуємось?',
             budgetLow: 'Бюджетний',
             budgetMid: 'Оптимальний',
-            budgetHigh: 'Максимум',
             budgetAny: 'Без обмежень',
             askBrand: 'Є бренд, якому надаєте перевагу?',
             brandAny: 'Не важливо',
@@ -120,6 +127,7 @@
             details: 'Детальніше',
             addedToCart: 'Додав у кошик:',
             noMatch: 'За такими критеріями нічого не знайшов. Спробуємо ширший бюджет?',
+            noMoreOptions: 'Це всі варіанти, які є в каталозі під ваш запит. Почнемо спочатку чи покликати менеджера?',
             showOther: 'Показати інші',
             restart: 'Почати спочатку',
             callMe: 'Хочу консультацію',
@@ -134,8 +142,7 @@
             send: 'Надіслати',
             fallback: 'Не зовсім зрозумів. Оберіть категорію — і я підберу варіант:',
             inStockNote: 'В наявності',
-            outStockNote: 'Немає в наявності',
-            budgetPicked: 'Бюджет:'
+            outStockNote: 'Немає в наявності'
         },
         en: {
             title: 'AEGIS AI',
@@ -154,7 +161,6 @@
             askBudget: 'Great choice. What budget are we aiming at?',
             budgetLow: 'Budget',
             budgetMid: 'Balanced',
-            budgetHigh: 'Top tier',
             budgetAny: 'No limit',
             askBrand: 'Any brand you prefer?',
             brandAny: 'No preference',
@@ -179,6 +185,7 @@
             details: 'Details',
             addedToCart: 'Added to cart:',
             noMatch: 'Nothing matches those criteria. Shall we widen the budget?',
+            noMoreOptions: 'That is everything in the catalog for your request. Start over, or shall I call a manager?',
             showOther: 'Show others',
             restart: 'Start over',
             callMe: 'I need advice',
@@ -193,8 +200,7 @@
             send: 'Send',
             fallback: 'I didn\'t quite get that. Pick a category and I\'ll suggest something:',
             inStockNote: 'In stock',
-            outStockNote: 'Out of stock',
-            budgetPicked: 'Budget:'
+            outStockNote: 'Out of stock'
         }
     };
 
@@ -211,6 +217,20 @@
        СТИЛІ (glassmorphism, палітра магазину з fallback-значеннями)
        --------------------------------------------------------------------- */
     const CSS = `
+    /* Захист від стилів сторінки-хоста: скидаємо все, що може прилетіти
+       з голих тегів або глобальних правил, і фіксуємо власну геометрію. */
+    .aegis-fab, .aegis-panel, .aegis-panel * {
+        box-sizing: border-box;
+        margin: 0;
+        font-family: inherit;
+    }
+    .aegis-panel > *, .aegis-panel .aegis-head, .aegis-panel .aegis-foot {
+        position: relative;
+        top: auto; left: auto; right: auto; bottom: auto;
+        width: auto;
+        border-radius: 0;
+    }
+
     .aegis-fab {
         position: fixed; right: 26px; bottom: 26px;
         width: 60px; height: 60px; border-radius: 50%;
@@ -270,8 +290,10 @@
         display: flex; align-items: center; gap: 12px;
         padding: 16px 18px;
         border-bottom: 1px solid rgba(255,255,255,0.07);
-        background: linear-gradient(180deg, rgba(197,168,128,0.10), rgba(197,168,128,0));
+        /* непрозора підкладка: під шапкою прокручуються повідомлення */
+        background: linear-gradient(180deg, rgba(197,168,128,0.12), rgba(197,168,128,0.02)), #14151b;
         flex-shrink: 0;
+        z-index: 2;
     }
     .aegis-avatar {
         width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
@@ -399,6 +421,10 @@
     .aegis-send svg { width: 17px; height: 17px; }
     .aegis-send:disabled { opacity: 0.35; cursor: default; }
 
+    /* Premium Store: поки чат відкрито, ховаємо кнопку зв'язку —
+       вона стоїть у тому ж куті й опинялась би під панеллю */
+    body.aegis-open .contact-fab { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+
     @media (max-width: 600px) {
         .aegis-fab { right: 18px; bottom: 18px; width: 52px; height: 52px; }
         .aegis-fab svg { width: 22px; height: 22px; }
@@ -445,17 +471,21 @@
     panel.className = 'aegis-panel';
     panel.setAttribute('role', 'dialog');
     panel.setAttribute('aria-label', CONFIG.botName);
+    panel.setAttribute('aria-hidden', 'true');   // закрита панель не має читатись скрінрідером
+    /* Свідомо жодних <header>/<footer>/<section> — сторінка-хост може мати
+       стилі на голі теги (у Premium Store `header { position: fixed }`,
+       що ламало розкладку панелі). Тільки div + класи з префіксом aegis-. */
     panel.innerHTML = `
-        <header class="aegis-head">
+        <div class="aegis-head">
             <div class="aegis-avatar">${ICON_CHAT}</div>
             <div>
                 <div class="aegis-head-name" id="aegisTitle">${t('title')}</div>
                 <div class="aegis-head-sub"><span class="aegis-dot"></span><span id="aegisSubtitle">${t('subtitle')}</span></div>
             </div>
             <button class="aegis-head-close" id="aegisClose" aria-label="${t('closeLabel')}">&times;</button>
-        </header>
+        </div>
         <div class="aegis-body" id="aegisBody" aria-live="polite"></div>
-        <form class="aegis-foot" id="aegisForm">
+        <form class="aegis-foot" id="aegisForm" autocomplete="off">
             <textarea class="aegis-input" id="aegisInput" rows="1" maxlength="300" placeholder="${t('inputPlaceholder')}"></textarea>
             <button type="submit" class="aegis-send" id="aegisSend" aria-label="${t('send')}" disabled>${ICON_SEND}</button>
         </form>
@@ -472,10 +502,11 @@
     /* ---------------------------------------------------------------------
        СТАН ДІАЛОГУ
        --------------------------------------------------------------------- */
-    const state = { cat: null, budget: null, brand: null, purpose: null, lastPick: null, started: false };
+    const state = { cat: null, budget: null, brand: null, purpose: null, lastPick: null, shown: [], started: false };
 
     function resetState() {
-        state.cat = null; state.budget = null; state.brand = null; state.purpose = null; state.lastPick = null;
+        state.cat = null; state.budget = null; state.brand = null;
+        state.purpose = null; state.lastPick = null; state.shown = [];
     }
 
     /* ---------------------------------------------------------------------
@@ -576,23 +607,35 @@
     }
 
     /* Бюджетні «кошики» рахуються з реальних цін категорії, тому працюють
-       і для аксесуарів за 6к, і для ноутбуків за 142к. */
+       і для аксесуарів за 6к, і для ноутбуків за 142к.
+       Пороги-дублікати відкидаємо: у категорії з одним товаром інакше
+       виходили дві однакові кнопки «до 142 000 UAH». */
     function budgetBuckets(items) {
-        const prices = items.map(p => p.price).sort((a, b) => a - b);
-        const low = prices[Math.floor(prices.length / 3)] || prices[0];
-        const mid = prices[Math.floor(prices.length * 2 / 3)] || prices[prices.length - 1];
-        return [
-            { key: 'low', label: `${t('budgetLow')} · до ${money(low)}`, max: low },
-            { key: 'mid', label: `${t('budgetMid')} · до ${money(mid)}`, max: mid },
-            { key: 'high', label: t('budgetHigh'), max: Infinity },
-            { key: 'any', label: t('budgetAny'), max: Infinity }
-        ];
+        const prices = [...new Set(items.map(p => p.price))].sort((a, b) => a - b);
+        if (prices.length < 2) return null;               // вибирати нема з чого
+
+        const top = prices[prices.length - 1];
+        const low = prices[Math.floor((prices.length - 1) / 3)];
+        const mid = prices[Math.floor((prices.length - 1) * 2 / 3)];
+
+        const buckets = [];
+        [{ label: t('budgetLow'), max: low }, { label: t('budgetMid'), max: mid }].forEach(b => {
+            if (b.max < top && !buckets.some(x => x.max === b.max)) {
+                buckets.push({ label: `${b.label} · до ${money(b.max)}`, max: b.max });
+            }
+        });
+        buckets.push({ label: t('budgetAny'), max: Infinity });
+        return buckets;
     }
 
     async function askBudget() {
         const items = catalog().filter(p => p.cat === state.cat);
+        const buckets = budgetBuckets(items);
+
+        if (!buckets) { state.budget = Infinity; askBrand(); return; }
+
         await addBot(t('askBudget'));
-        addChips(budgetBuckets(items).map(b => ({
+        addChips(buckets.map(b => ({
             label: b.label,
             onPick: () => { state.budget = b.max; askBrand(); }
         })));
@@ -649,15 +692,27 @@
         );
     }
 
-    async function recommend() {
+    async function recommend(opts) {
+        const skipShown = !!(opts && opts.skipShown);
         await addBot(t('thinking'), 500);
 
         let items = matchingProducts();
+        if (skipShown) items = items.filter(p => !state.shown.includes(p.id));
+
+        // «Показати інші», коли інших уже не лишилось
+        if (items.length === 0 && skipShown) {
+            await addBot(t('noMoreOptions'));
+            addChips([
+                { label: t('restart'), onPick: () => restart() },
+                { label: t('callMe'), ghost: true, onPick: () => showLeadForm() }
+            ]);
+            return;
+        }
 
         if (items.length === 0) {
             await addBot(t('noMatch'));
             addChips([
-                { label: t('budgetAny'), onPick: () => { state.budget = null; state.brand = null; recommend(); } },
+                { label: t('budgetAny'), onPick: () => { state.budget = Infinity; state.brand = null; recommend(); } },
                 { label: t('callMe'), ghost: true, onPick: () => showLeadForm() },
                 { label: t('restart'), ghost: true, onPick: () => restart() }
             ]);
@@ -667,13 +722,30 @@
         const ranked = rankProducts(items);
         const inStock = ranked.filter(p => p.inStock);
 
-        // Всі підходящі товари розпродано — кажемо прямо і шукаємо альтернативу
+        // Всі підходящі товари розпродано — кажемо прямо і шукаємо альтернативу.
+        // Уже показане не пропонуємо вдруге.
         if (inStock.length === 0) {
-            await addBot(`${t('outOfStock')} <strong>${ranked[0].name}</strong>`);
-            const alt = rankProducts(catalog().filter(p => p.cat === state.cat && p.inStock))[0]
-                || rankProducts(catalog().filter(p => p.inStock))[0];
-            if (!alt) { await addBot(t('noAlt')); showLeadForm(); return; }
+            await addBot(`${t('outOfStock')} <strong>${esc(ranked[0].name)}</strong>`);
+            // Тільки в межах категорії: пропонувати смартфон замість мишки — гірше, ніж чесне «немає»
+            const alt = rankProducts(catalog().filter(p =>
+                p.cat === state.cat && p.inStock && !state.shown.includes(p.id)
+            ))[0];
+
+            if (!alt) {
+                await addBot(state.shown.length ? t('noMoreOptions') : t('noAlt'));
+                if (state.shown.length) {
+                    addChips([
+                        { label: t('restart'), onPick: () => restart() },
+                        { label: t('callMe'), ghost: true, onPick: () => showLeadForm() }
+                    ]);
+                } else {
+                    showLeadForm();
+                }
+                return;
+            }
+
             await addBot(t('altOffer'));
+            state.shown.push(alt.id);
             addNode(productCard(alt));
             afterRecommendation();
             return;
@@ -682,18 +754,21 @@
         const picks = inStock.slice(0, CONFIG.maxRecommendations);
         state.lastPick = picks[0];
         await addBot(picks.length > 1 ? t('recIntro') : t('recSingle'));
-        picks.forEach(p => addNode(productCard(p)));
+        picks.forEach(p => {
+            state.shown.push(p.id);
+            addNode(productCard(p));
+        });
 
         // Якщо топ-варіант за критеріями був розпроданий — чесно попереджаємо
         if (!ranked[0].inStock) {
-            await addBot(`${t('outOfStock')} <strong>${ranked[0].name}</strong>`);
+            await addBot(`${t('outOfStock')} <strong>${esc(ranked[0].name)}</strong>`);
         }
         afterRecommendation();
     }
 
     function afterRecommendation() {
         addChips([
-            { label: t('showOther'), onPick: () => { state.brand = null; state.budget = null; recommend(); } },
+            { label: t('showOther'), onPick: () => { state.brand = null; state.budget = Infinity; recommend({ skipShown: true }); } },
             { label: t('callMe'), ghost: true, onPick: () => showLeadForm() },
             { label: t('restart'), ghost: true, onPick: () => restart() }
         ]);
@@ -702,17 +777,17 @@
     function productCard(p) {
         const card = document.createElement('div');
         card.className = 'aegis-card';
-        const img = p.img ? `<img src="${p.img}" alt="" loading="lazy">` : '';
+        const img = p.img ? `<img src="${esc(p.img)}" alt="" loading="lazy">` : '';
         card.innerHTML = `
             <div class="aegis-card-top">
                 <div class="aegis-card-img">${img}</div>
                 <div>
-                    <div class="aegis-card-name">${p.name}</div>
+                    <div class="aegis-card-name">${esc(p.name)}</div>
                     <div class="aegis-card-price">${money(p.price)}</div>
                     <div class="aegis-card-stock ${p.inStock ? 'ok' : 'no'}">${p.inStock ? t('inStockNote') : t('outStockNote')}</div>
                 </div>
             </div>
-            <div class="aegis-card-why">${whyLine()} ${productDesc(p)}</div>
+            <div class="aegis-card-why">${whyLine()} ${esc(productDesc(p))}</div>
             <div class="aegis-card-actions">
                 <button type="button" class="aegis-btn" ${p.inStock ? '' : 'disabled'}>${t('addToCart')}</button>
                 <button type="button" class="aegis-btn secondary">${t('details')}</button>
@@ -723,7 +798,7 @@
             if (!p.inStock) return;
             pushToCart(p.id);
             state.lastPick = p;
-            addBot(`${t('addedToCart')} <strong>${p.name}</strong>`, 350);
+            addBot(`${t('addedToCart')} <strong>${esc(p.name)}</strong>`, 350);
         });
         detailsBtn.addEventListener('click', () => {
             if (!openProduct(p.id)) return;
@@ -740,6 +815,10 @@
     }
 
     async function showLeadForm() {
+        // одна форма за раз + прибрати чіпси попереднього кроку
+        if (body.querySelector('.aegis-lead')) return;
+        body.querySelectorAll('.aegis-chips').forEach(el => el.remove());
+
         await addBot(t('leadIntro'));
 
         const form = document.createElement('form');
@@ -752,23 +831,30 @@
             <button type="submit" class="aegis-btn">${t('leadSubmit')}</button>
         `;
 
+        // form.elements — а не form.name/form.phone: у HTMLFormElement є власна
+        // властивість name, і збіг імен полів дає непередбачуваний результат
+        const nameInput = form.elements.namedItem('name');
+        const phoneInput = form.elements.namedItem('phone');
+
         form.addEventListener('submit', e => {
             e.preventDefault();
-            const name = form.name.value.trim();
-            const phone = form.phone.value.trim();
+            const name = nameInput.value.trim();
+            const phone = phoneInput.value.trim();
             const nameOk = name.length >= 2;
             const phoneOk = isValidPhone(phone);
 
             form.querySelector('[data-for="name"]').classList.toggle('show', !nameOk);
             form.querySelector('[data-for="phone"]').classList.toggle('show', !phoneOk);
-            form.name.classList.toggle('invalid', !nameOk);
-            form.phone.classList.toggle('invalid', !phoneOk);
+            nameInput.classList.toggle('invalid', !nameOk);
+            phoneInput.classList.toggle('invalid', !phoneOk);
             if (!nameOk || !phoneOk) return;
 
             saveLead({ name, phone });
             form.remove();
             addUser(`${name}, ${phone}`);
-            addBot(t('leadDone'));
+            addBot(t('leadDone')).then(() => {
+                addChips([{ label: t('restart'), ghost: true, onPick: () => restart() }]);
+            });
         });
 
         addNode(form);
@@ -819,8 +905,10 @@
 
         const catHit = Object.keys(KEYWORDS).find(cat => KEYWORDS[cat].some(k => text.includes(k)));
 
+        // ≥ 1000, інакше «iPhone 15 Pro 256» дає «бюджет 256»
         const priceHit = text.match(/(\d[\d\s]{2,})/);
-        const budget = priceHit ? parseInt(priceHit[1].replace(/\s/g, ''), 10) : null;
+        const parsed = priceHit ? parseInt(priceHit[1].replace(/\s/g, ''), 10) : NaN;
+        const budget = (!isNaN(parsed) && parsed >= 1000) ? parsed : null;
 
         if (catHit || brandHit || budget) {
             state.cat = catHit || state.cat;
@@ -857,7 +945,9 @@
     function openPanel() {
         applyStaticText();
         panel.classList.add('is-open');
+        panel.setAttribute('aria-hidden', 'false');
         fab.classList.add('is-open');
+        document.body.classList.add('aegis-open');
         fab.setAttribute('aria-expanded', 'true');
         badge.classList.remove('show');
         if (!state.started) startDialog();
@@ -866,8 +956,20 @@
 
     function closePanel() {
         panel.classList.remove('is-open');
+        panel.setAttribute('aria-hidden', 'true');
         fab.classList.remove('is-open');
+        document.body.classList.remove('aegis-open');
         fab.setAttribute('aria-expanded', 'false');
+    }
+
+    /* Магазин вішає body.modal-open на свої модалки/шторки. Якщо така
+       відкрилась — прибираємо чат, щоб панелі не накладались. */
+    if (window.MutationObserver) {
+        new MutationObserver(() => {
+            if (document.body.classList.contains('modal-open') && panel.classList.contains('is-open')) {
+                closePanel();
+            }
+        }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
     }
 
     function restart() {
