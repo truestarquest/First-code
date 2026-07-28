@@ -495,9 +495,10 @@
         .drawer-total-row strong { color: var(--text-color); font-family: 'Orbitron', sans-serif; font-size: 16px; }
 
         /* ===== TOASTS ===== */
+        /* Ліворуч: праворуч знизу стоять кнопки зв'язку та AI-консультанта */
         .toast-container {
             position: fixed;
-            bottom: 100px; right: 30px;
+            bottom: 100px; left: 30px;
             z-index: 5000;
             display: flex; flex-direction: column; gap: 10px;
             pointer-events: none;
@@ -513,7 +514,7 @@
             font-weight: 500;
             box-shadow: var(--shadow);
             display: flex; align-items: center; gap: 10px;
-            transform: translateX(120%);
+            transform: translateX(-120%);
             opacity: 0;
             transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
             max-width: 320px;
@@ -523,7 +524,7 @@
         .toast-icon { flex-shrink: 0; width: 18px; height: 18px; color: var(--gold-premium); }
 
         @media (max-width: 480px) {
-            .toast-container { right: 16px; left: 16px; bottom: 92px; }
+            .toast-container { right: 16px; left: 16px; bottom: 150px; }
             .toast { max-width: none; }
             .icon-btn { width: 36px; height: 36px; }
         }
@@ -2220,15 +2221,21 @@
         .legal-content strong { color: var(--text-color); }
 
         /* ===== STICKY CONTACT FAB ===== */
+        /* bottom: 100px — над плаваючою кнопкою AI-консультанта (aegis-widget.js).
+           pointer-events: none на контейнері — інакше його невидима коробка
+           (разом зі згорнутим меню) перехоплює кліки по контенту під нею. */
         .contact-fab {
             position: fixed;
-            right: 26px; bottom: 26px;
+            right: 26px; bottom: 100px;
             z-index: 2600;
             display: flex;
             flex-direction: column;
             align-items: flex-end;
             gap: 12px;
+            pointer-events: none;
         }
+
+        .contact-fab-toggle, .contact-fab.open .contact-fab-menu { pointer-events: auto; }
 
         .contact-fab-menu {
             display: flex;
@@ -2364,7 +2371,7 @@
                 transform: translateY(100%);
             }
             .checkout-row { grid-template-columns: 1fr; }
-            .contact-fab { right: 18px; bottom: 18px; }
+            .contact-fab { right: 18px; bottom: 82px; }
             .contact-fab-toggle { width: 50px; height: 50px; }
             .footer-inner { grid-template-columns: 1fr; }
         }
@@ -2927,6 +2934,9 @@
     <div class="app-modal" id="callbackModal" onclick="if(event.target===this) closeCallback()">
         <div class="app-modal-card" id="callbackCard"></div>
     </div>
+
+    <!-- AI-консультант AEGIS (standalone, без бекенду) -->
+    <script src="aegis-widget.js" defer></script>
 
     <script>
         let currentLang = 'uk';

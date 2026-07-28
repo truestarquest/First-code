@@ -26,16 +26,75 @@
 ## ✨ Ключові фічі
 
 ### 🛒 Core E-commerce
-- ✅ **Динамічний каталог** — 7 товарів у 3 категоріях (Apple, Gaming, Audio)
-- ✅ **Підкатегорії** — точна фільтрація товарів (iPhone, MacBook, Миші, тощо)
-- ✅ **Глобальний пошук** — миттєвий пошук по всіх категоріях
-- ✅ **Сортування** — за замовчуванням, новизною, ціною (↑↓)
+- ✅ **Динамічний каталог** — товари в одному плоскому масиві `PRODUCTS`, категорії: Смартфони, Ноутбуки, Планшети, Аксесуари
+- ✅ **Фільтри** — ціна (min/max + повзунок), бренд (чекбокси), наявність
+- ✅ **Глобальний пошук** — по назві, бренду та категорії
+- ✅ **Сортування** — за замовчуванням, новизною, популярністю, ціною (↑↓)
 
 ### 🛍️ Shopping Experience
 - ✅ **Функціональний кошик** — додавання, видалення, зміна кількості, auto-save у localStorage
+- ✅ **Доставка** — 150 UAH, безкоштовно від 5000 UAH (константа `SHIPPING`)
+- ✅ **Оформлення замовлення** — форма (ім'я, телефон, місто, відділення НП), вибір оплати: накладний платіж або картка (демо-заглушка)
+- ✅ **Історія замовлень** — номери від #1001, зберігаються в localStorage
 - ✅ **Wishlist (Обране)** — зберігання улюблених товарів
 - ✅ **Toast-сповіщення** — гарні UI-оповіщення про дії (добавили в кошик, тощо)
 - ✅ **Related Products** — пропозиція схожих товарів у модалці
+
+### 🤖 AEGIS AI — чат-консультант
+- ✅ **Плаваюча кнопка** (правий нижній кут) з пульсацією + бейдж-нагадування через 8 с
+- ✅ **Чат-панель** — popup на десктопі, slide-up bottom sheet на мобільних, glassmorphism
+- ✅ **Дерево діалогу** — категорія → бюджет → бренд → призначення → 1-2 рекомендації
+- ✅ **Контекст каталогу** — читає той самий масив `PRODUCTS`; бюджетні «кошики» рахуються з реальних цін
+- ✅ **Розпродано** — бот прямо каже про це і пропонує альтернативу зі складу
+- ✅ **Кнопка «Додати у кошик»** прямо з чату + «Детальніше» (відкриває картку товару)
+- ✅ **Ліди** — ім'я + телефон із чату → `localStorage['aegis_leads']` + `console.log`
+- ✅ **Вільний текст** — keyword-роутер («ноутбук apple до 150000») веде в те саме дерево
+
+---
+
+## 🔌 Інтеграція AEGIS-віджета
+
+Один тег перед `</body>` — і все:
+
+```html
+<script src="aegis-widget.js" defer></script>
+```
+
+У цьому проєкті він уже стоїть в `index.html` **перед** основним інлайновим `<script>`
+(атрибут `defer` гарантує, що віджет стартує після каталогу магазину).
+
+**Залежностей немає.** Якщо на сторінці є магазинні глобали — віджет їх підхоплює,
+якщо немає — працює на вбудованому каталозі-заглушці:
+
+| Глобал магазину | Що дає віджету | Якщо відсутній |
+|-----------------|----------------|----------------|
+| `PRODUCTS` | актуальні товари, ціни, наявність, бренди | вбудований `FALLBACK_PRODUCTS` |
+| `currentLang` | мова інтерфейсу (uk / en) | українська |
+| `addToCart(id)` | кнопка «Додати у кошик» + тост і бейдж магазину | пише напряму в `localStorage['ptc_cart']` |
+| `openProductModal(id)` | кнопка «Детальніше» | кнопка нічого не робить |
+
+**Налаштування** — константа `CONFIG` на початку `aegis-widget.js`
+(ім'я бота, ключ localStorage, затримка «бот друкує», кількість рекомендацій).
+
+**Міні-API** для власних кнопок на сторінці:
+
+```javascript
+AegisWidget.open();      // відкрити чат
+AegisWidget.close();
+AegisWidget.restart();   // скинути діалог
+AegisWidget.leads();     // масив зібраних лідів
+```
+
+> ⚠️ Це **standalone-демо**: діалог працює на фронті, без бекенду AEGIS.
+> Щоб під'єднати реальний AI — заміни `routeFreeText()` на `fetch()` до `/api/chat`,
+> а `saveLead()` — на POST у CRM.
+
+---
+
+### 📞 Контакти та правові сторінки
+- ✅ **Sticky-кнопка зв'язку** — Telegram, Viber, телефон, зворотний дзвінок (правий нижній кут)
+- ✅ **Форма зворотного дзвінка** — ім'я + телефон → localStorage (`ptc_callbacks`)
+- ✅ **Правові сторінки** — Про нас, Договір оферти, Доставка та оплата, Повернення, Гарантія (модалки, лінки у футері)
 
 ### 🎨 User Interface
 - ✅ **Light/Dark mode** — перемикання тем в реальному часі
@@ -66,7 +125,7 @@
 | **Frontend** | HTML5, CSS3, Vanilla JavaScript (ES6+) |
 | **Styling** | CSS Grid, Flexbox, CSS Variables |
 | **Images** | Cloudinary CDN (lazy loading, responsive) |
-| **Storage** | LocalStorage (cart, wishlist, theme) |
+| **Storage** | LocalStorage (`ptc_cart`, `ptc_wishlist`, `ptc_orders`, `ptc_callbacks`) |
 | **SEO** | Semantic HTML, Meta tags, sitemap.xml, robots.txt |
 | **Performance** | Code splitting, image optimization, minimal DOM |
 | **Hosting** | Vercel (serverless) |
@@ -123,7 +182,7 @@ vercel dev
 
 ```
 premium-tech-store/
-├── index_new.html          # Main application
+├── index.html              # Main application (весь сайт в одному файлі)
 ├── sitemap.xml             # SEO sitemap
 ├── robots.txt              # Search engines crawl rules
 ├── README.md               # This file
@@ -135,41 +194,42 @@ premium-tech-store/
 
 ## 🎯 Key Implementation Details
 
-### 1. **Dynamic Product Database**
+### 1. **Product Catalog (плоский масив)**
 ```javascript
-const productsDatabase = {
-    apple: [
-        {
-            name: "iPhone 15 Pro Max...",
-            price: "44 500 UAH",
-            subcat: "iphone",      // Для фільтрації підкатегорій
-            img: "https://res.cloudinary.com/...",
-            descUk: "...",
-            descEn: "..."
-        }
-    ]
+const PRODUCTS = [
+    {
+        id: 'iphone-15-pro-max-256',
+        name: 'iPhone 15 Pro Max 256GB Space Black',
+        brand: 'Apple',
+        cat: 'smartphones',        // smartphones | laptops | tablets | accessories
+        price: 44500,              // число, не рядок
+        inStock: true,
+        popularity: 98,            // сортування «за популярністю»
+        added: '2026-05-20',       // сортування «спочатку нові»
+        img: 'https://res.cloudinary.com/...',
+        descUk: '...', descEn: '...'
+    }
+];
+```
+Щоб додати товар — просто додай об'єкт у масив. Категорії, бренд-фільтри, лічильники та marquee будуються з даних автоматично.
+
+### 2. **Один стан фільтрів → один рендер**
+```javascript
+const filters = { cat: 'all', search: '', sort: 'default', brands: [], inStockOnly: false, priceMin: 0, priceMax: 0 };
+
+function getFilteredProducts() {
+    // пошук / категорія / бренди / наявність / діапазон ціни, далі applySort()
 }
 ```
 
-### 2. **Smart Search Across All Categories**
+### 3. **Кошик і доставка**
 ```javascript
-function handleSearch(query) {
-    // Пошук по всім категоріям одночасно
-    const results = Object.keys(productsDatabase).flatMap(cat => {
-        return productsDatabase[cat].filter(p => 
-            p.name.toLowerCase().includes(query.toLowerCase())
-        );
-    });
-}
-```
+const SHIPPING = { cost: 150, freeFrom: 5000 };
 
-### 3. **Subcategory Filtering**
-```javascript
-function filterSubcategory(catKey, subcatKey) {
-    // Фільтрує товари по конкретній підкатегорії
-    const filtered = productsDatabase[catKey].filter(
-        p => p.subcat === subcatKey
-    );
+function cartTotals() {
+    const subtotal = /* сума позицій */;
+    const shipping = (subtotal === 0 || subtotal >= SHIPPING.freeFrom) ? 0 : SHIPPING.cost;
+    return { subtotal, shipping, total: subtotal + shipping };
 }
 ```
 
