@@ -1,401 +1,162 @@
-# 🛍️ Premium Tech Store — E-commerce Platform
+# 🛡️ Aegis AI — Smart AI Assistant for Business Admin Panel
 
-> **Сучасний e-commerce проєкт демонструючи full-stack front-end навички: UI/UX, JavaScript, доступність та performance**
+> **Smart AI-powered customer support assistant: an embeddable website widget, a Telegram bot, and an admin dashboard with CRM and analytics**
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Node.js](https://img.shields.io/badge/node.js-v20%2B-green)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Status](https://img.shields.io/badge/status-production%20ready-success)
 
 ---
 
-## 📸 Скріншоти
+## 🔑 Instant Admin Preview
 
-### Responsive Design (Desktop / Tablet / Mobile)
-![Responsive Showcase](portfolio_collage.png)
+Try the admin panel **without any database or backend setup required**:
 
-### Lighthouse Performance Audit
-- **Performance:** 100/100 ⚡
-- **Accessibility:** 96/100 ♿
-- **Best Practices:** 96/100 ✅
-- **SEO:** 100/100 🔍
+* 🌐 **URL:** `/admin.html`
+* 🛠️ **Full Access Demo:** `demo-admin-2024` *(full read/write access, local fixture data)*
+* 👁️ **Read-Only Demo:** `demo-manager-2024` *(manager read-only view)*
 
-[View Full Lighthouse Report](lighthouse-report.html)
+> Both demo accounts run entirely client-side against local fixture data — zero API keys or database required!
 
----
-
-## ✨ Ключові фічі
-
-### 🛒 Core E-commerce
-- ✅ **Динамічний каталог** — товари в одному плоскому масиві `PRODUCTS`, категорії: Смартфони, Ноутбуки, Планшети, Аксесуари
-- ✅ **Фільтри** — ціна (min/max + повзунок), бренд (чекбокси), наявність
-- ✅ **Глобальний пошук** — по назві, бренду та категорії
-- ✅ **Сортування** — за замовчуванням, новизною, популярністю, ціною (↑↓)
-
-### 🛍️ Shopping Experience
-- ✅ **Функціональний кошик** — додавання, видалення, зміна кількості, auto-save у localStorage
-- ✅ **Доставка** — 150 UAH, безкоштовно від 5000 UAH (константа `SHIPPING`)
-- ✅ **Оформлення замовлення** — форма (ім'я, телефон, місто, відділення НП), вибір оплати: накладний платіж або картка (демо-заглушка)
-- ✅ **Історія замовлень** — номери від #1001, зберігаються в localStorage
-- ✅ **Wishlist (Обране)** — зберігання улюблених товарів
-- ✅ **Toast-сповіщення** — гарні UI-оповіщення про дії (добавили в кошик, тощо)
-- ✅ **Related Products** — пропозиція схожих товарів у модалці
-
-### 🤖 AEGIS AI — чат-консультант
-- ✅ **Плаваюча кнопка** (правий нижній кут) з пульсацією + бейдж-нагадування через 8 с
-- ✅ **Чат-панель** — popup на десктопі, slide-up bottom sheet на мобільних, glassmorphism
-- ✅ **Дерево діалогу** — категорія → бюджет → бренд → призначення → 1-2 рекомендації
-- ✅ **Контекст каталогу** — читає той самий масив `PRODUCTS`; бюджетні «кошики» рахуються з реальних цін
-- ✅ **Розпродано** — бот прямо каже про це і пропонує альтернативу зі складу
-- ✅ **Кнопка «Додати у кошик»** прямо з чату + «Детальніше» (відкриває картку товару)
-- ✅ **Ліди** — ім'я + телефон із чату → `localStorage['aegis_leads']` + `console.log`
-- ✅ **Вільний текст** — keyword-роутер («ноутбук apple до 150000») веде в те саме дерево
+🌍 **Live Demo:** [smart-ai-assistant-for-business-admin.onrender.com](https://smart-ai-assistant-for-business-admin.onrender.com)
 
 ---
 
-## 🔌 Інтеграція AEGIS-віджета
+## ✨ Key Features
 
-Один тег перед `</body>` — і все:
+### 💬 Customer-Facing
+- ✅ **Embeddable Chat Widget** — drop-in script (`public/chat-widget.js`), single line integration, no build step required.
+- ✅ **Telegram Bot** — powered by the exact same engine and shares conversation history with the web widget.
+- ✅ **Bilingual Support (UA/EN)** — automatic per-message visitor language detection.
+- ✅ **Knowledge Base Grounding** — answers strictly anchored to business-provided facts with zero hallucinated pricing or facts.
+- ✅ **Smart Operating Hours** — automated off-hours responses outside business schedule to avoid unnecessary AI token expenditure.
+- ✅ **Prompt Injection Safeguards** — regex input pre-filtering combined with a hardened system prompt.
 
-```html
-<script src="aegis-widget.js" defer></script>
-```
-
-У цьому проєкті він уже стоїть в `index.html` **перед** основним інлайновим `<script>`
-(атрибут `defer` гарантує, що віджет стартує після каталогу магазину).
-
-**Залежностей немає.** Якщо на сторінці є магазинні глобали — віджет їх підхоплює,
-якщо немає — працює на вбудованому каталозі-заглушці:
-
-| Глобал магазину | Що дає віджету | Якщо відсутній |
-|-----------------|----------------|----------------|
-| `PRODUCTS` | актуальні товари, ціни, наявність, бренди | вбудований `FALLBACK_PRODUCTS` |
-| `currentLang` | мова інтерфейсу (uk / en) | українська |
-| `addToCart(id)` | кнопка «Додати у кошик» + тост і бейдж магазину | пише напряму в `localStorage['ptc_cart']` |
-| `openProductModal(id)` | кнопка «Детальніше» | кнопка нічого не робить |
-
-**Налаштування** — константа `CONFIG` на початку `aegis-widget.js`
-(ім'я бота, ключ localStorage, затримка «бот друкує», кількість рекомендацій).
-
-**Міні-API** для власних кнопок на сторінці:
-
-```javascript
-AegisWidget.open();      // відкрити чат
-AegisWidget.close();
-AegisWidget.restart();   // скинути діалог
-AegisWidget.leads();     // масив зібраних лідів
-```
-
-> ⚠️ Це **standalone-демо**: діалог працює на фронті, без бекенду AEGIS.
-> Щоб під'єднати реальний AI — заміни `routeFreeText()` на `fetch()` до `/api/chat`,
-> а `saveLead()` — на POST у CRM.
-
----
-
-### 📞 Контакти та правові сторінки
-- ✅ **Sticky-кнопка зв'язку** — Telegram, Viber, телефон, зворотний дзвінок (правий нижній кут)
-- ✅ **Форма зворотного дзвінка** — ім'я + телефон → localStorage (`ptc_callbacks`)
-- ✅ **Правові сторінки** — Про нас, Договір оферти, Доставка та оплата, Повернення, Гарантія (модалки, лінки у футері)
-
-### 🎨 User Interface
-- ✅ **Light/Dark mode** — перемикання тем в реальному часі
-- ✅ **Bilingual (UA/EN)** — повна локалізація інтерфейсу
-- ✅ **Breadcrumbs** — навігаційний ланцюжок у модалці товару
-- ✅ **Micro-animations** — плавні переходи, skeleton loading, bump-анімація лічильників
-- ✅ **Floating Chat Button** — швидкий доступ до контакту (Instagram)
-
-### 📱 Accessibility & Performance
-- ✅ **Lazy Loading** — зображення завантажуються по мірі появи
-- ✅ **WCAG 2.1 Compliant** — доступність для користувачів із обмеженнями
-- ✅ **Responsive Design** — ідеально працює на мобільних, планшетах, десктопі
-- ✅ **Semantic HTML** — main landmark, aria-labels для форм
-- ✅ **No external dependencies** — чистий Vanilla JS, без React/Vue
-
-### 📊 Additional Sections
-- ✅ **FAQ** — 5 питань про доставку, гарантію, повернення
-- ✅ **Newsletter** — форма підписки на новинки
-- ✅ **Product Reviews** — секція з відгуками клієнтів
-- ✅ **Benefits Section** — Чому саме ми (500+ клієнтів, 100% оригіналу)
+### 📊 Admin Panel (`/admin.html`)
+- ✅ **Overview Dashboard** — real-time metrics: active users, message counts, and live sessions.
+- ✅ **Conversations Browser** — seamless inspection of complete message threads for any session.
+- ✅ **CRM & Lead Tracking** — visitor list with automatic lead lifecycle tagging (`new` ➔ `qualified` / `booked` / `lost`).
+- ✅ **Analytics** — 7-day activity chart, lead conversion rates, and average bot response time.
+- ✅ **Dialog History** — search, status & date filtering, manual lead status overrides, CSV exports, and one-click history resets.
+- ✅ **Bot Settings** — knowledge base editor, tone-of-voice presets (*Business*, *Friendly*, *Sales*), schedule configuration, and live-tested CRM Webhooks.
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Категорія | Технологія |
+| Category | Technology |
 |-----------|-----------|
-| **Frontend** | HTML5, CSS3, Vanilla JavaScript (ES6+) |
-| **Styling** | CSS Grid, Flexbox, CSS Variables |
-| **Images** | Cloudinary CDN (lazy loading, responsive) |
-| **Storage** | LocalStorage (`ptc_cart`, `ptc_wishlist`, `ptc_orders`, `ptc_callbacks`) |
-| **SEO** | Semantic HTML, Meta tags, sitemap.xml, robots.txt |
-| **Performance** | Code splitting, image optimization, minimal DOM |
-| **Hosting** | Vercel (serverless) |
+| **Backend** | Node.js (v20+), Express.js |
+| **Database** | MongoDB (Mongoose) |
+| **AI Core** | OpenAI-compatible API (OpenAI, NVIDIA API, local LLMs) |
+| **Messaging** | Telegraf (Telegram Bot API) |
+| **Frontend** | Vanilla HTML5, CSS3, JavaScript (ES6+, zero frameworks) |
+| **Security Middleware** | Helmet, CORS, Express Rate Limit, Mongo Sanitize, XSS Protection |
+| **Deployment** | Render (`render.yaml`) |
 
 ---
 
-## 📊 Lighthouse Metrics
+## 📐 System Architecture
 
+```text
+                               ┌─────────────────────────┐
+    Chat Widget (public/) ────►│                         │
+                               │   Express.js API Server │─────► OpenAI-Compatible LLM
+   Telegram Bot (src/bot/)────►│                         │
+                               └───────────┬─────────────┘
+                                           │
+                                           ▼
+                                    MongoDB Database
+                         (Messages, Lead Status, Settings)
+                                           ▲
+                                           │
+    Admin Panel (public/admin.html) ───────┴────── (Auth via x-admin-key)
 ```
-✅ Performance:      100/100
-✅ Accessibility:     96/100
-✅ Best Practices:    96/100
-✅ SEO:              100/100
 
-⏱️  First Contentful Paint:    0.5s
-⏱️  Largest Contentful Paint:  1.2s
-⏱️  Cumulative Layout Shift:   0.0
-```
+> **Resilient Fallback Design:** If MongoDB is unreachable, Aegis AI gracefully degrades — active chat interactions function seamlessly in real time without persistence, preventing service downtime.
 
 ---
 
-## 🚀 Як запустити локально
+## 🚀 How to Run Locally (Quick Start)
 
 ### Prerequisites
-- Node.js 14+ або Python 3+
+- Node.js 20+
+- MongoDB *(optional, required only for session history persistence)*
 
-### Option 1: Python HTTP Server (найпростіше)
 ```bash
-# Розпакуй файли проєкту
-cd premium-tech-store
+# 1. Clone the repository and install dependencies
+npm install
 
-# Запусти локальний сервер
-python3 -m http.server 8000
+# 2. Create the configuration file from the example
+cp .env.example .env
 
-# Відкрий у браузері
-open http://localhost:8000
-```
+# 3. Start in development mode (with auto-reload)
+npm run dev
 
-### Option 2: Node.js HTTP Server
-```bash
-npx http-server -p 8000 -c-1
-open http://localhost:8000
-```
-
-### Option 3: Vercel CLI (как на прод-хосте)
-```bash
-npm install -g vercel
-vercel dev
+# Or start in production mode
+npm start
 ```
 
 ---
 
-## 📂 Структура Проєкту
+## 📂 Project Structure
 
-```
-premium-tech-store/
-├── index.html              # Main application (весь сайт в одному файлі)
-├── sitemap.xml             # SEO sitemap
-├── robots.txt              # Search engines crawl rules
-├── README.md               # This file
-├── portfolio_collage.png    # Responsive design showcase
-└── screenshot_*.png        # Full-page screenshots (desktop/tablet/mobile)
+```text
+aegis-ai/
+├── server.js                    # Application entry point — middleware, routes, boot
+├── src/
+│   ├── bot/
+│   │   └── index.js             # Telegram bot handler (anti-spam, shared chat logic)
+│   ├── middleware/
+│   │   └── adminAuth.js          # Authentication check via x-admin-key header
+│   ├── models/                  # Mongoose schemas (Message, User, Settings, Session)
+│   ├── routes/                  # API endpoints (chat, admin, users)
+│   └── services/
+│       └── openaiService.js      # Core LLM service, language detection, lead tracking, webhooks
+├── public/
+│   ├── index.html               # Product landing page
+│   ├── chat-widget.{js,css}     # Embeddable zero-dependency chat widget
+│   └── admin.html               # Administrative Dashboard UI
+└── render.yaml                  # Deployment configuration for Render
 ```
 
 ---
 
 ## 🎯 Key Implementation Details
 
-### 1. **Product Catalog (плоский масив)**
+### 1. **Unified Core Engine (`openaiService.js`)**
+A shared service serving both the web chat widget and Telegram bot ensures unified system prompts, a single source of truth for the knowledge base, and centralized operating hours scheduling:
 ```javascript
-const PRODUCTS = [
-    {
-        id: 'iphone-15-pro-max-256',
-        name: 'iPhone 15 Pro Max 256GB Space Black',
-        brand: 'Apple',
-        cat: 'smartphones',        // smartphones | laptops | tablets | accessories
-        price: 44500,              // число, не рядок
-        inStock: true,
-        popularity: 98,            // сортування «за популярністю»
-        added: '2026-05-20',       // сортування «спочатку нові»
-        img: 'https://res.cloudinary.com/...',
-        descUk: '...', descEn: '...'
-    }
-];
-```
-Щоб додати товар — просто додай об'єкт у масив. Категорії, бренд-фільтри, лічильники та marquee будуються з даних автоматично.
-
-### 2. **Один стан фільтрів → один рендер**
-```javascript
-const filters = { cat: 'all', search: '', sort: 'default', brands: [], inStockOnly: false, priceMin: 0, priceMax: 0 };
-
-function getFilteredProducts() {
-    // пошук / категорія / бренди / наявність / діапазон ціни, далі applySort()
+// Single point of interaction handling across all channels
+async function getChatReply({ message, sessionId, channel }) {
+    // 1. Check business working hours schedule
+    // 2. Auto-detect visitor language per message
+    // 3. Query LLM with automated lead status tagging
+    // 4. Trigger CRM Webhook upon new lead creation
 }
 ```
 
-### 3. **Кошик і доставка**
+### 2. **Automatic Lead Lifecycle Tagging**
+The LLM automatically tags the lead status via a hidden response marker unless manually overridden by an administrator:
 ```javascript
-const SHIPPING = { cost: 150, freeFrom: 5000 };
-
-function cartTotals() {
-    const subtotal = /* сума позицій */;
-    const shipping = (subtotal === 0 || subtotal >= SHIPPING.freeFrom) ? 0 : SHIPPING.cost;
-    return { subtotal, shipping, total: subtotal + shipping };
-}
-```
-
-### 4. **Cart with LocalStorage Persistence**
-```javascript
-// Зберігається навіть після перезавантаження сторінки
-localStorage.setItem('ptc_cart', JSON.stringify(cart));
-let cart = JSON.parse(localStorage.getItem('ptc_cart') || '[]');
-```
-
-### 5. **Lazy Image Loading**
-```html
-<img 
-    src="..." 
-    loading="lazy" 
-    decoding="async"
-    class="lazy-img" 
-    onload="this.classList.add('loaded')"
-/>
+// Lead status marker parsed server-side from AI completion response
+const leadStatusMatch = reply.match(/\[STATUS:\s*(new|qualified|booked|lost)\]/);
 ```
 
 ---
 
-## 🎨 Design Decisions
+## 🗺️ Roadmap (Future Enhancements)
 
-### Color Palette
-- **Primary:** `#c9a961` (Gold Premium)
-- **Background Dark:** `#0a0a0c` (Deep Black)
-- **Background Light:** `#fafafa`
-- **Accent Red:** `#e63946` (CTA buttons)
-
-### Typography
-- **Headers:** Orbitron (Futuristic, monospace)
-- **Body:** Montserrat (Clean, modern)
-- **Monospace:** Syncopate (Elegant accent)
-
-### UX Principles
-1. **Progressive Enhancement** — працює без JS (семантичний HTML)
-2. **Performance First** — lazy loading, CSS variables, minimal repaints
-3. **Accessibility by Default** — WCAG 2.1, semantic landmarks, ARIA labels
-4. **Mobile-First** — розроблено для мобілю, потім для десктопу
-5. **No Bloat** — нема React, Vue, jQuery — чистий vanilla JS (~50KB бандл)
-
----
-
-## 📱 Browser Support
-
-| Browser | Desktop | Mobile |
-|---------|---------|--------|
-| Chrome  | ✅ 90+  | ✅ 90+ |
-| Firefox | ✅ 88+  | ✅ 88+ |
-| Safari  | ✅ 14+  | ✅ 14+ |
-| Edge    | ✅ 90+  | ✅ 90+ |
-
----
-
-## 🔗 Live Demo
-
-🌍 **[premium-concept-ten.vercel.app](https://premium-concept-ten.vercel.app)**
-
----
-
-## 📚 API Integration (Готове для backend)
-
-Поточна версія — **повністю фронтенд**, але готова до інтеграції з backend:
-
-```javascript
-// Готово до заміни на реальний API
-async function fetchProducts() {
-    const response = await fetch('https://api.yourserver.com/products');
-    const data = await response.json();
-    // Replace productsDatabase with API response
-}
-```
-
----
-
-## 🛣️ Roadmap (Future Enhancements)
-
-- [ ] Backend integration (Node.js/Python API)
-- [ ] Database (PostgreSQL/MongoDB)
-- [ ] User authentication (Sign up, Login, Profiles)
-- [ ] Payment gateway (Stripe, LiqPay)
-- [ ] Order tracking
-- [ ] Admin dashboard
-- [ ] Product reviews/ratings system
-- [ ] Analytics (Google Analytics, Hotjar)
-
----
-
-## 📈 Performance Optimizations Implemented
-
-✅ **Image Optimization**
-- Cloudinary CDN для оптимізації форматів
-- Lazy loading з fade-in ефектом
-- Responsive image sizes
-
-✅ **CSS Optimization**
-- CSS variables для швидкого theme switching
-- Minimal CSS (~25KB)
-- No unused styles
-
-✅ **JavaScript Optimization**
-- Event delegation (один listener замість багатьох)
-- requestAnimationFrame для плавних анімацій
-- Efficient DOM queries
-
-✅ **Network Optimization**
-- Single HTML file (no extra requests)
-- Cloudinary CDN for global image delivery
-- Browser caching headers (through Vercel)
-
----
-
-## 🤝 Contributing
-
-Це портфоліо-проєкт, але якщо маєш ідеї для покращень:
-
-1. Fork the repo
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** — see the LICENSE file for details.
-
----
-
-## 👤 Author
-
-**Ukrainian Web Developer**
-
-- 🔗 [GitHub](https://github.com/yourusername)
-- 💼 [LinkedIn](https://linkedin.com/in/yourusername)
-- 📧 [Email](mailto:your.email@example.com)
-- 🌐 [Portfolio](https://yourportfolio.com)
-
----
-
-## 🙏 Acknowledgments
-
-- Design inspiration: Premium e-commerce platforms
-- Cloudinary for image hosting & optimization
-- Vercel for seamless deployment
-- Lighthouse for performance auditing
-
----
-
-## 📞 Support
-
-Якщо є питання або баги:
-
-1. Відкрий Issue на GitHub
-2. Напиши детально про проблему
-3. Додай скріншоти/відео
-4. Я відповім якнайшвидше
+- [ ] Multi-channel traffic analytics breakdown (Web Widget vs Telegram)
+- [ ] Custom date-range selector for historical analytics
+- [ ] Direct CSV / JSON data export for KPI dashboard cards
 
 ---
 
 <div align="center">
 
-**Made with ❤️ in Ukraine**
+**Made with ❤️**
 
 *Thank you for checking out this project!*
 
